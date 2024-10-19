@@ -1,6 +1,5 @@
 import Image from "next/image";
-import Card from "@/components/card";
-import Input from "@/components/Input";
+import Card from "../components/card";
 export default function Home() {
   const propsRegister = {
     img: "/kids.png",
