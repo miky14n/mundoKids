@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Card from "../components/Cardard";
+import Card from "../components/Card";
 export default function Home() {
   const propsRegister = {
     img: "/kids.png",
