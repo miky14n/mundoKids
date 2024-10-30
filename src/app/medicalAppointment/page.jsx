@@ -50,8 +50,8 @@ export default function MedicalAppointment() {
           setStatus={setSuccess}
         />
       )}
-      <div className="flex flex-col items-center justify-center pt-10 bg-gray-100">
-        <div className="bg-white shadow-md rounded-lg p-8 max-w-5xl w-full">
+      <div className="flex flex-col items-center justify-center mt-16 bg-gray-100">
+        <div className="bg-white shadow-md rounded-lg p-8 max-w-5xl w-full mt-40 mb-10">
           <h2 className="text-2xl font-bold mb-6 text-center">
             Registro de Paciente
           </h2>
