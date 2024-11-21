@@ -22,6 +22,11 @@ export default function Navbar() {
 
           {/* Navigation items aligned to the right */}
           <div className="hidden md:flex items-center space-x-4 ml-auto">
+            <Link href="/noursing">
+              <span className="hover:bg-purple-50 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
+                Enfermeria
+              </span>
+            </Link>
             <Link href="/">
               <span className="hover:bg-purple-50 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
                 Home

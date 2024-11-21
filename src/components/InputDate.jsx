@@ -4,7 +4,7 @@ import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
 
 export default function InputDate({ setDateBorn }) {
-  const [value, setValue] = React.useState(parseDate("2024-04-04"));
+  const [value, setValue] = React.useState(parseDate("2014-04-04"));
 
   let formatter = useDateFormatter({ dateStyle: "full" });
 
@@ -16,14 +16,17 @@ export default function InputDate({ setDateBorn }) {
           label="Date (controlled)"
           value={value}
           onChange={(newValue) => {
-            setValue(newValue); // Aquí establecemos la nueva fecha en el estado
-            setDateBorn(newValue); // También pasamos la nueva fecha a la función setDateBorn
+            setValue(newValue); // Mantiene el formato original en el estado local
+            const isoDate = newValue.toString(); // Convierte a formato ISO (ej. "2014-04-04")
+            setDateBorn(isoDate); // Pasa la fecha en formato ISO
           }}
         />
-        {/*<p className="text-default-500 text-sm">
-          Selected date:{" "}
-          {value ? formatter.format(value.toDate(getLocalTimeZone())) : "--"}
-        </p>*/}
+        {
+          <p className="text-default-500 text-sm">
+            Selected date:{" "}
+            {value ? formatter.format(value.toDate(getLocalTimeZone())) : "--"}
+          </p>
+        }
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import PersonalButton from "@/components/Button";
 import Alert from "@/components/Alert";
 import SimpleDropdown from "@/components/SimpleDropdown";
 import InputDate from "@/components/InputDate";
+
 export default function Register() {
   const [patientName, setPatientName] = useState("");
   const [ci, setCI] = useState("");
@@ -14,13 +15,82 @@ export default function Register() {
   const [height, setHeight] = useState("");
   const [guardianName, setGuardianName] = useState("");
   const [contactNumber, setContactNumber] = useState("");
+  const [guardianCI, setGuardianCI] = useState("");
+  const [relationship, setRelationship] = useState("");
   const [success, setSuccess] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+
   const items = [
-    { key: "masculino", label: "Masculino" },
-    { key: "femenino", label: "Femenino" },
+    { key: "M", label: "Masculino" },
+    { key: "F", label: "Femenino" },
   ];
-  console.log("soy fec nac" + dateBorn);
+
+  const handleRegister = async () => {
+    const gender = selectedItem ? selectedItem.key : null;
+    console.log("MAndadndo datoas" + dateBorn);
+    if (
+      !patientName ||
+      !ci ||
+      !gender ||
+      !dateBorn ||
+      !guardianName ||
+      !contactNumber
+    ) {
+      setSuccess(false);
+      return;
+    }
+    const data = {
+      ci: +ci,
+      name: patientName,
+      last_name: "",
+      gender: gender,
+      date_of_birth: new Date(dateBorn),
+      age: +age,
+      weight: weight,
+      height: height,
+      guardian_name: guardianName,
+      contact_number: +contactNumber,
+      guardian_ci: +guardianCI,
+      relationship_to_patient: relationship,
+    };
+    console.log("Los datos a mandar:" + JSON.stringify(data));
+    try {
+      const response = await fetch("/api/patients", {
+        method: "POST",
+        body: JSON.stringify(data),
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        console.log(response);
+        setSuccess(true);
+        resetForm();
+      } else {
+        setSuccess(false);
+      }
+    } catch (error) {
+      console.error("Error al registrar el paciente:", error);
+      setSuccess(false);
+    }
+  };
+
+  const resetForm = () => {
+    setPatientName("");
+    setCI("");
+    setDateBorn("");
+    setAge("");
+    setWeight("");
+    setHeight("");
+    setGuardianName("");
+    setContactNumber("");
+    setGuardianCI("");
+    setRelationship("");
+    setSelectedItem(null);
+  };
+
   return (
     <>
       {success === true && (
@@ -39,7 +109,7 @@ export default function Register() {
           setStatus={setSuccess}
         />
       )}
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 ">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
         <div className="bg-white shadow-md rounded-lg p-8 max-w-5xl w-full">
           <h2 className="text-2xl font-bold mb-6 text-center">
             Registro de Paciente
@@ -109,8 +179,6 @@ export default function Register() {
           </div>
 
           <h3 className="text-xl font-bold mt-6 mb-4">Datos Complementarios</h3>
-
-          {/* Fila para Nombre del Tutor y Número de Contacto */}
           <div className="grid grid-cols-2 gap-6">
             <div>
               <SimpleInput
@@ -129,33 +197,36 @@ export default function Register() {
               />
             </div>
           </div>
-
           <div className="grid grid-cols-2 gap-6 mt-4">
             <div>
               <SimpleInput
                 type="text"
-                label="Ci Tutor"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
+                label="CI Tutor"
+                value={guardianCI}
+                onChange={(e) => setGuardianCI(e.target.value)}
               />
             </div>
             <div>
               <SimpleInput
                 type="text"
-                label="Parentezco"
-                value={height}
-                onChange={(e) => setHeight(e.target.value)}
+                label="Parentesco"
+                value={relationship}
+                onChange={(e) => setRelationship(e.target.value)}
               />
             </div>
           </div>
-
-          {/* Botones */}
           <div className="flex justify-between mt-6">
-            <PersonalButton content="Borrar" color="default" />
+            <PersonalButton
+              content="Borrar"
+              color="default"
+              onClick={resetForm}
+            />
             <PersonalButton
               content="Registrar"
               color="secondary"
               variant="ghost"
+              onClick={handleRegister}
+              action={handleRegister}
             />
           </div>
         </div>
