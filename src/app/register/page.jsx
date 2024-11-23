@@ -5,14 +5,14 @@ import PersonalButton from "@/components/Button";
 import Alert from "@/components/Alert";
 import SimpleDropdown from "@/components/SimpleDropdown";
 import InputDate from "@/components/InputDate";
+import { useEffect } from "react";
+import { calculateAge } from "./functions";
 
 export default function Register() {
   const [patientName, setPatientName] = useState("");
   const [ci, setCI] = useState("");
   const [dateBorn, setDateBorn] = useState("");
   const [age, setAge] = useState("");
-  const [weight, setWeight] = useState("");
-  const [height, setHeight] = useState("");
   const [guardianName, setGuardianName] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [guardianCI, setGuardianCI] = useState("");
@@ -46,8 +46,6 @@ export default function Register() {
       gender: gender,
       date_of_birth: new Date(dateBorn),
       age: +age,
-      weight: weight,
-      height: height,
       guardian_name: guardianName,
       contact_number: +contactNumber,
       guardian_ci: +guardianCI,
@@ -82,15 +80,18 @@ export default function Register() {
     setCI("");
     setDateBorn("");
     setAge("");
-    setWeight("");
-    setHeight("");
     setGuardianName("");
     setContactNumber("");
     setGuardianCI("");
     setRelationship("");
     setSelectedItem(null);
   };
-
+  useEffect(() => {
+    if (dateBorn) {
+      const age = calculateAge(dateBorn);
+      setAge(age);
+    }
+  }, [dateBorn, setAge]);
   return (
     <>
       {success === true && (
@@ -152,28 +153,8 @@ export default function Register() {
               <SimpleInput
                 type="text"
                 label="Edad"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-              />
-            </div>
-          </div>
-
-          {/* Fila para Peso y Tamaño */}
-          <div className="grid grid-cols-2 gap-6 mt-4">
-            <div>
-              <SimpleInput
-                type="text"
-                label="Peso"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
-              />
-            </div>
-            <div>
-              <SimpleInput
-                type="text"
-                label="Tamaño"
-                value={height}
-                onChange={(e) => setHeight(e.target.value)}
+                value={dateBorn ? calculateAge(dateBorn) : ""}
+                readOnly
               />
             </div>
           </div>

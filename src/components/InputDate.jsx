@@ -4,7 +4,7 @@ import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
 
 export default function InputDate({ setDateBorn }) {
-  const [value, setValue] = React.useState(parseDate("2014-04-04"));
+  const [value, setValue] = React.useState(parseDate("2010-04-04"));
 
   let formatter = useDateFormatter({ dateStyle: "full" });
 
@@ -13,7 +13,7 @@ export default function InputDate({ setDateBorn }) {
       <div className="w-full flex flex-col gap-y-2">
         <DatePicker
           className="max-w-[284px]"
-          label="Date (controlled)"
+          label="Ingrese la Fecha de Nacimiento"
           value={value}
           onChange={(newValue) => {
             setValue(newValue); // Mantiene el formato original en el estado local
@@ -21,12 +21,12 @@ export default function InputDate({ setDateBorn }) {
             setDateBorn(isoDate); // Pasa la fecha en formato ISO
           }}
         />
-        {
+        {/*
           <p className="text-default-500 text-sm">
             Selected date:{" "}
             {value ? formatter.format(value.toDate(getLocalTimeZone())) : "--"}
           </p>
-        }
+        */}
       </div>
     </div>
   );
