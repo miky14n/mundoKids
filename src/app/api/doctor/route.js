@@ -16,6 +16,7 @@ export async function POST(req) {
   try {
     const body = await req.json();
     const { name, last_name, ci, contact_number, email, hire_date } = body;
+    const specialty_id = body.valueExtraComponent;
     if (!name || !last_name || !ci) {
       return NextResponse.json(
         { error: "Los campos 'name', 'last_name' y 'ci' son obligatorios." },
@@ -23,9 +24,10 @@ export async function POST(req) {
       );
     }
     const result = await neon_sql`
-      INSERT INTO doctor (name, last_name, ci, contact_number, email, hire_date)
+      INSERT INTO doctor (name,specialty_id, last_name, ci, contact_number, email, hire_date)
       VALUES (
         ${name},
+        ${specialty_id},
         ${last_name},
         ${ci},
         ${contact_number || "N/A"},

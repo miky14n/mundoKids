@@ -29,6 +29,7 @@ export default function BasicForm({
       const newFormData = {
         ...prev,
         [field.name]: value,
+        valueExtraComponent,
       };
 
       if (field.type === "checkbox") {
@@ -48,13 +49,18 @@ export default function BasicForm({
 
   const handleSubmit = async () => {
     try {
-      console.log(formData, "Que se le envia");
+      console.log(
+        formData,
+        "Que se le envia",
+        "El extra component",
+        valueExtraComponent
+      );
       const response = await fetch(apiUrl, {
         method: typeRequestApi,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData, valueExtraComponent),
       });
       if (response.ok) {
         setFormData({});

@@ -1,3 +1,4 @@
+"use client";
 import {
   Dropdown,
   DropdownTrigger,
@@ -10,18 +11,17 @@ import { useState, useEffect } from "react";
 export default function ApiDropdown({
   buttonLabel,
   urlApi,
-  onAction,
+  onActionName = () => {},
+  onActionId = () => {},
   idOfGet,
   nameOfGet,
 }) {
   const [menuItems, setMenuItems] = useState([]);
   const [selectedItemName, setSelectedItemName] = useState(
-    buttonLabel || "Open Menu"
-  ); // Para mostrar el elemento seleccionado
+    buttonLabel || "Choose an option"
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Fetch de las categorías desde la API
   useEffect(() => {
     const fetchApi = async () => {
       setLoading(true);
@@ -30,10 +30,11 @@ export default function ApiDropdown({
           method: "GET",
         });
         if (!response.ok) {
-          throw new Error("Error fetching categories");
+          throw new Error("Error fetching data");
         }
         const data = await response.json();
-        setMenuItems(data);
+        const addData = [{ categoryname: "Todos", idcategory: 99 }, ...data];
+        setMenuItems(addData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -43,11 +44,15 @@ export default function ApiDropdown({
 
     fetchApi();
   }, [urlApi]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-  const handleSelect = (name) => {
+
+  const handleSelect = (id, name) => {
     setSelectedItemName(name);
-    onAction(name);
+    console.log(id);
+    onActionName(name);
+    onActionId(id);
   };
 
   return (
@@ -55,15 +60,20 @@ export default function ApiDropdown({
       <DropdownTrigger>
         <Button variant="bordered">{selectedItemName}</Button>
       </DropdownTrigger>
-      <DropdownMenu variant="faded" aria-label="Category Actions">
-        {menuItems.map((item) => (
-          <DropdownItem
-            key={item[idOfGet]}
-            onClick={() => handleSelect(item[nameOfGet])}
-          >
-            {item[nameOfGet]}
-          </DropdownItem>
-        ))}
+      <DropdownMenu variant="faded" aria-label="Dropdown Actions">
+        {menuItems.map((item, index) => {
+          //console.log(item[nameOfGet], "index", index);
+          return (
+            item[nameOfGet] && (
+              <DropdownItem
+                key={`${item[idOfGet]}-${index}`}
+                onClick={() => handleSelect(item[idOfGet], item[nameOfGet])}
+              >
+                {String(item[nameOfGet])}
+              </DropdownItem>
+            )
+          );
+        })}
       </DropdownMenu>
     </Dropdown>
   );

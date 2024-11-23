@@ -1,6 +1,12 @@
+"use client";
+import ApiDropdown from "@/components/ApiDropdown";
 import BasicForm from "@/components/BasicForm";
+import Container from "@/components/Container";
+import { useState } from "react";
 export default function Settings() {
   /***/
+  const [specialty, setSpecialty] = useState("");
+  const [ciDoctor, setciDoctor] = useState("");
   return (
     <div className="mt-16">
       <hr className="border-t-2 border-gray-300 my-6" />
@@ -23,34 +29,47 @@ export default function Settings() {
           onSuccessMessage="Doctor creado exitosamente"
           onErrorMessage="Error al registrar doctor"
           buttonLabel="Registrar Dr."
+          extraComponent={
+            <div>
+              <ApiDropdown
+                buttonLabel="Elije una especialidad"
+                urlApi="/api/specialty"
+                onActionId={(selectedSpecialty) =>
+                  setSpecialty(selectedSpecialty)
+                }
+                idOfGet="specialty_id"
+                nameOfGet="name"
+              />
+            </div>
+          }
+          valueExtraComponent={specialty}
         />
       </div>
-      <div className="mt-16">
-        <hr className="border-t-2 border-gray-300 my-6" />
-        <div>
-          <BasicForm
-            layout="horizontal"
-            fields={[
-              {
-                name: "name",
-                type: "text",
-                label: "Nombre de la especialidad",
-              },
-              { name: "description", type: "text", label: "Descripcion" },
-              {
-                name: "price",
-                type: "text",
-                label: "Costo de la especialidad",
-              },
-            ]}
-            apiUrl="/api/specialty"
-            formTitle="Añadir Especialidad"
-            onSuccessMessage="Especialidad creada exitosamente"
-            onErrorMessage="Error al registrar la especialidad"
-            buttonLabel="Registrar."
-          />
-        </div>
+      <hr className="border-t-2 border-gray-300 my-6" />
+      <div>
+        <BasicForm
+          layout="horizontal"
+          fields={[
+            {
+              name: "name",
+              type: "text",
+              label: "Nombre de la especialidad",
+            },
+            { name: "description", type: "text", label: "Descripcion" },
+            {
+              name: "price",
+              type: "text",
+              label: "Costo de la especialidad",
+            },
+          ]}
+          apiUrl="/api/specialty"
+          formTitle="Añadir Especialidad"
+          onSuccessMessage="Especialidad creada exitosamente"
+          onErrorMessage="Error al registrar la especialidad"
+          buttonLabel="Registrar."
+        />
       </div>
+      <hr className="border-t-2 border-gray-300 my-6" />
     </div>
   );
 }
