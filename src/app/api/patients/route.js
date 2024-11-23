@@ -14,9 +14,9 @@ export async function GET() {
   }
 }
 
-export async function POST(req) {
+export async function POST(request) {
   try {
-    const body = await req.json();
+    const body = await request.json();
     const {
       ci,
       name,
