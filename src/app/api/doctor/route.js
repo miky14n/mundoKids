@@ -28,9 +28,9 @@ export async function POST(req) {
         ${name},
         ${last_name},
         ${ci},
-        ${contact_number || null},
-        ${email || null},
-        ${hire_date || null}
+        ${contact_number || "N/A"},
+        ${email || "N/A"},
+        ${hire_date || new Date()}
       )
       RETURNING *;
     `;
@@ -38,7 +38,7 @@ export async function POST(req) {
   } catch (error) {
     console.error("Error al insertar el doctor:", error);
     return NextResponse.json(
-      { error: "Error al crear el doctor. Inténtalo de nuevo." },
+      { error: "Error al crear el doctor. Inténtalo de nuevo.", error },
       { status: 500 }
     );
   }

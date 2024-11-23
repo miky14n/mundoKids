@@ -8,13 +8,17 @@ export default function Settings() {
         <BasicForm
           layout="horizontal"
           fields={[
-            { name: "categoryName", type: "text", label: "Nombre" },
-            { name: "description", type: "text", label: "Apellido" },
-            { name: "description", type: "text", label: "Ci" },
-            { name: "description", type: "text", label: "Numero de contacto" },
-            { name: "description", type: "text", label: "Correo" },
+            { name: "name", type: "text", label: "Nombre" },
+            { name: "last_name", type: "text", label: "Apellido" },
+            { name: "ci", type: "text", label: "Ci" },
+            {
+              name: "contact_number",
+              type: "text",
+              label: "Numero de contacto",
+            },
+            { name: "email", type: "text", label: "Correo" },
           ]}
-          apiUrl="https://uildbknzgh.execute-api.us-east-2.amazonaws.com/dev/category"
+          apiUrl="/api/doctor"
           formTitle="Registra Nuevo Doctor"
           onSuccessMessage="Doctor creado exitosamente"
           onErrorMessage="Error al registrar doctor"

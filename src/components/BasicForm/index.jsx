@@ -4,17 +4,6 @@ import SimpleInput from "@/components/Input";
 import NextButton from "@/components/Button";
 import Alert from "@/components/Alert";
 
-function formatDateForSQL(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  const seconds = String(date.getSeconds()).padStart(2, "0");
-
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
-
 export default function BasicForm({
   layout = "vertical",
   fields = [],
@@ -34,17 +23,12 @@ export default function BasicForm({
   const [success, setSuccess] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const now = new Date();
-  const formattedDate = formatDateForSQL(now);
 
   const handleChange = (field, value) => {
     setFormData((prev) => {
       const newFormData = {
         ...prev,
         [field.name]: value,
-        dateofout: formattedDate,
-        numserial: valueExtraComponent?.numserial || "",
-        dateofentry: valueExtraComponent?.dateofentry || "",
-        clientid: valueExtraComponent?.clientid || "",
       };
 
       if (field.type === "checkbox") {
