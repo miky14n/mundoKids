@@ -107,16 +107,15 @@ export default function BasicForm({
       )}
 
       <div className="flex items-center justify-center">
-        <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl">
+        <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-6xl">
           <h2 className="text-2xl font-bold mb-4 text-center">{formTitle}</h2>
           <div
             className={`flex ${
               layout === "horizontal"
                 ? "flex-row space-x-2"
-                : "flex-col space-y-2"
+                : "flex-col space-y-4 items-center justify-center"
             }`}
           >
-            <div>{extraComponent || <></>}</div>
             {fields.map((field, index) => (
               <div key={index} className="flex-1">
                 {field.type === "checkbox" ? (
@@ -139,7 +138,7 @@ export default function BasicForm({
                 )}
               </div>
             ))}
-
+            <div>{extraComponent || <></>}</div>
             <div>
               {dateOption ||
                 (formData.support && (
