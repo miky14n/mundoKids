@@ -32,7 +32,8 @@ export default function Settings() {
           extraComponent={
             <div>
               <ApiDropdown
-                buttonLabel="Elije una especialidad"
+                buttonLabel={specialty}
+                defaultText="Elija una Especialidad"
                 urlApi="/api/specialty"
                 onActionId={(selectedSpecialty) =>
                   setSpecialty(selectedSpecialty)
