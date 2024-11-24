@@ -23,7 +23,6 @@ export default function PersonalButton({
 
   const handlerAction = () => {
     setIsPressed(true);
-    /*Something Happens*/
     console.log("It has been pressed!");
   };
 

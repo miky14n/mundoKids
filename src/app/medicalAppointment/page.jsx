@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SimpleInput from "@/components/Input";
 import PersonalButton from "@/components/Button";
 import Alert from "@/components/Alert";
@@ -13,10 +13,11 @@ export default function MedicalAppointment() {
   const [doctor, setDoctor] = useState(null);
   const [consultType, setConsultType] = useState(null);
   const [specialtyCost, setSpecialtyCost] = useState("");
-  const [summary, setSummary] = useState("");
+  //const [summary, setSummary] = useState("");
   const [success, setSuccess] = useState(null);
   const [patientLastName, setPatientLastName] = useState("");
   const [responsible, setResponsible] = useState("");
+  const patient_id = useRef(null);
   const consultTypeItems = [
     { key: "1", label: "Consulta" },
     { key: "2", label: "Emergencia" },
@@ -33,6 +34,7 @@ export default function MedicalAppointment() {
           console.log("Datos del paciente:", data);
           setPatientName(data[0].name);
           setPatientLastName(data[0].last_name);
+          patient_id.current = data[0].patient_id;
         } catch (error) {
           console.error("Error al buscar al paciente:", error);
           setPatientName("No existe el paciente");
@@ -51,7 +53,7 @@ export default function MedicalAppointment() {
             throw new Error(`Error al obtener los datos: ${response.status}`);
           }
           const data = await response.json();
-          console.log("Datos del paciente:", data);
+          console.log("Datos de la especialidad:", data);
           setSpecialtyCost(data[0].price);
         } catch (error) {
           console.error("Error al buscar al paciente:", error);
@@ -62,7 +64,53 @@ export default function MedicalAppointment() {
       fetchDoctor();
     }
   }, [specialty]);
+  const handleRegister = async () => {
+    console.log("MAndadndo datoas medical apoiment", patient_id.current);
+    const typeAppoiment = consultType ? consultType.label : null;
+    const data = {
+      patient_id: patient_id.current,
+      ci,
+      type_of_appointment: typeAppoiment,
+      specialty_id: specialty,
+      doctor_id: doctor,
+      date: new Date(),
+      responsible,
+    };
+    console.log("Los datos a mandar:" + JSON.stringify(data));
+    try {
+      const response = await fetch("/api/appointment", {
+        method: "POST",
+        body: JSON.stringify(data),
 
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        console.log(response);
+        setSuccess(true);
+        resetForm();
+      } else {
+        setSuccess(false);
+      }
+    } catch (error) {
+      console.error("Error al registrar el paciente:", error);
+      setSuccess(false);
+    }
+  };
+
+  const resetForm = () => {
+    setPatientName("");
+    setCI("");
+    setDoctor(null);
+    setSpecialty(null);
+    setConsultType(null);
+    setSpecialtyCost("");
+    setPatientLastName("");
+    setResponsible("");
+    patient_id.current = "";
+  };
   return (
     <>
       {success === true && (
@@ -84,7 +132,7 @@ export default function MedicalAppointment() {
       <div className="flex flex-col items-center justify-center mt-16 bg-gray-100">
         <div className="bg-white shadow-md rounded-lg p-8 max-w-5xl w-full mt-40 mb-10">
           <h2 className="text-2xl font-bold mb-6 text-center">
-            Registro de Paciente
+            Agendar Consulta
           </h2>
 
           {/* Fila para Encargada y CI del Paciente */}
@@ -132,7 +180,8 @@ export default function MedicalAppointment() {
           <div className="grid grid-cols-3 gap-6 mt-4">
             <div>
               <ApiDropdown
-                buttonLabel="Especialidades"
+                buttonLabel={specialty}
+                defaultText="Seleccione una Especialidad"
                 urlApi="/api/specialty"
                 onActionId={(selectedSpecialty) =>
                   setSpecialty(selectedSpecialty)
@@ -144,11 +193,14 @@ export default function MedicalAppointment() {
 
             <div>
               <ApiDropdown
-                buttonLabel="Doctor"
+                buttonLabel={doctor}
+                defaultText="Seleccione un Doctor"
                 urlApi="/api/doctor"
                 onActionId={(selectedDoctor) => setDoctor(selectedDoctor)}
                 idOfGet="doctor_id"
                 nameOfGet="name"
+                filterLabel={"specialty_id"}
+                filterValue={specialty}
               />
             </div>
             <div>
@@ -176,10 +228,15 @@ export default function MedicalAppointment() {
           {/* Botón de Guardar */}
           <div className="flex justify-center mt-6">
             <PersonalButton
-              content="Guardar"
+              content="Borrar"
+              color="default"
+              action={resetForm}
+            />
+            <PersonalButton
+              content="Agendar"
               color="secondary"
               variant="ghost"
-              onClick={() => setSuccess(true)}
+              action={handleRegister}
             />
           </div>
         </div>

@@ -195,13 +195,12 @@ export default function Register() {
             <PersonalButton
               content="Borrar"
               color="default"
-              onClick={resetForm}
+              action={resetForm}
             />
             <PersonalButton
               content="Registrar"
               color="secondary"
               variant="ghost"
-              onClick={handleRegister}
               action={handleRegister}
             />
           </div>

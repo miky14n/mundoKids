@@ -116,6 +116,7 @@ export default function BasicForm({
                 : "flex-col space-y-4 items-center justify-center"
             }`}
           >
+            <div>{extraComponent || <></>}</div>
             {fields.map((field, index) => (
               <div key={index} className="flex-1">
                 {field.type === "checkbox" ? (
@@ -138,7 +139,7 @@ export default function BasicForm({
                 )}
               </div>
             ))}
-            <div>{extraComponent || <></>}</div>
+
             <div>
               {dateOption ||
                 (formData.support && (
