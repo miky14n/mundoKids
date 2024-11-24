@@ -20,7 +20,7 @@ export default function MedicalAppointment() {
   const patient_id = useRef(null);
   const consultTypeItems = [
     { key: "1", label: "Consulta" },
-    { key: "2", label: "Emergencia" },
+    { key: "2", label: "Re consulta" },
   ];
   useEffect(() => {
     if (ci && ci !== "") {
@@ -226,10 +226,10 @@ export default function MedicalAppointment() {
           </div>
 
           {/* Botón de Guardar */}
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-around mt-6">
             <PersonalButton
               content="Borrar"
-              color="default"
+              color="danger"
               action={resetForm}
             />
             <PersonalButton

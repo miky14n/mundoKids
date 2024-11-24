@@ -194,7 +194,7 @@ export default function Register() {
           <div className="flex justify-between mt-6">
             <PersonalButton
               content="Borrar"
-              color="default"
+              color="danger"
               action={resetForm}
             />
             <PersonalButton
