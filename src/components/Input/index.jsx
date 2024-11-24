@@ -1,20 +1,36 @@
 import { Input } from "@nextui-org/react";
+import PropTypes from "prop-types";
 
 export default function SimpleInput({
   type = "email",
   label = "Email",
   variant = "bordered",
-  value,
   onChange,
+  value,
+  typeInput = "onchnge",
+  inputRef,
 }) {
   return (
-    <Input
-      type={type}
-      label={label}
-      variant={variant}
-      value={value}
-      onChange={onChange}
-      className="max-w-xs"
-    />
+    <>
+      {typeInput === "onchnge" ? (
+        <Input
+          type={type}
+          label={label}
+          variant={variant}
+          value={value}
+          onChange={onChange}
+          className="max-w-xs"
+        />
+      ) : (
+        <Input
+          type={type}
+          label={label}
+          variant={variant}
+          onChange={onChange}
+          ref={inputRef}
+          className="max-w-xs"
+        />
+      )}
+    </>
   );
 }

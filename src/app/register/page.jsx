@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import SimpleInput from "@/components/Input";
 import PersonalButton from "@/components/Button";
 import Alert from "@/components/Alert";
@@ -19,7 +19,7 @@ export default function Register() {
   const [relationship, setRelationship] = useState("");
   const [success, setSuccess] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
-
+  const lastNameRef = useRef();
   const items = [
     { key: "M", label: "Masculino" },
     { key: "F", label: "Femenino" },
@@ -28,21 +28,11 @@ export default function Register() {
   const handleRegister = async () => {
     const gender = selectedItem ? selectedItem.key : null;
     console.log("MAndadndo datoas" + dateBorn);
-    if (
-      !patientName ||
-      !ci ||
-      !gender ||
-      !dateBorn ||
-      !guardianName ||
-      !contactNumber
-    ) {
-      setSuccess(false);
-      return;
-    }
+
     const data = {
       ci: +ci,
       name: patientName,
-      last_name: "",
+      last_name: lastNameRef.current.value,
       gender: gender,
       date_of_birth: new Date(dateBorn),
       age: +age,
@@ -85,6 +75,7 @@ export default function Register() {
     setGuardianCI("");
     setRelationship("");
     setSelectedItem(null);
+    lastNameRef.current.value = "";
   };
   useEffect(() => {
     if (dateBorn) {
@@ -129,6 +120,15 @@ export default function Register() {
             <div>
               <SimpleInput
                 type="text"
+                label="Apellido del paciente"
+                onChange={() => {}}
+                typeInput="ref"
+                inputRef={lastNameRef}
+              />
+            </div>
+            <div>
+              <SimpleInput
+                type="text"
                 label="Ingrese el CI"
                 value={ci}
                 onChange={(e) => setCI(e.target.value)}
@@ -150,12 +150,7 @@ export default function Register() {
               <InputDate setDateBorn={setDateBorn} />
             </div>
             <div>
-              <SimpleInput
-                type="text"
-                label="Edad"
-                value={dateBorn ? calculateAge(dateBorn) : ""}
-                readOnly
-              />
+              <SimpleInput type="text" label="Edad" value={age} readOnly />
             </div>
           </div>
 

@@ -1,4 +1,5 @@
 export const calculateAge = (dateBorn) => {
+  console.log("La fecha de nac", dateBorn);
   if (!dateBorn) return "";
   const today = new Date();
   const birthDate = new Date(dateBorn);
@@ -8,5 +9,6 @@ export const calculateAge = (dateBorn) => {
   if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
     age--;
   }
+  console.log("la edad calculada " + age);
   return age;
 };

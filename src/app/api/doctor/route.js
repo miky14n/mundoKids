@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { neon_sql } from "@/app/libs/neon";
+import { neon_sql } from "@/app/lib/neon";
 export async function GET() {
   try {
     const patients = await neon_sql`SELECT * FROM doctor`;
