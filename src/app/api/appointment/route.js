@@ -1,6 +1,17 @@
 import { NextResponse } from "next/server";
 import { neon_sql } from "@/app/lib/neon";
-
+export async function GET() {
+  try {
+    const patients = await neon_sql`SELECT * FROM medical_appointment`;
+    return NextResponse.json(patients);
+  } catch (error) {
+    console.error("Error al consultar la base de datos:", error);
+    return NextResponse.json(
+      { error: "Error al obtener los datos" },
+      { status: 500 }
+    );
+  }
+}
 export async function POST(request) {
   try {
     const body = await request.json();

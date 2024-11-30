@@ -40,7 +40,7 @@ export default function ApiDropdown({
           throw new Error("Error fetching data");
         }
         const data = await response.json();
-        const addData = [{ categoryname: "Todos", idcategory: 99 }, ...data];
+        const addData = [...data];
         setMenuItems(addData);
       } catch (err) {
         setError(err.message);

@@ -2,49 +2,98 @@
 import SimpleInput from "@/components/Input";
 import PersonalButton from "@/components/Button";
 import Alert from "@/components/Alert";
-import { useState } from "react";
-export default function Noursing(params) {
-  const [patientName, setPatientName] = useState("");
-  const [ci, setCI] = useState("");
+import { useState, useEffect } from "react";
+import BasicForm from "@/components/BasicForm";
+
+export default function Noursing() {
+  const [appoiments, setAppoiments] = useState([]); // Inicializar como arreglo vacío
+  const [error, setError] = useState(null); // Manejo de errores
+
+  useEffect(() => {
+    // Llamar a la API para obtener las citas al montar el componente
+    fetchApiAppoiment();
+  }, []);
+
+  const fetchApiAppoiment = async () => {
+    try {
+      const response = await fetch("/api/appointment", {
+        method: "GET",
+      });
+      if (!response.ok) {
+        throw new Error("Error fetching data");
+      }
+      const data = await response.json();
+
+      // Para cada cita, obtener información del paciente
+      const updatedAppointments = await Promise.all(
+        data.map(async (appointment) => {
+          try {
+            const patientResponse = await fetch(
+              `/api/patients/${appointment.ci}`
+            );
+            if (!patientResponse.ok) {
+              throw new Error(
+                `Error al obtener datos del paciente con ID ${appointment.patient_id}`
+              );
+            }
+            const patientData = await patientResponse.json();
+            return {
+              ...appointment,
+              patientName: patientData[0]?.name || "No disponible",
+              patientLastName: patientData[0]?.last_name || "",
+            };
+          } catch {
+            return {
+              ...appointment,
+              patientName: "No disponible",
+              patientLastName: "",
+            };
+          }
+        })
+      );
+
+      setAppoiments(updatedAppointments);
+      console.log("Citas médicas actualizadas:", updatedAppointments);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
-    <div>
-      <div className="flex flex-col items-center justify-center mt-16 bg-gray-100">
-        <div className="bg-white shadow-md rounded-lg p-8 max-w-5xl w-full mt-40 mb-10">
-          <h2 className="text-2xl font-bold mb-6 text-center">
-            Datos Complementarios de consulta
-          </h2>
-
-          {/* Fila para Encargada y CI del Paciente */}
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <SimpleInput
-                type="text"
-                label="Peso"
-                value={patientName}
-                onChange={(e) => setPatientName(e.target.value)}
+    <>
+      <div>Hola perrio</div>
+      {error && <Alert message={`Error: ${error}`} type="error" />}
+      <div className="mb-8">
+        {appoiments
+          .filter((item) => !item.height && !item.weight && !item.temperature)
+          .map((item, index) => (
+            <div key={index} className="mb-8">
+              <BasicForm
+                layout="horizontal"
+                fields={[
+                  {
+                    name: "temperature",
+                    type: "text",
+                    label: "Ingrese la temperatura",
+                  },
+                  { name: "weight", type: "text", label: "Ingrese el peso" },
+                  {
+                    name: "height",
+                    type: "text",
+                    label: "Ingrese la altura",
+                  },
+                ]}
+                apiUrl={`/api/appointment/${item.appoiment_id}`}
+                typeRequestApi="PATCH"
+                formTitle={`Paciente: ${item.patientName} ${item.patientLastName}`}
+                onSuccessMessage="Registro completado"
+                onErrorMessage="Error al registrar el peso, talla y temperatura"
+                buttonLabel="Registrar."
               />
+              <div className="p-4 border border-gray-300 rounded"></div>
             </div>
-            <div>
-              <SimpleInput
-                type="text"
-                label="Tamaño"
-                value={ci}
-                onChange={(e) => setCI(e.target.value)}
-              />
-            </div>
-          </div>
-
-          {/* Botón de Guardar */}
-          <div className="flex justify-center mt-6">
-            <PersonalButton
-              content="Guardar"
-              color="secondary"
-              variant="ghost"
-              onClick={() => setSuccess(true)}
-            />
-          </div>
-        </div>
+          ))}
       </div>
-    </div>
+    </>
   );
 }
