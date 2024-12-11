@@ -1,8 +1,17 @@
 import { NextResponse } from "next/server";
 import { neon_sql } from "@/app/lib/neon";
-export async function GET() {
+export async function GET(request) {
   try {
-    const patients = await neon_sql`SELECT * FROM medical_appointment`;
+    const { searchParams } = new URL(request.url);
+    const date = searchParams.get("date");
+
+    let query = `SELECT * FROM medical_appointment`;
+    if (date) {
+      console.log(date);
+      query += ` WHERE date = '${date}'`;
+    }
+
+    const patients = await neon_sql(query);
     return NextResponse.json(patients);
   } catch (error) {
     console.error("Error al consultar la base de datos:", error);
