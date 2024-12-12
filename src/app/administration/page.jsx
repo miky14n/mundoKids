@@ -71,6 +71,30 @@ export default function Settings() {
         />
       </div>
       <hr className="border-t-2 border-gray-300 my-6" />
+      <div>
+        <BasicForm
+          layout="horizontal"
+          fields={[
+            {
+              name: "name",
+              type: "text",
+              label: "Nombre del Servicio",
+            },
+            { name: "description", type: "text", label: "Descripcion" },
+            {
+              name: "price",
+              type: "text",
+              label: "Costo del Servicio",
+            },
+          ]}
+          apiUrl="/api/services"
+          formTitle="Añadir Servicio"
+          onSuccessMessage="Servicio registrado"
+          onErrorMessage="Error al registrar la Servicio"
+          buttonLabel="Registrar."
+        />
+      </div>
+      <hr className="border-t-2 border-gray-300 my-6" />
     </div>
   );
 }
