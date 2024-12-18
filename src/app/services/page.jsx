@@ -3,28 +3,20 @@ import { useState, useEffect, useRef } from "react";
 import SimpleInput from "@/components/Input";
 import PersonalButton from "@/components/Button";
 import Alert from "@/components/Alert";
-import SimpleDropdown from "@/components/SimpleDropdown";
 import ApiDropdown from "@/components/ApiDropdown";
 
-export default function MedicalAppointment() {
+export default function Services() {
   const [patientName, setPatientName] = useState("");
   const [ci, setCI] = useState("");
   const [services, setServices] = useState(null);
-  const [doctor, setDoctor] = useState(null);
-  const [consultType, setConsultType] = useState(null);
   const [servicesCost, setServicesCost] = useState("");
-  //const [summary, setSummary] = useState("");
   const [success, setSuccess] = useState(null);
   const [patientLastName, setPatientLastName] = useState("");
   const [responsible, setResponsible] = useState("");
   const patient_id = useRef(null);
-  const consultTypeItems = [
-    { key: "1", label: "Consulta" },
-    { key: "2", label: "Re consulta" },
-  ];
   useEffect(() => {
     if (ci && ci !== "") {
-      const fetchDoctor = async () => {
+      const fetchPatient = async () => {
         try {
           const response = await fetch(`/api/patients/${ci}`);
           if (!response.ok) {
@@ -41,12 +33,12 @@ export default function MedicalAppointment() {
           setPatientLastName("");
         }
       };
-      fetchDoctor();
+      fetchPatient();
     }
   }, [ci]);
   useEffect(() => {
     if (services && services !== "") {
-      const fetchDoctor = async () => {
+      const fetchServices = async () => {
         try {
           const response = await fetch(`/api/services/${services}`);
           if (!response.ok) {
@@ -61,24 +53,20 @@ export default function MedicalAppointment() {
           setPatientLastName("");
         }
       };
-      fetchDoctor();
+      fetchServices();
     }
   }, [services]);
   const handleRegister = async () => {
-    console.log("MAndadndo datoas medical apoiment", patient_id.current);
-    const typeAppoiment = consultType ? consultType.label : null;
+    console.log("Mandadndo datoas medical services", patient_id.current);
     const data = {
       patient_id: patient_id.current,
-      ci,
-      type_of_appointment: typeAppoiment,
-      specialty_id: services,
-      doctor_id: doctor,
+      services_id: services,
       date: new Date(),
       responsible,
     };
     console.log("Los datos a mandar:" + JSON.stringify(data));
     try {
-      const response = await fetch("/api/appointment", {
+      const response = await fetch("/api/medical_services", {
         method: "POST",
         body: JSON.stringify(data),
 
@@ -103,9 +91,7 @@ export default function MedicalAppointment() {
   const resetForm = () => {
     setPatientName("");
     setCI("");
-    setDoctor(null);
     setServices(null);
-    setConsultType(null);
     setServicesCost("");
     setPatientLastName("");
     setResponsible("");
@@ -190,13 +176,11 @@ export default function MedicalAppointment() {
               />
             </div>
           </div>
-
-          {/* Fila para Costo de Especialidad y Resumen */}
           <div className="grid grid-cols-2 gap-6 mt-4">
             <div>
               <SimpleInput
                 type="text"
-                label="Costo de Especialidad"
+                label="Costo del servicio medico"
                 value={servicesCost}
                 readOnly
               />
