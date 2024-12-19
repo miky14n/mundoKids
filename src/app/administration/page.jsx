@@ -46,6 +46,7 @@ export default function Administracion() {
             data.map((patient, index) => (
               <div key={index} className="my-4 p-4 border rounded">
                 <BasicForm
+                  formTitle="Datos de paciente"
                   layout="horizontal"
                   fields={[
                     {
@@ -76,7 +77,10 @@ export default function Administracion() {
                       name: "dateBorn",
                       type: "text-only",
                       title: "Fecha de nacimiento",
-                      label: patient.date_of_birth,
+                      label:
+                        typeof patient.date_of_birth === "string"
+                          ? patient.date_of_birth.split("T")[0]
+                          : "Fecha no disponible",
                     },
                   ]}
                   buttonLabel="Ver detalle."
