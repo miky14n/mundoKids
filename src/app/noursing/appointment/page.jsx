@@ -1,4 +1,4 @@
-"use client";
+/*"use client";
 
 import Alert from "@/components/Alert";
 import { useState, useEffect } from "react";
@@ -15,7 +15,6 @@ export default function Noursing() {
   const fetchApiAppoiment = async () => {
     try {
       const date = new Date().toISOString();
-      let checker = false;
       console.log("Soy la fecha del dia de hoy:", date);
       const response = await fetch(`/api/appointment?date=${date}`, {
         method: "GET",
@@ -26,44 +25,33 @@ export default function Noursing() {
       const data = await response.json();
       const updatedAppointments = await Promise.all(
         data.map(async (appointment) => {
-          if (
-            !appointment.weight &&
-            appointment.height &&
-            !appointment.temperature
-          ) {
-            try {
-              const patientResponse = await fetch(
-                `/api/patients/${appointment.ci}`
+          try {
+            const patientResponse = await fetch(
+              `/api/patients/${appointment.ci}`
+            );
+            if (!patientResponse.ok) {
+              throw new Error(
+                `Error al obtener datos del paciente con ID ${appointment.patient_id}`
               );
-              if (!patientResponse.ok) {
-                throw new Error(
-                  `Error al obtener datos del paciente con ID ${appointment.patient_id}`
-                );
-              }
-              const patientData = await patientResponse.json();
-              return {
-                ...appointment,
-                patientName: patientData[0]?.name || "No disponible",
-                patientLastName: patientData[0]?.last_name || "",
-              };
-            } catch {
-              return {
-                ...appointment,
-                patientName: "No disponible",
-                patientLastName: "",
-              };
             }
-          } else {
-            console.log("No hay datos por completar");
-            checker = true;
+            const patientData = await patientResponse.json();
+            return {
+              ...appointment,
+              patientName: patientData[0]?.name || "No disponible",
+              patientLastName: patientData[0]?.last_name || "",
+            };
+          } catch {
+            return {
+              ...appointment,
+              patientName: "No disponible",
+              patientLastName: "",
+            };
           }
         })
       );
 
-      if (!checker) {
-        setAppoiments(updatedAppointments);
-        console.log("Citas médicas actualizadas:", updatedAppointments);
-      }
+      setAppoiments(updatedAppointments);
+      console.log("Citas médicas actualizadas:", updatedAppointments);
     } catch (err) {
       setError(err.message);
     }
@@ -112,4 +100,4 @@ export default function Noursing() {
       </div>
     </>
   );
-}
+}*/

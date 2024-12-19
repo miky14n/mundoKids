@@ -1,5 +1,28 @@
 import { NextResponse } from "next/server";
 import { neon_sql } from "@/app/lib/neon";
+
+export async function GET(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const date = searchParams.get("date");
+
+    let query = `SELECT * FROM medical_services`;
+    if (date) {
+      console.log(date);
+      query += ` WHERE date = '${date}'`;
+    }
+
+    const patients = await neon_sql(query);
+    return NextResponse.json(patients);
+  } catch (error) {
+    console.error("Error al consultar la base de datos:", error);
+    return NextResponse.json(
+      { error: "Error al obtener los datos" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -13,6 +36,7 @@ export async function POST(request) {
       height,
       date,
     } = body;
+    //corregir cuando se tenga a los usarios esto se debe enviar del body
     const user_id = services_id;
     if (!services_id || !patient_id || !responsible || !user_id) {
       return NextResponse.json(

@@ -22,29 +22,30 @@ export default function Navbar() {
 
           {/* Navigation items aligned to the right */}
           <div className="hidden md:flex items-center space-x-4 ml-auto">
+            <Link href="/">
+              <span className="hover:bg-purple-50 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
+                Inicio
+              </span>
+            </Link>
             <Link href="/noursing">
               <span className="hover:bg-purple-50 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
                 Enfermeria
               </span>
             </Link>
-            <Link href="/">
-              <span className="hover:bg-purple-50 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
-                Home
-              </span>
-            </Link>
+            {/*
             <Link href="/about">
               <span className="hover:bg-purple-50 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
                 About
               </span>
-            </Link>
+            </Link>*/}
             <Link href="/services/listOfServices">
               <span className="hover:bg-purple-50 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
-                Services
+                Servicios Medicos
               </span>
             </Link>
-            <Link href="/contact">
+            <Link href="/administration">
               <span className="hover:bg-purple-50 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">
-                Contact
+                Administracion
               </span>
             </Link>
           </div>
@@ -81,22 +82,18 @@ export default function Navbar() {
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           <Link href="/">
             <span className="block hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium cursor-pointer">
-              Home
+              Inicio
             </span>
           </Link>
-          <Link href="/about">
-            <span className="block hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium cursor-pointer">
-              About
-            </span>
-          </Link>
+
           <Link href="/services">
             <span className="block hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium cursor-pointer">
-              Services
+              Servicios Medicos
             </span>
           </Link>
           <Link href="/contact">
             <span className="block hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium cursor-pointer">
-              Contact
+              Enfermeria
             </span>
           </Link>
         </div>

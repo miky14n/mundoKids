@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export default function Alert({ message, color, link, setStatus }) {
+export default function Alert({ message, color, link, setStatus = () => {} }) {
   const [isVisible, setIsVisible] = useState(true);
 
   const colorClasses = {

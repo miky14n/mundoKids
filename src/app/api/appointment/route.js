@@ -11,8 +11,8 @@ export async function GET(request) {
       query += ` WHERE date = '${date}'`;
     }
 
-    const patients = await neon_sql(query);
-    return NextResponse.json(patients);
+    const medical_appointment = await neon_sql(query);
+    return NextResponse.json(medical_appointment);
   } catch (error) {
     console.error("Error al consultar la base de datos:", error);
     return NextResponse.json(
