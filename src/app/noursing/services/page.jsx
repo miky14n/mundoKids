@@ -25,7 +25,7 @@ export default function Noursing() {
       let checker = false;
       const updatedServices = await Promise.all(
         data.map(async (service) => {
-          if (!service.weight && service.height && !service.temperature) {
+          if (!service.weight && !service.height && !service.temperature) {
             try {
               const patientResponse = await fetch(
                 `/api/patients?patient_id=${service.patient_id}`

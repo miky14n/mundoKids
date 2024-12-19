@@ -28,7 +28,7 @@ export default function Noursing() {
         data.map(async (appointment) => {
           if (
             !appointment.weight &&
-            appointment.height &&
+            !appointment.height &&
             !appointment.temperature
           ) {
             try {

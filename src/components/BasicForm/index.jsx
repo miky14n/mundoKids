@@ -128,6 +128,13 @@ export default function BasicForm({
                     />
                     <span>{field.label}</span>
                   </label>
+                ) : field.type === "text-only" ? (
+                  <div>
+                    {field.title && (
+                      <p className="font-bold text-gray-800">{field.title}</p>
+                    )}
+                    <p className="text-gray-700">{field.label}</p>
+                  </div>
                 ) : (
                   <SimpleInput
                     type={field.type}
