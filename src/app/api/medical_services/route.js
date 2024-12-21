@@ -5,11 +5,13 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const date = searchParams.get("date");
-
+    const patient_id = searchParams.get("id");
     let query = `SELECT * FROM medical_services`;
     if (date) {
       console.log(date);
       query += ` WHERE date = '${date}'`;
+    } else if (patient_id) {
+      query += ` WHERE patient_id = ${patient_id}`;
     }
 
     const patients = await neon_sql(query);

@@ -30,16 +30,19 @@ export default function Noursing() {
               const patientResponse = await fetch(
                 `/api/patients?patient_id=${service.patient_id}`
               );
+
               if (!patientResponse.ok) {
                 throw new Error(
                   `Error al obtener datos del paciente con ID ${service.patient_id}`
                 );
               }
               const patientData = await patientResponse.json();
+
               return {
                 ...service,
                 patientName: patientData[0]?.name || "No disponible",
                 patientLastName: patientData[0]?.last_name || "",
+                data: patientData,
               };
             } catch {
               return {
@@ -78,6 +81,7 @@ export default function Noursing() {
           .filter((item) => !item.height && !item.weight && !item.temperature)
           .map((item, index) => (
             <div key={index} className="mt-16">
+              {console.log(services)}
               <hr className="border-t-2 border-gray-300 my-6" />
               <BasicForm
                 layout="horizontal"

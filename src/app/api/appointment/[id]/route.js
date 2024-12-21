@@ -63,3 +63,37 @@ export async function PATCH(request, { params }) {
     );
   }
 }
+
+export async function GET(request, { params }) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const ci = searchParams.get("id");
+    const appoiment_id = params.id;
+
+    if (!appoiment_id) {
+      return NextResponse.json(
+        { error: "ID del paciente inválido en la validación" },
+        { status: 400 }
+      );
+    }
+
+    let query = `SELECT * FROM medical_appointment`;
+
+    if (ci) {
+      console.log("CI recibido:", ci);
+      query += ` WHERE ci =${ci}`;
+    } else {
+      console.log("UUID recibido:", appoiment_id);
+      query += ` WHERE appoiment_id ='${appoiment_id}'`;
+    }
+    console.log("la query", query, "Los key value", ci, appoiment_id);
+    const patients = await neon_sql(query);
+    return NextResponse.json(patients);
+  } catch (error) {
+    console.error("Error al consultar la base de datos:", error);
+    return NextResponse.json(
+      { error: "Error al obtener los datos" },
+      { status: 500 }
+    );
+  }
+}

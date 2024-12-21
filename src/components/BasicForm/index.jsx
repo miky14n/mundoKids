@@ -3,7 +3,7 @@ import { useState } from "react";
 import SimpleInput from "@/components/Input";
 import NextButton from "@/components/Button";
 import Alert from "@/components/Alert";
-
+import Link from "next/link";
 export default function BasicForm({
   layout = "vertical",
   fields = [],
@@ -18,6 +18,8 @@ export default function BasicForm({
   dateOption = null,
   titleDate = "",
   actionOnSuccess = null,
+  personalSubmint = null,
+  navigationTo = null,
 }) {
   const [formData, setFormData] = useState({});
   const [success, setSuccess] = useState(null);
@@ -164,7 +166,16 @@ export default function BasicForm({
                 ))}
             </div>
             <div>
-              <NextButton content={buttonLabel} action={handleSubmit} />
+              {navigationTo ? (
+                <Link href={navigationTo}>
+                  <NextButton content={buttonLabel} />
+                </Link>
+              ) : (
+                <NextButton
+                  content={buttonLabel}
+                  action={personalSubmint || handleSubmit}
+                />
+              )}
             </div>
           </div>
         </div>

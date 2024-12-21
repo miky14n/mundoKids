@@ -6,13 +6,17 @@ import { fetchPatients } from "./functions";
 
 export default function Administracion() {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [error, setError] = useState(null);
+  const [name, setName] = useState("");
+  const [ci, setCi] = useState("");
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const patients = await fetchPatients();
         setData(patients);
+        setFilteredData(patients);
         console.log("Pacientes cargados:", patients);
       } catch (error) {
         console.error("Error al cargar los datos:", error);
@@ -23,27 +27,40 @@ export default function Administracion() {
     loadData();
   }, []);
 
-  const fields = [
-    {
-      name: "info",
-      type: "text-only",
-      title: "Información Importante:",
-      label: "Este formulario debe llenarse con datos reales.",
-    },
-  ];
+  useEffect(() => {
+    const filtered = data.filter((patient) => {
+      const matchesName =
+        name.trim() === "" ||
+        `${patient.name} ${patient.last_name}`
+          .toLowerCase()
+          .includes(name.toLowerCase());
+      const matchesCi = ci.trim() === "" || patient.ci.toString().includes(ci);
+      return matchesName && matchesCi;
+    });
+    setFilteredData(filtered);
+  }, [name, ci, data]);
 
   return (
     <div>
-      <h1>Administración de Pacientes</h1>
-      <SimpleInput label="Nombre de paciente" />
-      <SimpleInput label="Ingrese CI del paciente" />
+      <div className="grid grid-cols-2 gap-6 mt-4">
+        <SimpleInput
+          label="Nombre de paciente"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <SimpleInput
+          label="Ingrese CI del paciente"
+          value={ci}
+          onChange={(e) => setCi(e.target.value)}
+        />
+      </div>
 
       {error ? (
         <p className="text-red-500">{error}</p>
       ) : (
         <>
-          {data.length > 0 ? (
-            data.map((patient, index) => (
+          {filteredData.length > 0 ? (
+            filteredData.map((patient, index) => (
               <div key={index} className="my-4 p-4 border rounded">
                 <BasicForm
                   formTitle="Datos de paciente"
@@ -84,11 +101,12 @@ export default function Administracion() {
                     },
                   ]}
                   buttonLabel="Ver detalle."
+                  navigationTo={`/administration/${patient.ci}`}
                 />
               </div>
             ))
           ) : (
-            <p>No hay pacientes registrados.</p>
+            <p>Cargando datos...</p>
           )}
         </>
       )}

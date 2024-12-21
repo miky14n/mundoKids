@@ -4,11 +4,13 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const date = searchParams.get("date");
-
+    const ci = searchParams.get("id");
     let query = `SELECT * FROM medical_appointment`;
     if (date) {
       console.log(date);
       query += ` WHERE date = '${date}'`;
+    } else if (ci) {
+      query += ` WHERE ci = '${ci}'`;
     }
 
     const medical_appointment = await neon_sql(query);
@@ -21,6 +23,7 @@ export async function GET(request) {
     );
   }
 }
+
 export async function POST(request) {
   try {
     const body = await request.json();

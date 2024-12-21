@@ -61,3 +61,38 @@ export async function PATCH(request, { params }) {
     );
   }
 }
+export async function GET(request, { params }) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const patient_id = searchParams.get("id");
+    const medical_srv_id = params.id;
+
+    console.log("ID de la cita médica recibido:", medical_srv_id);
+    console.log("CI recibido:", patient_id);
+
+    if (!medical_srv_id) {
+      return NextResponse.json(
+        { error: "ID del paciente inválido en la validación" },
+        { status: 400 }
+      );
+    }
+
+    let query = `SELECT * FROM medical_services`;
+    if (patient_id) {
+      console.log("CI recibido:", patient_id);
+      query += ` WHERE patient_id = ${parseInt(patient_id, 10)}`;
+    } else if (medical_srv_id) {
+      console.log("UUID recibido:", medical_srv_id);
+      query += ` WHERE medical_srv_id = '${medical_srv_id}'`;
+    }
+
+    const patients = await neon_sql(query);
+    return NextResponse.json(patients);
+  } catch (error) {
+    console.error("Error al consultar la base de datos:", error);
+    return NextResponse.json(
+      { error: "Error al obtener los datos" },
+      { status: 500 }
+    );
+  }
+}
