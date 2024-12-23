@@ -2,16 +2,23 @@
 
 import CardPatient from "@/components/CardPatient";
 import { useState, useEffect } from "react";
-import { fetchAppointments, fetchServices } from "./functionsForOne";
+import {
+  combineDataAppoimnet,
+  fetchAppointments,
+  fetchServices,
+  fetchMedicalServices,
+  combineDataMedicalSrv,
+} from "./functionsForOne";
+import BasicTable from "@/components/BasicTable";
 
 export default function OnePatient({ params }) {
   let ci = params.id;
   const [patient, setPatient] = useState(null);
   const [error, setError] = useState(null);
-  const [servicesOnePatient, setServicesOnePatient] = useState(null);
-  const [appoimentOnePatient, setAppoimentOnePatient] = useState(null);
-  const [lastServices, setLastServices] = useState(null);
-  const [lastAppointments, setLastAppointments] = useState(null);
+  const [servicesOnePatient, setServicesOnePatient] = useState([]);
+  const [appoimentOnePatient, setAppoimentOnePatient] = useState([]);
+  const [lastServices, setLastServices] = useState([]);
+  const [lastAppointments, setLastAppointments] = useState([]);
   useEffect(() => {
     if (ci && ci.trim() !== "") {
       const fetchPatient = async () => {
@@ -21,21 +28,37 @@ export default function OnePatient({ params }) {
           if (!response.ok) {
             throw new Error(`Error al obtener los datos: ${response.status}`);
           }
+
           const data = await response.json();
           const appoimentPatient = await fetchAppointments(ci);
-          const servicesPatient = await fetchServices(data[0].patient_id);
-          if (Object.keys(data).length === 0) {
+          const servicesPatient = await fetchMedicalServices(
+            data[0].patient_id
+          );
+
+          if (!data || data.length === 0) {
             throw new Error("No se encontraron datos para este paciente.");
           }
+
           console.log("Datos del paciente:", data);
           setPatient(data);
-          setAppoimentOnePatient(appoimentPatient);
-          setServicesOnePatient(servicesPatient);
+          const appoimentCombine = await combineDataAppoimnet(appoimentPatient);
+          //console.log("La respuesta de la convinacion", app);
+          setAppoimentOnePatient(appoimentCombine);
+          const servicesCombine = await combineDataMedicalSrv(servicesPatient);
+          setServicesOnePatient(servicesCombine);
+          if (servicesPatient.length > 0) {
+            setLastServices(servicesPatient.at(-1));
+          }
+
+          if (appoimentPatient.length > 0) {
+            setLastAppointments(appoimentPatient.at(-1));
+          }
         } catch (err) {
           console.error("Error al buscar al paciente:", err);
           setError(err.message);
         }
       };
+
       fetchPatient();
     } else {
       setError("CI del paciente no válido.");
@@ -59,13 +82,49 @@ export default function OnePatient({ params }) {
       </div>
     );
   }
-
+  let columsAppoimentShow = [
+    "Tipo de consulta",
+    "Fecha",
+    "Altura",
+    "Peso",
+    "Temperatura",
+    "Responsable",
+    "Nombre del Doctor",
+    "Especialidad",
+  ];
+  let columsMedicalSrvShow = [
+    "Nombre del servicio medico",
+    "Fecha",
+    "Altura",
+    "Peso",
+    "Temperatura",
+    "Responsable",
+  ];
   return (
     <>
       {patient ? (
         <>
-          {patient && <CardPatient data={patient} />}
-          {console.log("El paciente:", patient)}
+          {patient && (
+            <>
+              {console.log("El paciente:", appoimentOnePatient)}
+              <CardPatient data={patient} />
+              <hr className=" my-6" />
+              <div>
+                <BasicTable
+                  data={appoimentOnePatient}
+                  title={"Ultima Cita medica"}
+                  personalColums={columsAppoimentShow}
+                />
+              </div>
+              <div>
+                <BasicTable
+                  data={servicesOnePatient}
+                  title={"Ultima Servicios medicos Aplicados"}
+                  personalColums={columsMedicalSrvShow}
+                />
+              </div>
+            </>
+          )}
         </>
       ) : (
         <div className="text-center mt-8">
