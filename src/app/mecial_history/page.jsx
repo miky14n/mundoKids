@@ -4,7 +4,7 @@ import SimpleInput from "@/components/Input";
 import { useEffect, useState } from "react";
 import { fetchPatients } from "./functions";
 
-export default function Administracion() {
+export default function MedicalHistory() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [error, setError] = useState(null);
@@ -101,7 +101,7 @@ export default function Administracion() {
                     },
                   ]}
                   buttonLabel="Ver detalle."
-                  navigationTo={`/administration/${patient.ci}`}
+                  navigationTo={`/mecial_history/${patient.ci}`}
                 />
               </div>
             ))

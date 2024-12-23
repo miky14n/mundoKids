@@ -86,8 +86,10 @@ function castColumns(columns) {
         return "Tipo de consulta";
       case "doctor_name":
         return "Nombre del Doctor";
-      case "date":
-        return "Fecha";
+      case "date_srv":
+        return "Fecha del ultimo servicio medico";
+      case "date_appt":
+        return "Fecha de la consulta";
       case "height":
         return "Altura";
       case "weight":
@@ -118,6 +120,7 @@ const combineDataAppoimnet = async (data) => {
         id: item.appoiment_id,
         doctor_name: doctorName,
         Especialidad: specialtyName,
+        date_appt: new Date(item.date).toLocaleDateString(),
       };
     })
   );
@@ -143,6 +146,7 @@ const combineDataMedicalSrv = async (data) => {
         ...item,
         id: item.medical_srv_id,
         name_medical_srv: servicesName,
+        date_srv: new Date(item.data).toLocaleDateString(),
       };
     })
   );

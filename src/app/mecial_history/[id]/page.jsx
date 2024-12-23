@@ -84,7 +84,7 @@ export default function OnePatient({ params }) {
   }
   let columsAppoimentShow = [
     "Tipo de consulta",
-    "Fecha",
+    "Fecha de la consulta",
     "Altura",
     "Peso",
     "Temperatura",
@@ -94,7 +94,7 @@ export default function OnePatient({ params }) {
   ];
   let columsMedicalSrvShow = [
     "Nombre del servicio medico",
-    "Fecha",
+    "Fecha del ultimo servicio medico",
     "Altura",
     "Peso",
     "Temperatura",
