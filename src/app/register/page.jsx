@@ -27,7 +27,6 @@ export default function Register() {
 
   const handleRegister = async () => {
     const gender = selectedItem ? selectedItem.key : null;
-    console.log("MAndadndo datoas" + dateBorn);
 
     const data = {
       ci: +ci,
@@ -41,7 +40,6 @@ export default function Register() {
       guardian_ci: +guardianCI,
       relationship_to_patient: relationship,
     };
-    console.log("Los datos a mandar:" + JSON.stringify(data));
     try {
       const response = await fetch("/api/patients", {
         method: "POST",

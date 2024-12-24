@@ -21,13 +21,11 @@ export default function Container({
   const [formData, setFormData] = useState({});
   const [success, setSuccess] = useState(null);
   useEffect(() => {
-    console.log({ doctor_id, specialty_id });
     const data = { doctor_id, specialty_id };
     setFormData(data);
   }, [doctor_id, specialty_id]);
   const handleSubmit = async () => {
     try {
-      console.log(formData, "Data sent");
       const response = await fetch(apiUrl, {
         method: typeRequestApi,
         headers: {

@@ -40,7 +40,7 @@ const fetchSpeciality = async (specialty_id) => {
       throw new Error(`Error al obtener los datos: ${response.status}`);
     }
     const data = await response.json();
-    console.log("Datos del medico no encontrado:", data);
+    console.log("Datos de especialidad:", data);
     return data;
   } catch (error) {
     console.error("Error al buscar los servicios médicos:", error);
@@ -56,7 +56,7 @@ const fetchServices = async (services_id) => {
       throw new Error(`Error al obtener los datos: ${response.status}`);
     }
     const data = await response.json();
-    console.log("Datos del medico no encontrado:", data);
+    console.log("Datos del servico no encontrado:", data);
     return data;
   } catch (error) {
     console.error("Error al buscar los servicios médicos:", error);
@@ -75,7 +75,7 @@ const fetchDoctor = async (doctor_id) => {
     console.log("Datos del medico no encontrado:", data);
     return data;
   } catch (error) {
-    console.error("Error al buscar los servicios médicos:", error);
+    console.error("Error al buscar los médicos:", error);
     throw error;
   }
 };
@@ -100,6 +100,12 @@ function castColumns(columns) {
         return "Responsable";
       case "name_medical_srv":
         return "Nombre del servicio medico";
+      case "specialty_name":
+        return "Especialidad";
+      case "appointment_count":
+        return "Total de consultas";
+      case "total_earnings":
+        return "Total de ingreso";
 
       default:
         return item; // Si no hay traducción, retorna el nombre original
@@ -168,4 +174,7 @@ export {
   fetchMedicalServices,
   combineDataAppoimnet,
   combineDataMedicalSrv,
+  fetchSpeciality,
+  fetchDoctor,
+  castColumns,
 };

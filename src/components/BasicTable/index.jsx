@@ -44,7 +44,7 @@ export default function BasicTable({
           <hr className="border-t-2 border-gray-300 mt-2" />
         </div>
       )}
-      {validData.length > 1 && (
+      {validData.length > 0 && (
         <Table
           aria-label="Dynamic table with client-side pagination"
           bottomContent={
@@ -78,7 +78,6 @@ export default function BasicTable({
               <TableRow key={item.id || item[(personalColums || columns)[0]]}>
                 {(personalColums || columns).map((col) => (
                   <TableCell key={col}>
-                    {/*console.log("dentro de la tabla", item[col])*/}
                     {item[col] !== null && item[col] !== undefined
                       ? item[col].toString()
                       : "Dato no registrado"}

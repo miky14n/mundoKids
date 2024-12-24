@@ -23,7 +23,7 @@ export default function OnePatient({ params }) {
     if (ci && ci.trim() !== "") {
       const fetchPatient = async () => {
         try {
-          console.log("Buscando paciente con CI:", ci);
+          //console.log("Buscando paciente con CI:", ci);
           const response = await fetch(`/api/patients/${ci}`);
           if (!response.ok) {
             throw new Error(`Error al obtener los datos: ${response.status}`);
@@ -39,7 +39,7 @@ export default function OnePatient({ params }) {
             throw new Error("No se encontraron datos para este paciente.");
           }
 
-          console.log("Datos del paciente:", data);
+          //console.log("Datos del paciente:", data);
           setPatient(data);
           const appoimentCombine = await combineDataAppoimnet(appoimentPatient);
           //console.log("La respuesta de la convinacion", app);
@@ -106,7 +106,7 @@ export default function OnePatient({ params }) {
         <>
           {patient && (
             <>
-              {console.log("El paciente:", appoimentOnePatient)}
+              {/*console.log("El paciente:", appoimentOnePatient)*/}
               <CardPatient data={patient} />
               <hr className=" my-6" />
               <div>

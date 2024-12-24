@@ -14,9 +14,11 @@ export default function Noursing() {
 
   const fetchApiAppoiment = async () => {
     try {
-      const date = new Date().toISOString();
+      const today = new Date();
+      const date = `${today.getFullYear()}-${(today.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
       let checker = false;
-      console.log("Soy la fecha del dia de hoy:", date);
       const response = await fetch(`/api/appointment?date=${date}`, {
         method: "GET",
       });
@@ -60,10 +62,8 @@ export default function Noursing() {
         })
       );
 
-      if (!checker) {
-        setAppoiments(updatedAppointments);
-        console.log("Citas médicas actualizadas:", updatedAppointments);
-      }
+      const filteredAppointments = updatedAppointments.filter(Boolean);
+      setAppoiments(filteredAppointments);
     } catch (err) {
       setError(err.message);
     }

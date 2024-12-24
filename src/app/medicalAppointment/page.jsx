@@ -53,7 +53,6 @@ export default function MedicalAppointment() {
             throw new Error(`Error al obtener los datos: ${response.status}`);
           }
           const data = await response.json();
-          console.log("Datos de la especialidad:", data);
           setSpecialtyCost(data[0].price);
         } catch (error) {
           console.error("Error al buscar al paciente:", error);
@@ -65,18 +64,20 @@ export default function MedicalAppointment() {
     }
   }, [specialty]);
   const handleRegister = async () => {
-    console.log("MAndadndo datoas medical apoiment", patient_id.current);
     const typeAppoiment = consultType ? consultType.label : null;
+    const today = new Date();
+    const date = `${today.getFullYear()}-${(today.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
     const data = {
       patient_id: patient_id.current,
       ci,
       type_of_appointment: typeAppoiment,
       specialty_id: specialty,
       doctor_id: doctor,
-      date: new Date(),
+      date: date,
       responsible,
     };
-    console.log("Los datos a mandar:" + JSON.stringify(data));
     try {
       const response = await fetch("/api/appointment", {
         method: "POST",
@@ -88,7 +89,6 @@ export default function MedicalAppointment() {
       });
 
       if (response.ok) {
-        console.log(response);
         setSuccess(true);
         resetForm();
       } else {

@@ -51,12 +51,6 @@ export default function BasicForm({
 
   const handleSubmit = async () => {
     try {
-      console.log(
-        formData,
-        "Que se le envia",
-        "El extra component",
-        valueExtraComponent
-      );
       const response = await fetch(apiUrl, {
         method: typeRequestApi,
         headers: {

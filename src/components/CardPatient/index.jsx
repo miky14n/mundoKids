@@ -1,7 +1,6 @@
 export default function CardPatient(params) {
   const { data } = params;
   const patient = data[0];
-  console.log("dentro del componente", patient);
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
       <h1 className="text-2xl font-bold text-gray-800 mb-4">

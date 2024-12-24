@@ -15,7 +15,6 @@ export default function Noursing() {
   const fetchApiAppoiment = async () => {
     try {
       const date = new Date().toISOString();
-      console.log("Soy la fecha del dia de hoy:", date);
       const response = await fetch(`/api/appointment?date=${date}`, {
         method: "GET",
       });
@@ -51,7 +50,6 @@ export default function Noursing() {
       );
 
       setAppoiments(updatedAppointments);
-      console.log("Citas médicas actualizadas:", updatedAppointments);
     } catch (err) {
       setError(err.message);
     }

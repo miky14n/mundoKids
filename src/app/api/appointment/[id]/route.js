@@ -11,7 +11,7 @@ export async function PATCH(request, { params }) {
     }
 
     const appoiment_id = params.id;
-    console.log("ID de la cita médica recibido:", appoiment_id);
+    //console.log("ID de la cita médica recibido:", appoiment_id);
 
     const body = await request.json();
     const {

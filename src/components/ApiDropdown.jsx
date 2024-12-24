@@ -9,7 +9,6 @@ import {
 import { useState, useEffect } from "react";
 function getMenuItem(menuItems, buttonLabel, nameOfGet, id) {
   const foundItem = menuItems.find((item) => item[id] === buttonLabel);
-  console.log(" lo que retorna el metodo:", menuItems);
   return foundItem ? foundItem[nameOfGet] : null;
 }
 export default function ApiDropdown({
@@ -56,8 +55,6 @@ export default function ApiDropdown({
   if (error) return <p>Error: {error}</p>;
 
   const handleSelect = (id, name) => {
-    //setSelectedItemName(name);
-    console.log(id);
     onActionName(name);
     onActionId(id);
   };

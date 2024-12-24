@@ -14,7 +14,10 @@ export default function Noursing() {
 
   const fetchApiMedicalSrv = async () => {
     try {
-      const date = new Date().toISOString();
+      const today = new Date();
+      const date = `${today.getFullYear()}-${(today.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
       const response = await fetch(`/api/medical_services?date=${date}`, {
         method: "GET",
       });
@@ -58,9 +61,9 @@ export default function Noursing() {
         })
       );
 
-      if (!checker) {
-        setServices(updatedServices);
-      }
+      const filterServices = updatedServices.filter(Boolean);
+      console.log("Servicios medicos pendientes actualizadas:", filterServices);
+      setServices(filterServices);
     } catch (err) {
       setError(err.message);
     }
@@ -81,7 +84,6 @@ export default function Noursing() {
           .filter((item) => !item.height && !item.weight && !item.temperature)
           .map((item, index) => (
             <div key={index} className="mt-16">
-              {console.log(services)}
               <hr className="border-t-2 border-gray-300 my-6" />
               <BasicForm
                 layout="horizontal"

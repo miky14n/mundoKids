@@ -23,12 +23,10 @@ export default function Services() {
             throw new Error(`Error al obtener los datos: ${response.status}`);
           }
           const data = await response.json();
-          console.log("Datos del paciente:", data);
           setPatientName(data[0].name);
           setPatientLastName(data[0].last_name);
           patient_id.current = data[0].patient_id;
         } catch (error) {
-          console.error("Error al buscar al paciente:", error);
           setPatientName("No existe el paciente");
           setPatientLastName("");
         }
@@ -56,12 +54,16 @@ export default function Services() {
       fetchServices();
     }
   }, [services]);
+  const today = new Date();
+  const date = `${today.getFullYear()}-${(today.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
   const handleRegister = async () => {
     console.log("Mandadndo datoas medical services", patient_id.current);
     const data = {
       patient_id: patient_id.current,
       services_id: services,
-      date: new Date(),
+      date: date,
       responsible,
     };
     console.log("Los datos a mandar:" + JSON.stringify(data));
