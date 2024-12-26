@@ -1,8 +1,5 @@
 "use client";
-//NextUI
 import { Button } from "@nextui-org/react";
-
-//React
 import react from "react";
 
 export default function PersonalButton({
@@ -19,13 +16,6 @@ export default function PersonalButton({
     console.log("Im doing something!");
   },
 }) {
-  const [isPressed, setIsPressed] = react.useState(false);
-
-  const handlerAction = () => {
-    setIsPressed(true);
-    console.log("It has been pressed!");
-  };
-
   return (
     <Button
       size={size}
@@ -36,9 +26,7 @@ export default function PersonalButton({
       endContent={endIcon}
       classname={classname}
       onPress={action}
-      isPressed={isPressed}
       variant={variant}
-      onPressChange={handlerAction}
     >
       {content}
     </Button>

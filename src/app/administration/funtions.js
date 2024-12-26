@@ -3,6 +3,8 @@ import {
   fetchSpeciality,
   castColumns,
 } from "../mecial_history/[id]/functionsForOne";
+import ExcelJS from "exceljs";
+
 const fetchAppointments = async (aditionalQuery) => {
   try {
     const response = await fetch(`/api/appointment?${aditionalQuery}`, {
@@ -20,7 +22,7 @@ const fetchAppointments = async (aditionalQuery) => {
   }
 };
 
-const processData = async (data) => {
+const processData = async (data, filterName) => {
   const statsMap = new Map();
 
   await Promise.all(
@@ -55,13 +57,11 @@ const processData = async (data) => {
       statsMap.set(key, currentStats); // Actualizar en el mapa
     })
   );
-
-  // Convertimos el mapa en un array
   const results = Array.from(statsMap.values());
   const renamedResults = results.map((item) => {
     const renamedItem = {};
     Object.keys(item).forEach((key) => {
-      const translatedKey = castColumns([key])[0];
+      const translatedKey = castColumns([key], filterName)[0];
       renamedItem[translatedKey] = item[key];
     });
     return renamedItem;
@@ -70,5 +70,43 @@ const processData = async (data) => {
 
   return renamedResults;
 };
+const exportToExcel = (data, filterName, fileName = "tabla_medica.xlsx") => {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Datos Médicos");
 
-export { fetchAppointments, processData };
+  // Agregar los encabezados
+  worksheet.columns = [
+    { header: "Especialidad", key: "especialidad", width: 30 },
+    { header: "Nombre del Doctor", key: "doctor", width: 30 },
+    { header: "Total de Consultas", key: "totalConsultas", width: 20 },
+    { header: "Total de Ingreso", key: "totalIngreso", width: 20 },
+  ];
+
+  // Formatear los datos
+  data.forEach((item) => {
+    worksheet.addRow({
+      especialidad: item.Especialidad,
+      doctor: item["Nombre del Doctor"],
+      totalConsultas: item[`Total de consultas ${filterName}`],
+      totalIngreso: item["Total de ingreso"],
+    });
+  });
+
+  // Crear un buffer del archivo Excel
+  workbook.xlsx
+    .writeBuffer()
+    .then((buffer) => {
+      // Crear un enlace para descargar el archivo
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      link.click();
+    })
+    .catch((error) => {
+      console.error("Error al generar el archivo Excel:", error);
+    });
+};
+export { fetchAppointments, processData, exportToExcel };

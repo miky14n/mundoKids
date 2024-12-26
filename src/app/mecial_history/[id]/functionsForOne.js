@@ -79,7 +79,7 @@ const fetchDoctor = async (doctor_id) => {
     throw error;
   }
 };
-function castColumns(columns) {
+function castColumns(columns, filterName) {
   return columns.map((item) => {
     switch (item) {
       case "type_of_appointment":
@@ -103,7 +103,7 @@ function castColumns(columns) {
       case "specialty_name":
         return "Especialidad";
       case "appointment_count":
-        return "Total de consultas";
+        return `Total de consultas ${filterName}`;
       case "total_earnings":
         return "Total de ingreso";
 
