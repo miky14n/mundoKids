@@ -20,6 +20,7 @@ export default function BasicForm({
   actionOnSuccess = null,
   personalSubmint = null,
   navigationTo = null,
+  colorButton = null,
 }) {
   const [formData, setFormData] = useState({});
   const [success, setSuccess] = useState(null);
@@ -102,9 +103,9 @@ export default function BasicForm({
         />
       )}
 
-      <div className="flex items-center justify-center">
-        <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-6xl">
-          <h2 className="text-2xl font-bold mb-4 text-center">{formTitle}</h2>
+      <div className="flex items-center justify-center ">
+        <div className="bg-white shadow-md rounded-lg px-10 py-8 w-full max-w-4xl">
+          <h2 className="text-3xl font-bold mb-8 text-center">{formTitle}</h2>
           <div
             className={`flex ${
               layout === "horizontal"
@@ -112,20 +113,24 @@ export default function BasicForm({
                 : "flex-col space-y-4 items-center justify-center"
             }`}
           >
-            <div>{extraComponent || <></>}</div>
+            {extraComponent && (
+              <div className="w-full">
+                <div className="mb-4">{extraComponent}</div>
+              </div>
+            )}
             {fields.map((field, index) => (
-              <div key={index} className="flex-1">
+              <div key={index} className="w-full">
                 {field.type === "checkbox" ? (
-                  <label className="flex items-center space-x-2">
+                  <label className="flex items-center space-x-3">
                     <input
                       type="checkbox"
                       checked={formData[field.name] || false}
                       onChange={(e) => handleChange(field, e.target.checked)}
                     />
-                    <span>{field.label}</span>
+                    <span className="text-gray-700">{field.label}</span>
                   </label>
                 ) : field.type === "text-only" ? (
-                  <div>
+                  <div className="text-center">
                     {field.title && (
                       <p className="font-bold text-gray-800">{field.title}</p>
                     )}
@@ -138,14 +143,14 @@ export default function BasicForm({
                     variant="bordered"
                     value={formData[field.name] || ""}
                     onChange={(e) => handleChange(field, e.target.value)}
+                    className="mb-4"
                   />
                 )}
               </div>
             ))}
-
-            <div>
-              {dateOption ||
-                (formData.support && (
+            {dateOption ||
+              (formData.support && (
+                <div className="w-full">
                   <input
                     type="text"
                     value={selectedDate}
@@ -155,11 +160,11 @@ export default function BasicForm({
                     }
                     onChange={(e) => handleDateChange(e.target.value)}
                     placeholder={titleDate}
-                    className="mt-1 border rounded px-2 py-1 w-full"
+                    className="mt-1 border rounded px-4 py-2 w-full"
                   />
-                ))}
-            </div>
-            <div>
+                </div>
+              ))}
+            <div className="w-full flex justify-center">
               {navigationTo ? (
                 <Link href={navigationTo}>
                   <NextButton content={buttonLabel} />
@@ -168,6 +173,7 @@ export default function BasicForm({
                 <NextButton
                   content={buttonLabel}
                   action={personalSubmint || handleSubmit}
+                  color={colorButton}
                 />
               )}
             </div>

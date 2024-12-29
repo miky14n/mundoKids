@@ -3,26 +3,8 @@
 @tailwind utilities;
 @import url("https://fonts.googleapis.com/css2?family=Chivo:wght@400;700&display=swap");
 
-:root {
-  --background: #000000;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: "Chivo";
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
 }
