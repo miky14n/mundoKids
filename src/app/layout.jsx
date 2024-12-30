@@ -1,7 +1,7 @@
-import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "../components/NavBAr";
 import { NextUIProvider } from "@nextui-org/react";
+import NavBarNxtUI from "@/components/NavBarNxtUI";
 
 export const metadata = {
   title: "Clinaca mundo KIDS",
@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
       <body className="bg-slate-50">
         <NextUIProvider>
           <div className="font-sans">
-            <Navbar />
+            <NavBarNxtUI />
             {children}
           </div>
         </NextUIProvider>

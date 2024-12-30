@@ -6,7 +6,14 @@ import crypto from "crypto";
 export async function POST(request) {
   try {
     const data = await request.json();
-    const { email, password, user_name, activated, valueExtraComponent } = data;
+    const {
+      email,
+      password,
+      user_name,
+      active_account,
+      verified_account,
+      valueExtraComponent,
+    } = data;
     const role = valueExtraComponent?.key; // Verifica si `valueExtraComponent` existe
     if (!role) {
       return NextResponse.json(
@@ -49,15 +56,16 @@ export async function POST(request) {
 
     // Insertar el nuevo usuario
     const queryInsert = `
-      INSERT INTO users (user_name, email, password, verifi_password, role, activated) 
-      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+      INSERT INTO users (user_name, email, password, verifi_password, role, active_account,verified_account) 
+      VALUES ($1, $2, $3, $4, $5, $6,$7) RETURNING *`;
     const newUser = await neon_sql(queryInsert, [
       user_name,
       email,
       hashedPassword,
       hashedPassword,
       role,
-      activated || false,
+      active_account || true,
+      verified_account || false,
     ]);
 
     // Omitir el password del usuario en la respuesta

@@ -1,5 +1,4 @@
 import { Input } from "@nextui-org/react";
-import PropTypes from "prop-types";
 
 export default function SimpleInput({
   type = "email",
