@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { signOut } from "next-auth/react";
 export default function ToggleAvatar({ name = "?", avatarSrc = null }) {
   const handleClick = async () => {

@@ -5,13 +5,18 @@ import PasswordInput from "@/components/PasswordInput";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { signOut } from "next-auth/react";
 export default function ChangePassword() {
   const router = useRouter();
   const [error, setError] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [password, setPassword] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
-
+  const handleRestartSesion = async () => {
+    await signOut({
+      callbackUrl: "/login",
+    });
+  };
   const resetForm = () => {
     setNewPassword("");
     setPassword("");
@@ -48,10 +53,11 @@ export default function ChangePassword() {
         setError(data.error);
         return;
       }
-      alert("Contraseña cambiada exitosamente.");
+      alert(
+        "Contraseña cambiada exitosamente. Vuelva a iniciar sesion porfavor"
+      );
       resetForm();
-      router.push("/");
-      router.refresh();
+      handleRestartSesion();
     } catch (error) {
       console.error("Error al cambiar la contraseña:", error);
       setError("Error inesperado. Intenta nuevamente.");
