@@ -18,6 +18,7 @@ export const authOptions = {
           const userFound = await neon_sql(queryCheck, [credentials.email]);
 
           if (!userFound || userFound.length === 0) {
+            console.error("Usuario no encontrado:", credentials.email);
             throw new Error("No se encontró un usuario con este correo.");
           }
 
@@ -28,6 +29,7 @@ export const authOptions = {
           );
 
           if (!matchPassword) {
+            console.error("Contraseña incorrecta para el usuario:", user.email);
             throw new Error("La contraseña es incorrecta.");
           }
 
@@ -38,7 +40,7 @@ export const authOptions = {
             role: user.role,
           };
         } catch (error) {
-          console.error("Error en la autenticación:", error);
+          console.error("Error en authorize:", error);
           throw new Error("Credenciales inválidas.");
         }
       },
