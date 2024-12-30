@@ -100,6 +100,8 @@ export default function Noursing() {
                   onSuccessMessage="Registro completado"
                   onErrorMessage="Error al registrar el peso, talla y temperatura"
                   buttonLabel="Registrar."
+                  colorButton="secondary"
+                  onSuccess={fetchApiAppoiment}
                 />
               </div>
             ))

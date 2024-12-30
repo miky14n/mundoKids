@@ -21,6 +21,7 @@ export default function BasicForm({
   personalSubmint = null,
   navigationTo = null,
   colorButton = null,
+  onSuccess = null,
 }) {
   const [formData, setFormData] = useState({});
   const [success, setSuccess] = useState(null);
@@ -62,6 +63,7 @@ export default function BasicForm({
       if (response.ok) {
         setFormData({});
         setSuccess(true);
+        onSuccess();
       } else {
         setSuccess(false);
       }
