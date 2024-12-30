@@ -36,8 +36,28 @@ export default function Login() {
             headers: { "Content-Type": "application/json" },
           }
         );
+
+        if (!response.ok) {
+          console.error("Error al obtener la información del usuario.");
+          return;
+        }
+
         const data = await response.json();
-        if (!data.verified_account) {
+        console.log("La respuesta", data);
+        if (data?.verified_account === false) {
+          try {
+            const patchResponse = await fetch(`/api/auth/users/${email}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+            });
+
+            if (!patchResponse.ok) {
+              throw new Error("Error al actualizar la cuenta.");
+            }
+          } catch (patchError) {
+            console.error("No se activó la cuenta correctamente:", patchError);
+          }
+
           alert("Cuenta recién creada. Se requiere cambio de contraseña.");
           setTimeout(() => {
             router.push("/auth/changePassword");
@@ -46,7 +66,9 @@ export default function Login() {
           router.push("/");
           router.refresh();
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+      }
     }
   };
 
