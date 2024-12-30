@@ -8,6 +8,7 @@ export async function middleware(req) {
 
   if (!token) {
     return NextResponse.redirect(new URL("/auth/login", req.url));
+    console;
   }
 
   const role = token.role;

@@ -36,15 +36,14 @@ export default function Login() {
             headers: { "Content-Type": "application/json" },
           }
         );
-
+        const data = await response.json();
         if (!response.ok) {
           console.error("Error al obtener la información del usuario.");
           return;
         }
 
-        const data = await response.json();
-        console.log("La respuesta", data);
-        if (data?.verified_account === false) {
+        console.log("La respuesta", data[0]);
+        if (!data[0].verified_account) {
           try {
             const patchResponse = await fetch(`/api/auth/users/${email}`, {
               method: "PATCH",
@@ -101,12 +100,7 @@ export default function Login() {
             />
           </div>
 
-          <div className="flex justify-between mt-6">
-            <PersonalButton
-              content="Cancelar"
-              color="danger"
-              action={resetForm}
-            />
+          <div className="flex justify-center mt-6">
             <PersonalButton
               content="Iniciar Sesión"
               color="secondary"
