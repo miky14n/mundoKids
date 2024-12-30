@@ -62,10 +62,9 @@ export default function Login() {
           setTimeout(() => {
             router.push("/auth/changePassword");
           }, 1000);
-        } else {
-          router.push("/");
-          router.refresh();
         }
+        router.push("/");
+        router.refresh();
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
