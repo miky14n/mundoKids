@@ -12,17 +12,19 @@ import ToggleAvatar from "./ToggleAvatar";
 
 export default async function NavBarNxtUI() {
   const session = await getServerSession(authOptions);
+  const listRol = ["nurse", "doctor"];
   return (
     <>
       {session && (
-        <Navbar className="bg-customPink text-customPurple">
-          <NavbarBrand>
-            <Link href="/">
+        <Navbar className="bg-customPink text-customPurple" isBordered>
+          <NavbarBrand justify="start" className="ml-[-20px]">
+            <Link justify="start" className="pl-4" href="/">
               <Image src="/Logo.png" alt="Logo" width="200" height="200" />
+              <p className="font-bold text-inherit"> </p>
             </Link>
           </NavbarBrand>
 
-          <NavbarContent className="hidden sm:flex gap-5" justify="center">
+          <NavbarContent className="hidden sm:flex gap-4" justify="center">
             <NavbarItem isActive>
               <Link aria-current="page" color="secondary" href="/">
                 Inicio
@@ -38,8 +40,15 @@ export default async function NavBarNxtUI() {
                 Servicios Médicos
               </Link>
             </NavbarItem>
+            {session.user.role != "nurse" && (
+              <NavbarItem>
+                <Link color="foreground" href="/medical-history">
+                  Historiales Clinicos
+                </Link>
+              </NavbarItem>
+            )}
             <>
-              {session.user.role != "nurse" && (
+              {!listRol.includes(session.user.role) && (
                 <NavbarItem>
                   <Link color="foreground" href="/administration">
                     Administración
