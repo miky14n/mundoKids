@@ -16,7 +16,7 @@ export async function middleware(req) {
     case "admin":
       const authorizeDirectionsAdm = [
         "/administration",
-        "/medical_services",
+        "/medical-services",
         "/auth",
         "/medical-history",
         "/register",
@@ -27,7 +27,7 @@ export async function middleware(req) {
       }
     case "nurse":
       const authorizeDirectionsN = [
-        "/medical_services",
+        "/medical-services",
         "register",
         "/",
         "/noursing",
@@ -40,7 +40,7 @@ export async function middleware(req) {
       }
     case "doctor":
       const authorizeDirectionsD = [
-        "/medical_services",
+        "/medical-services",
         "register",
         "/",
         "/noursing",
@@ -60,7 +60,7 @@ export { default } from "next-auth/middleware";
 export const config = {
   matcher: [
     "/",
-    "/medical_services",
+    "/medical-services",
     "/administration",
     "/api",
     "/auth",

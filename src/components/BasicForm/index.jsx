@@ -106,7 +106,7 @@ export default function BasicForm({
       )}
 
       <div className="flex items-center justify-center ">
-        <div className="bg-white shadow-md rounded-lg px-10 py-8 w-full max-w-4xl">
+        <div className="bg-white shadow-md rounded-lg px-10 py-8 w-full max-w-7xl">
           <h2 className="text-3xl font-bold mb-8 text-center">{formTitle}</h2>
           <div
             className={`flex ${

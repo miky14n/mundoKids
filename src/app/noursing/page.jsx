@@ -72,7 +72,7 @@ export default function Noursing() {
   return (
     <>
       {error && <Alert message={`Error: ${error}`} type="error" />}
-      <div className="mt-8 bg-indigo-300">
+      <div className="mt-8 ">
         {appoiments.length > 0 ? (
           appoiments
             .filter((item) => !item.height && !item.weight && !item.temperature)

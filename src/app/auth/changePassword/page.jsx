@@ -85,13 +85,13 @@ export default function ChangePassword() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <PasswordInput
-            personalPlaceHolder="Ingrese la nueva Contraseña"
-            personaLabel="Nueva Contraseña"
+            personalPlaceHolder="Ingrese la nueva contraseña"
+            personaLabel="Nueva contraseña"
             onChange={(e) => setNewPassword(e.target.value)}
           />
           <PasswordInput
-            personalPlaceHolder="Repita la nueva Contraseña"
-            personaLabel="Repetir Nueva Contraseña"
+            personalPlaceHolder="Repita la nueva contraseña"
+            personaLabel="Repetir nueva contraseña"
             onChange={(e) => setVerifyPassword(e.target.value)}
           />
         </div>

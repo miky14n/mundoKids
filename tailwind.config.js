@@ -10,8 +10,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
         customPink: "#EAC5E4",
         customPurple: "#4A226E",
       },

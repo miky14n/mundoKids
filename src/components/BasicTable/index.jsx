@@ -15,9 +15,10 @@ export default function BasicTable({
   data,
   title = null,
   personalColums = null,
+  rowsPerPage = 4,
 }) {
   const [page, setPage] = useState(1);
-  const rowsPerPage = 4;
+
   let columns;
   let validData = data;
   if (!Array.isArray(data)) {
@@ -34,7 +35,7 @@ export default function BasicTable({
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     return validData.slice(start, end);
-  }, [page, validData]);
+  }, [page, rowsPerPage, validData]);
 
   return (
     <div>

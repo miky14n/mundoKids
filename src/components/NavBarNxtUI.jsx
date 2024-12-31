@@ -23,27 +23,27 @@ export default async function NavBarNxtUI() {
               <p className="font-bold text-inherit"> </p>
             </Link>
           </NavbarBrand>
-
-          <NavbarContent className="hidden sm:flex gap-4" justify="center">
-            <NavbarItem isActive>
+          {}
+          <NavbarContent className="hidden sm:flex gap-4 " justify="center">
+            {/**<NavbarItem isActive>
               <Link aria-current="page" color="secondary" href="/">
                 Inicio
               </Link>
-            </NavbarItem>
+            </NavbarItem> */}
             <NavbarItem>
               <Link color="foreground" href="/noursing">
                 Enfermería
               </Link>
             </NavbarItem>
             <NavbarItem>
-              <Link color="foreground" href="/services/listOfServices">
+              <Link color="foreground" href="/medical-services/listOfServices">
                 Servicios Médicos
               </Link>
             </NavbarItem>
             {session.user.role != "nurse" && (
               <NavbarItem>
                 <Link color="foreground" href="/medical-history">
-                  Historiales Clinicos
+                  Historial Clinico
                 </Link>
               </NavbarItem>
             )}

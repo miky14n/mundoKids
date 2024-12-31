@@ -20,7 +20,7 @@ export default function Home() {
     img: "/Services.png",
     title: "Registar Servicio",
     description: "Registrar servicio externo a consultas ",
-    path: "/medical_services",
+    path: "/medical-services",
     titleButton: "Servicios",
   };
   return (

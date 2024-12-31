@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 export default function ToggleAvatar({ name = "?", avatarSrc = null }) {
   const handleClick = async () => {
     await signOut({
@@ -51,13 +52,26 @@ export default function ToggleAvatar({ name = "?", avatarSrc = null }) {
           {/* Opciones del menú */}
           <ul className="py-2 text-sm text-gray-700 dark:text-gray-300">
             <li>
-              <button
-                className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600"
-                onClick={() => console.log("Cambiar Contraseña")}
-                role="menuitem"
-              >
-                Cambiar Contraseña
-              </button>
+              <Link href={"/auth/changePassword"}>
+                <button
+                  className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600"
+                  onClick={() => console.log("Cambiar Contraseña")}
+                  role="menuitem"
+                >
+                  Cambiar Contraseña
+                </button>
+              </Link>
+            </li>
+            <li>
+              <Link href={"/auth/register"}>
+                <button
+                  className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600"
+                  onClick={() => console.log("Cambiar Contraseña")}
+                  role="menuitem"
+                >
+                  Registrar usuarios
+                </button>
+              </Link>
             </li>
             <li>
               <button
