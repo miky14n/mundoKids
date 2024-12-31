@@ -56,6 +56,7 @@ export async function middleware(req) {
 
   console.log("la sesion", sesion);
 }
+export { default } from "next-auth/middleware";
 export const config = {
   matcher: [
     "/",
