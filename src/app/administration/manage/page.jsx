@@ -1,7 +1,6 @@
 "use client";
 import ApiDropdown from "@/components/ApiDropdown";
 import BasicForm from "@/components/BasicForm";
-import Container from "@/components/Container";
 import { useState } from "react";
 export default function Settings() {
   /***/
@@ -44,6 +43,7 @@ export default function Settings() {
             </div>
           }
           valueExtraComponent={specialty}
+          colorButton={"secondary"}
         />
       </div>
       <hr className="border-t-2 border-gray-300 my-6" />
@@ -68,6 +68,7 @@ export default function Settings() {
           onSuccessMessage="Especialidad creada exitosamente"
           onErrorMessage="Error al registrar la especialidad"
           buttonLabel="Registrar."
+          colorButton={"secondary"}
         />
       </div>
       <hr className="border-t-2 border-gray-300 my-6" />
@@ -92,6 +93,7 @@ export default function Settings() {
           onSuccessMessage="Servicio registrado"
           onErrorMessage="Error al registrar la Servicio"
           buttonLabel="Registrar."
+          colorButton={"secondary"}
         />
       </div>
       <hr className="border-t-2 border-gray-300 my-6" />

@@ -13,7 +13,7 @@ export default function Home() {
     title: "Agendar Consulta",
     description:
       "Agendar consulta para paciente que ya posea un registro dentro de la clinica",
-    path: "/medicalAppointment",
+    path: "/medical-appointment",
     titleButton: "Consulta",
   };
   const propsServices = {

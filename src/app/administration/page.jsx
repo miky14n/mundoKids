@@ -1,5 +1,4 @@
 "use client";
-import BasicForm from "@/components/BasicForm";
 import BasicTable from "@/components/BasicTable";
 import SimpleInput from "@/components/Input";
 import SimpleDropdown from "@/components/SimpleDropdown";

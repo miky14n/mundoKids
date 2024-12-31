@@ -5,26 +5,24 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const date = searchParams.get("date");
     const ci = searchParams.get("id");
-    const filter = searchParams.get("filter"); // Nuevo parámetro para filtrar por rango de fechas.
+    const filter = searchParams.get("filter");
     let query = `SELECT * FROM medical_appointment`;
     const conditions = [];
 
-    // Filtro por fecha exacta
     if (date) {
       conditions.push(`date = '${date}'`);
     }
-
-    // Filtro por CI del paciente
     if (ci) {
       conditions.push(`ci = ${ci}`);
     }
-
-    // Filtro por rango de fechas basado en el valor de "filter"
     if (filter) {
-      const today = new Date();
-      const todayDate = `${today.getFullYear()}-${(today.getMonth() + 1)
+      const now = new Date();
+      const boliviaOffset = -4 * 60; // Offset en minutos para GMT-4
+      const localNow = new Date(now.getTime() + boliviaOffset * 60 * 1000);
+
+      const todayDate = `${localNow.getFullYear()}-${(localNow.getMonth() + 1)
         .toString()
-        .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
+        .padStart(2, "0")}-${localNow.getDate().toString().padStart(2, "0")}`;
       switch (filter) {
         case "today":
           conditions.push(`date = '${todayDate}'`);
@@ -48,15 +46,10 @@ export async function GET(request) {
           throw new Error("Filtro inválido");
       }
     }
-
-    // Construcción de la cláusula WHERE
     if (conditions.length > 0) {
       query += ` WHERE ${conditions.join(" AND ")}`;
     }
-
-    // Ejecutar la consulta
     const medical_appointment = await neon_sql(query);
-    //console.log(medical_appointment);
     return NextResponse.json(medical_appointment);
   } catch (error) {
     console.error("Error al consultar la base de datos:", error);

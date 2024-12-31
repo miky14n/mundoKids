@@ -21,7 +21,7 @@ export default function BasicForm({
   personalSubmint = null,
   navigationTo = null,
   colorButton = null,
-  onSuccess = null,
+  onSuccess = () => {},
 }) {
   const [formData, setFormData] = useState({});
   const [success, setSuccess] = useState(null);

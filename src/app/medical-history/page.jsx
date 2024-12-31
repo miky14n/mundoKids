@@ -101,7 +101,8 @@ export default function MedicalHistory() {
                     },
                   ]}
                   buttonLabel="Ver detalle."
-                  navigationTo={`/mecial_history/${patient.ci}`}
+                  navigationTo={`/medical-history/${patient.ci}`}
+                  colorButton={"secondary"}
                 />
               </div>
             ))
