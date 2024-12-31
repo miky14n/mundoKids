@@ -2,7 +2,7 @@ import {
   fetchDoctor,
   fetchSpeciality,
   castColumns,
-} from "../historial_medico/[id]/functionsForOne";
+} from "../medical-history/[id]/functionsForOne";
 import ExcelJS from "exceljs";
 
 const fetchAppointments = async (aditionalQuery) => {

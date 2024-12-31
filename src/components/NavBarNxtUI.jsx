@@ -39,7 +39,7 @@ export default async function NavBarNxtUI() {
               </Link>
             </NavbarItem>
             <>
-              {session.user.role != "nourse" && (
+              {session.user.role != "nurse" && (
                 <NavbarItem>
                   <Link color="foreground" href="/administration">
                     Administración
