@@ -12,7 +12,9 @@ export default function Services() {
   const [servicesCost, setServicesCost] = useState("");
   const [success, setSuccess] = useState(null);
   const [patientLastName, setPatientLastName] = useState("");
-  const [responsible, setResponsible] = useState("");
+  const [responsible, setResponsible] = useState(
+    localStorage.getItem("userName")
+  );
   const patient_id = useRef(null);
   useEffect(() => {
     if (ci && ci !== "") {
@@ -128,7 +130,7 @@ export default function Services() {
             <div>
               <SimpleInput
                 type="text"
-                label="Encargada"
+                label="Encargado"
                 value={responsible}
                 onChange={(e) => setResponsible(e.target.value)}
               />

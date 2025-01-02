@@ -1,14 +1,21 @@
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
-export async function middleware(req) {
+export default async function middleware(req) {
   const sesion = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const url = req.nextUrl.pathname;
+  const publicPaths = ["/auth/login", "/unauthorized"];
+  const isAuthApi = url.startsWith("/api/auth");
+  if (publicPaths.includes(url) || isAuthApi) {
+    return NextResponse.next();
+  }
+
   if (!sesion) {
-    console.log("no sesion registrada", sesion);
+    console.log("No sesión registrada", sesion);
     return NextResponse.redirect(new URL("/auth/login", req.url));
   }
+
   const role = sesion.role;
-  const url = req.nextUrl.pathname;
 
   switch (role) {
     case "it":
@@ -24,6 +31,8 @@ export async function middleware(req) {
       ];
       if (authorizeDirectionsAdm.includes(url)) {
         return NextResponse.next();
+      } else {
+        return NextResponse.redirect(new URL("/unauthorized", req.url));
       }
     case "nurse":
       const authorizeDirectionsN = [
@@ -49,14 +58,17 @@ export async function middleware(req) {
       ];
       if (authorizeDirectionsD.includes(url)) {
         return NextResponse.next();
+      } else {
+        return NextResponse.redirect(new URL("/unauthorized", req.url));
       }
     default:
       return NextResponse.redirect(new URL("/auth/login", req.url));
   }
-
-  console.log("la sesion", sesion);
 }
-export { default } from "next-auth/middleware";
+
+/*export const config = {
+  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+};*/
 export const config = {
   matcher: [
     "/",

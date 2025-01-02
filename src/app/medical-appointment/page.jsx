@@ -16,7 +16,9 @@ export default function MedicalAppointment() {
   //const [summary, setSummary] = useState("");
   const [success, setSuccess] = useState(null);
   const [patientLastName, setPatientLastName] = useState("");
-  const [responsible, setResponsible] = useState("");
+  const [responsible, setResponsible] = useState(
+    localStorage.getItem("userName")
+  );
   const patient_id = useRef(null);
   const consultTypeItems = [
     { key: "1", label: "Consulta" },
@@ -140,7 +142,7 @@ export default function MedicalAppointment() {
             <div>
               <SimpleInput
                 type="text"
-                label="Encargada"
+                label="Encargado"
                 value={responsible}
                 onChange={(e) => setResponsible(e.target.value)}
               />

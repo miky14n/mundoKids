@@ -1,10 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-export default function ToggleAvatar({ name = "?", avatarSrc = null }) {
+export default function ToggleAvatar({
+  name = "?",
+  avatarSrc = null,
+  role = null,
+}) {
+  useEffect(() => {
+    // Verificar que estamos en el cliente
+    if (typeof window !== "undefined") {
+      localStorage.setItem("userName", name);
+      console.log("Guardado en sessionStorage:", name);
+    }
+  }, [name]);
   const handleClick = async () => {
     await signOut({
       callbackUrl: "/login",
@@ -62,17 +73,19 @@ export default function ToggleAvatar({ name = "?", avatarSrc = null }) {
                 </button>
               </Link>
             </li>
-            <li>
-              <Link href={"/auth/register"}>
-                <button
-                  className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600"
-                  onClick={() => console.log("Cambiar Contraseña")}
-                  role="menuitem"
-                >
-                  Registrar usuarios
-                </button>
-              </Link>
-            </li>
+            {role === "admin" && (
+              <li>
+                <Link href={"/auth/register"}>
+                  <button
+                    className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600"
+                    onClick={() => console.log("Cambiar Contraseña")}
+                    role="menuitem"
+                  >
+                    Registrar usuarios
+                  </button>
+                </Link>
+              </li>
+            )}
             <li>
               <button
                 className="block w-full px-4 py-2 text-left text-red-500 hover:bg-red-50 dark:hover:bg-red-600 dark:text-red-400"
