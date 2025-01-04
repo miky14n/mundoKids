@@ -17,7 +17,6 @@ export default function MedicalHistory() {
         const patients = await fetchPatients();
         setData(patients);
         setFilteredData(patients);
-        console.log("Pacientes cargados:", patients);
       } catch (error) {
         console.error("Error al cargar los datos:", error);
         setError("No se pudo cargar la lista de pacientes");

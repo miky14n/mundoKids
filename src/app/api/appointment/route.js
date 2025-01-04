@@ -15,6 +15,7 @@ export async function GET(request) {
     if (ci) {
       conditions.push(`ci = ${ci}`);
     }
+    console.log(filter, "el filtro");
     if (filter) {
       const now = new Date();
       const boliviaOffset = -4 * 60; // Offset en minutos para GMT-4
@@ -35,12 +36,12 @@ export async function GET(request) {
         case "month":
           conditions.push(
             `DATE_PART('month', date) = ${
-              today.getMonth() + 1
-            } AND DATE_PART('year', date) = ${today.getFullYear()}`
+              now.getMonth() + 1
+            } AND DATE_PART('year', date) = ${now.getFullYear()}`
           );
           break;
         case "year":
-          conditions.push(`DATE_PART('year', date) = ${today.getFullYear()}`);
+          conditions.push(`DATE_PART('year', date) = ${now.getFullYear()}`);
           break;
         default:
           throw new Error("Filtro inválido");
@@ -63,7 +64,6 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json();
-    //console.log(body);
     const {
       patient_id,
       ci,
@@ -120,8 +120,6 @@ export async function POST(request) {
       )
       RETURNING *;
     `;
-
-    // Respuesta con el registro creado
     return NextResponse.json(result[0], { status: 201 });
   } catch (error) {
     console.error("Error al insertar la cita médica:", error);

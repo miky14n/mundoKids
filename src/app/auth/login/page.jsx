@@ -41,8 +41,6 @@ export default function Login() {
           console.error("Error al obtener la información del usuario.");
           return;
         }
-
-        console.log("La respuesta", data[0]);
         if (!data[0].verified_account) {
           try {
             const patchResponse = await fetch(`/api/auth/users/${email}`, {

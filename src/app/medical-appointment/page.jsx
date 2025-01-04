@@ -33,7 +33,6 @@ export default function MedicalAppointment() {
             throw new Error(`Error al obtener los datos: ${response.status}`);
           }
           const data = await response.json();
-          console.log("Datos del paciente:", data);
           setPatientName(data[0].name);
           setPatientLastName(data[0].last_name);
           patient_id.current = data[0].patient_id;

@@ -7,11 +7,10 @@ const fetchPatients = async () => {
       throw new Error(`Error al obtener los datos: ${response.status}`);
     }
     const data = await response.json();
-    console.log("Datos del paciente:", data);
-    return data; // Retorna los datos de la API
+    return data;
   } catch (error) {
     console.error("Error al buscar al paciente:", error);
-    throw error; // Lanza el error para manejarlo externamente
+    throw error;
   }
 };
 
@@ -24,10 +23,10 @@ const fetchPatient = async (ci) => {
     }
     const data = await response.json();
     console.log("Datos del paciente:", data);
-    return data; // Retorna los datos de la API
+    return data;
   } catch (error) {
     console.error("Error al buscar al paciente:", error);
-    throw error; // Lanza el error para manejarlo externamente
+    throw error;
   }
 };
 export { fetchPatients, fetchPatient };

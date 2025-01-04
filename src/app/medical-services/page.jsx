@@ -45,7 +45,6 @@ export default function Services() {
             throw new Error(`Error al obtener los datos: ${response.status}`);
           }
           const data = await response.json();
-          console.log("Datos de la especialidad:", data);
           setServicesCost(data[0].price);
         } catch (error) {
           console.error("Error al buscar al paciente:", error);
@@ -61,7 +60,6 @@ export default function Services() {
     .toString()
     .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
   const handleRegister = async () => {
-    console.log("Mandadndo datoas medical services", patient_id.current);
     const data = {
       patient_id: patient_id.current,
       services_id: services,

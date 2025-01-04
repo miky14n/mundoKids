@@ -62,7 +62,6 @@ export default function Noursing() {
       );
 
       const filterServices = updatedServices.filter(Boolean);
-      console.log("Servicios medicos pendientes actualizadas:", filterServices);
       setServices(filterServices);
     } catch (err) {
       setError(err.message);

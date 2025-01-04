@@ -12,7 +12,6 @@ import ToggleAvatar from "./ToggleAvatar";
 
 export default async function NavBarNxtUI() {
   const session = await getServerSession(authOptions);
-
   const listRol = ["nurse", "doctor"];
   return (
     <>
@@ -60,7 +59,7 @@ export default async function NavBarNxtUI() {
           </NavbarContent>
 
           <NavbarContent as="div" justify="end">
-            <ToggleAvatar name={session.user.name} />
+            <ToggleAvatar name={session.user.name} role={session.user.role} />
           </NavbarContent>
         </Navbar>
       )}

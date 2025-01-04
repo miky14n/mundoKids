@@ -12,7 +12,6 @@ export default function Navbar() {
   };
   const pathname = usePathname();
   const hideNavbarPaths = ["/auth/login"];
-  console.log("soy la ruta actual", pathname);
   return (
     <>
       {!hideNavbarPaths.includes(pathname) && (

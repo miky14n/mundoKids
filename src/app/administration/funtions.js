@@ -14,17 +14,15 @@ const fetchAppointments = async (aditionalQuery) => {
       throw new Error(`Error al obtener los datos: ${response.status}`);
     }
     const data = await response.json();
-    console.log("Datos de la cita médica:", data);
-    return data; // Retorna los datos de la API
+    return data;
   } catch (error) {
     console.error("Error al buscar la cita médica:", error);
-    throw error; // Lanza el error para manejarlo externamente
+    throw error;
   }
 };
 
 const processData = async (data, filterName) => {
   const statsMap = new Map();
-
   await Promise.all(
     data.map(async (item) => {
       const specialty = await fetchSpeciality(item.specialty_id);
@@ -66,7 +64,6 @@ const processData = async (data, filterName) => {
     });
     return renamedItem;
   });
-  console.log("Datos procesados:", renamedResults);
 
   return renamedResults;
 };

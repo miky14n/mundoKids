@@ -25,8 +25,6 @@ export default function ChangePassword() {
   };
 
   const handleSubmit = async () => {
-    // Validaciones en el cliente
-    console.log("lo que se enviara", password, newPassword, verifyPassword);
     if (!password || !newPassword || !verifyPassword) {
       setError("Todos los campos son obligatorios.");
       return;
@@ -48,7 +46,6 @@ export default function ChangePassword() {
       });
 
       const data = await response.json();
-      console.log("la rspuesta del bako", data);
       if (!response.ok) {
         setError(data.error);
         return;

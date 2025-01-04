@@ -9,11 +9,10 @@ export default function ToggleAvatar({
   avatarSrc = null,
   role = null,
 }) {
+  const roleAdmition = ["admin", "it"];
   useEffect(() => {
-    // Verificar que estamos en el cliente
     if (typeof window !== "undefined") {
       localStorage.setItem("userName", name);
-      console.log("Guardado en sessionStorage:", name);
     }
   }, [name]);
   const handleClick = async () => {
@@ -73,7 +72,7 @@ export default function ToggleAvatar({
                 </button>
               </Link>
             </li>
-            {role === "admin" && (
+            {roleAdmition.includes(role) && (
               <li>
                 <Link href={"/auth/register"}>
                   <button
