@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { neon_sql } from "@/app/lib/neon";
-export async function GET() {
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+export async function GET(req) {
+  const session = await getServerSession(authOptions);
+  console.log("que tiene sesion para el usuario", session);
+  if (!session) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
+
   try {
     const patients = await neon_sql`SELECT * FROM doctor`;
     return NextResponse.json(patients);
@@ -12,6 +21,7 @@ export async function GET() {
     );
   }
 }
+
 export async function POST(req) {
   try {
     const body = await req.json();

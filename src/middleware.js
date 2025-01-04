@@ -37,6 +37,7 @@ export default async function middleware(req) {
     case "nurse":
       const authorizeDirectionsN = [
         "/medical-services",
+        "/medical-services/listOfServices",
         "register",
         "/",
         "/noursing",
@@ -72,13 +73,13 @@ export default async function middleware(req) {
 export const config = {
   matcher: [
     "/",
-    "/medical-services",
-    "/administration",
+    "/medical-services/:path*",
+    "/administration/:path*",
     "/api",
-    "/auth",
-    "/medical-appointment",
-    "/medical-history",
-    "/noursing",
-    "/register",
+    "/auth/:path*",
+    "/medical-appointment/:path*",
+    "/medical-history/:path*",
+    "/noursing/:path*",
+    "/register/:path*",
   ],
 };

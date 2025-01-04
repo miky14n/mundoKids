@@ -4,7 +4,7 @@ import PersonalButton from "@/components/Button";
 import SimpleInput from "@/components/Input";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Login() {
   const router = useRouter();
