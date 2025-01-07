@@ -25,9 +25,14 @@ export default async function middleware(req) {
         "/administration",
         "/medical-services",
         "/auth",
+        "/auth/changePassword",
+        "/auth/register",
         "/medical-history",
         "/register",
         "/",
+        "/medical-services/listOfServices",
+        "/noursing/services",
+        "/noursing",
       ];
       if (authorizeDirectionsAdm.includes(url)) {
         return NextResponse.next();
@@ -36,11 +41,13 @@ export default async function middleware(req) {
       }
     case "nurse":
       const authorizeDirectionsN = [
+        "/auth/changePassword",
         "/medical-services",
         "/medical-services/listOfServices",
         "register",
         "/",
         "/noursing",
+        "/noursing/services",
         "/medical-appointment",
       ];
       if (authorizeDirectionsN.includes(url)) {

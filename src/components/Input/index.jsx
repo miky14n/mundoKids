@@ -1,8 +1,8 @@
 import { Input } from "@nextui-org/react";
 
 export default function SimpleInput({
-  type = "email",
-  label = "Email",
+  type = "text ",
+  label = "Put some text here",
   variant = "bordered",
   onChange,
   value,
