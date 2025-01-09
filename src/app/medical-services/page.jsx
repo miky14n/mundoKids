@@ -38,7 +38,7 @@ export default function Services() {
   }, [ci]);
   useEffect(() => {
     if (services && services !== "") {
-      const fetchServices = async () => {
+      const fetchOneServices = async () => {
         try {
           const response = await fetch(`/api/services/${services}`);
           if (!response.ok) {
@@ -52,7 +52,7 @@ export default function Services() {
           setPatientLastName("");
         }
       };
-      fetchServices();
+      fetchOneServices();
     }
   }, [services]);
   const today = new Date();

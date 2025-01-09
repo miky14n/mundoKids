@@ -47,7 +47,7 @@ const fetchSpeciality = async (specialty_id) => {
     throw error;
   }
 };
-const fetchServices = async (services_id) => {
+const fetchOneServices = async (services_id) => {
   try {
     const response = await fetch(`/api/services/${services_id}`, {
       method: "GET",
@@ -104,6 +104,10 @@ function castColumns(columns, filterName) {
         return "Especialidad";
       case "appointment_count":
         return `Total de consultas ${filterName}`;
+      case "services_count":
+        return `Total de servicios atendidos ${filterName}`;
+      case "services_name":
+        return `Nombre del servicio medico`;
       case "total_earnings":
         return "Total de ingreso";
 
@@ -145,7 +149,7 @@ const combineDataAppoimnet = async (data) => {
 const combineDataMedicalSrv = async (data) => {
   const results = await Promise.all(
     data.map(async (item) => {
-      const services = await fetchServices(item.services_id);
+      const services = await fetchOneServices(item.services_id);
       const servicesName = services[0].name;
 
       return {
@@ -170,7 +174,7 @@ const combineDataMedicalSrv = async (data) => {
 
 export {
   fetchAppointments,
-  fetchServices,
+  fetchOneServices,
   fetchMedicalServices,
   combineDataAppoimnet,
   combineDataMedicalSrv,

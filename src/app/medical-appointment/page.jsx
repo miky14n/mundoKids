@@ -221,7 +221,7 @@ export default function MedicalAppointment() {
                 type="text"
                 label="Costo de Especialidad"
                 value={specialtyCost}
-                readOnly
+                onChange={(e) => setSpecialtyCost(e.target.value)}
               />
             </div>
           </div>

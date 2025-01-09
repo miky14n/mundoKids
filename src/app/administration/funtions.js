@@ -2,6 +2,7 @@ import {
   fetchDoctor,
   fetchSpeciality,
   castColumns,
+  fetchOneServices,
 } from "../medical-history/[id]/functionsForOne";
 import ExcelJS from "exceljs";
 
@@ -20,7 +21,68 @@ const fetchAppointments = async (aditionalQuery) => {
     throw error;
   }
 };
+const fetchMedicalServices = async (aditionalQuery) => {
+  try {
+    const response = await fetch(`/api/medical_services?${aditionalQuery}`, {
+      method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error(`Error al obtener los datos: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log("Datos del servico no encontrado:", data);
+    return data;
+  } catch (error) {
+    console.error("Error al buscar los servicios médicos:", error);
+    throw error;
+  }
+};
 
+const processDataServices = async (data, filterName) => {
+  if (data.length > 0) {
+    const statsMap = new Map();
+    await Promise.all(
+      data.map(async (item) => {
+        const services = await fetchOneServices(item.services_id);
+        const servicesCost = parseFloat(services[0].price) || 0;
+        if (!services || !servicesCost) {
+          console.error(
+            `No se pudo obtener el precio para services_id: ${item.services_id}`
+          );
+          return;
+        }
+        const key = `${item.services_id}`;
+
+        if (!statsMap.has(key)) {
+          statsMap.set(key, {
+            services_id: item.services_id,
+            services_name: services[0].name,
+            total_earnings: 0,
+            services_count: 0,
+          });
+        }
+
+        const currentStats = statsMap.get(key);
+        currentStats.total_earnings += servicesCost; // Sumar ganancias
+        currentStats.services_count += 1; // Incrementar contador de citas
+
+        statsMap.set(key, currentStats); // Actualizar en el mapa
+      })
+    );
+    const results = Array.from(statsMap.values());
+    console.log(results);
+    const renamedResults = results.map((item) => {
+      const renamedItem = {};
+      Object.keys(item).forEach((key) => {
+        const translatedKey = castColumns([key], filterName)[0];
+        renamedItem[translatedKey] = item[key];
+      });
+      return renamedItem;
+    });
+
+    return renamedResults;
+  } else return data;
+};
 const processData = async (data, filterName) => {
   const statsMap = new Map();
   await Promise.all(
@@ -126,4 +188,10 @@ const exportToExcel = (data, filterName, fileName = "tabla_medica.xlsx") => {
     });
 };
 
-export { fetchAppointments, processData, exportToExcel };
+export {
+  fetchAppointments,
+  processData,
+  exportToExcel,
+  fetchMedicalServices,
+  processDataServices,
+};

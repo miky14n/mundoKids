@@ -8,11 +8,11 @@ export default function ListOfServices(params) {
   const [showSpecialty, setShowSpecialty] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetchServices();
+    fetchOneServices();
     fetchSpecialty();
   }, []);
 
-  const fetchServices = async () => {
+  const fetchOneServices = async () => {
     try {
       const response = await fetch(`/api/services`, {
         method: "GET",

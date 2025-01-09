@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import {
   combineDataAppoimnet,
   fetchAppointments,
-  fetchServices,
   fetchMedicalServices,
   combineDataMedicalSrv,
 } from "./functionsForOne";
