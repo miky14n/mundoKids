@@ -40,7 +40,6 @@ const fetchSpeciality = async (specialty_id) => {
       throw new Error(`Error al obtener los datos: ${response.status}`);
     }
     const data = await response.json();
-    console.log("Datos de especialidad:", data);
     return data;
   } catch (error) {
     console.error("Error al buscar los servicios médicos:", error);
@@ -56,7 +55,6 @@ const fetchOneServices = async (services_id) => {
       throw new Error(`Error al obtener los datos: ${response.status}`);
     }
     const data = await response.json();
-    console.log("Datos del servico no encontrado:", data);
     return data;
   } catch (error) {
     console.error("Error al buscar los servicios médicos:", error);
@@ -72,7 +70,6 @@ const fetchDoctor = async (doctor_id) => {
       throw new Error(`Error al obtener los datos: ${response.status}`);
     }
     const data = await response.json();
-    console.log("Datos del medico no encontrado:", data);
     return data;
   } catch (error) {
     console.error("Error al buscar los médicos:", error);

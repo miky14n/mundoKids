@@ -30,7 +30,6 @@ const fetchMedicalServices = async (aditionalQuery) => {
       throw new Error(`Error al obtener los datos: ${response.status}`);
     }
     const data = await response.json();
-    console.log("Datos del servico no encontrado:", data);
     return data;
   } catch (error) {
     console.error("Error al buscar los servicios médicos:", error);
@@ -129,32 +128,62 @@ const processData = async (data, filterName) => {
 
   return renamedResults;
 };
-const exportToExcel = (data, filterName, fileName = "tabla_medica.xlsx") => {
+const exportToExcel = (
+  data,
+  filterName,
+  fileName = "tabla_medica.xlsx",
+  showAp = true
+) => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Datos Médicos");
-
-  worksheet.columns = [
-    { header: "Especialidad", key: "especialidad", width: 30 },
-    { header: "Nombre del Doctor", key: "doctor", width: 30 },
-    { header: "Total de Consultas", key: "totalConsultas", width: 20 },
-    { header: "Total de Ingreso", key: "totalIngreso", width: 20 },
-    {
-      header: "Fecha de extracción de reporte",
-      key: "fechaExtraccion",
-      width: 30,
-    },
-  ];
-  //fecha del dia de exportacion en formato dd/mm/yy
   const currentDate = new Date().toLocaleDateString("es-ES");
-  data.forEach((item) => {
-    worksheet.addRow({
-      especialidad: item.Especialidad,
-      doctor: item["Nombre del Doctor"],
-      totalConsultas: item[`Total de consultas ${filterName}`],
-      totalIngreso: item["Total de ingreso"],
-      fechaExtraccion: currentDate,
+  if (showAp) {
+    worksheet.columns = [
+      { header: "Especialidad", key: "especialidad", width: 30 },
+      { header: "Nombre del Doctor", key: "doctor", width: 30 },
+      { header: "Total de Consultas", key: "totalConsultas", width: 20 },
+      { header: "Total de Ingreso", key: "totalIngreso", width: 20 },
+      {
+        header: "Fecha de extracción de reporte",
+        key: "fechaExtraccion",
+        width: 30,
+      },
+    ];
+    data.forEach((item) => {
+      worksheet.addRow({
+        especialidad: item.Especialidad,
+        doctor: item["Nombre del Doctor"],
+        totalConsultas: item[`Total de consultas ${filterName}`],
+        totalIngreso: item["Total de ingreso"],
+        fechaExtraccion: currentDate,
+      });
     });
-  });
+  } else {
+    worksheet.columns = [
+      { header: "Nombre del servicio medico", key: "serviceName", width: 30 },
+      {
+        header: "Total de servicios atendidos",
+        key: "totalServices",
+        width: 20,
+      },
+      { header: "Total de Ingreso", key: "totalIngreso", width: 20 },
+      {
+        header: "Fecha de extracción de reporte",
+        key: "fechaExtraccion",
+        width: 30,
+      },
+    ];
+    data.forEach((item) => {
+      worksheet.addRow({
+        serviceName: item["Nombre del servicio medico"],
+        totalServices: item[`Total de servicios atendidos ${filterName}`],
+        totalIngreso: item["Total de ingreso"],
+        fechaExtraccion: currentDate,
+      });
+    });
+  }
+  //fecha del dia de exportacion en formato dd/mm/yy
+
   const totalIngreso = data.reduce(
     (sum, item) => sum + item["Total de ingreso"],
     0

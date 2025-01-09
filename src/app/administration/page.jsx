@@ -21,7 +21,7 @@ export default function MedicalHistory() {
   const [doctorName, setDoctorName] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const { data: session } = useSession();
-  const [setshowAp, setsetshowAp] = useState(true);
+  const [showAp, setshowAp] = useState(true);
 
   const items =
     session?.user.role === "nurse" || session?.user.role === "rp"
@@ -37,7 +37,7 @@ export default function MedicalHistory() {
       try {
         let filter = selectedItem ? selectedItem.key : "today";
         let filterName = selectedItem ? selectedItem.label : "Dia";
-        if (!setshowAp) {
+        if (!showAp) {
           const medicalServices = await fetchMedicalServices(
             `filter=${filter}`
           );
@@ -58,7 +58,7 @@ export default function MedicalHistory() {
     };
 
     loadData();
-  }, [selectedItem, setshowAp]);
+  }, [selectedItem, showAp]);
 
   useEffect(() => {
     const filtered = dataReport.filter((item) => {
@@ -73,7 +73,7 @@ export default function MedicalHistory() {
   }, [doctorName, dataReport]);
 
   const handleNavigation = (isSpecialty) => {
-    setsetshowAp(isSpecialty);
+    setshowAp(isSpecialty);
   };
 
   const iconExcel = (
@@ -95,7 +95,7 @@ export default function MedicalHistory() {
               type="radio"
               name="selection"
               value="specialty"
-              checked={setshowAp}
+              checked={showAp}
               onChange={() => handleNavigation(true)}
               className="mr-2"
             />
@@ -106,7 +106,7 @@ export default function MedicalHistory() {
               type="radio"
               name="selection"
               value="services"
-              checked={!setshowAp}
+              checked={!showAp}
               onChange={() => handleNavigation(false)}
               className="mr-2"
             />
@@ -136,21 +136,23 @@ export default function MedicalHistory() {
             content="Exportar a Excel"
             startIcon={iconExcel}
             color="success"
-            action={() =>
+            action={() => {
+              const dataToExport = showAp ? filteredData : dataReportServices;
+              const fileName = showAp ? "reporte_medicos" : "reporte_servicios";
+              const checker = showAp ? true : false;
               exportToExcel(
-                filteredData,
+                dataToExport,
                 selectedItem ? selectedItem.label : "Dia",
-                `Reporte Doctores ${
-                  selectedItem ? selectedItem.label : "Dia"
-                }.xlsx`
-              )
-            }
+                `${fileName} ${selectedItem ? selectedItem.label : "Dia"}.xlsx`,
+                checker
+              );
+            }}
           />
         </div>
       </div>
 
       <div>
-        {setshowAp ? (
+        {showAp ? (
           <BasicTable
             data={filteredData}
             title={"Reporte de médicos"}

@@ -18,7 +18,6 @@ export default function BasicTable({
   rowsPerPage = 4,
 }) {
   const [page, setPage] = useState(1);
-  console.log("el name", personalColums, "los datos", data);
   let columns;
   let validData = data;
   if (!Array.isArray(data)) {

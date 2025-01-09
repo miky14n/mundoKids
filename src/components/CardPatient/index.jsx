@@ -13,7 +13,7 @@ export default function CardPatient(params) {
         </div>
         <div>
           <p className="font-semibold text-gray-600">CI</p>
-          <p className="text-gray-800">{patient.ci}</p>
+          <p className="text-gray-800">{patient.ci || "N/A"}</p>
         </div>
         <div>
           <p className="font-semibold text-gray-600">Nombre</p>
