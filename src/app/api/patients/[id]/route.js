@@ -12,7 +12,7 @@ export async function GET(request, { params }) {
     const id = Number(params.id);
 
     console.log("ID del paciente recibido:", id);
-    let query = `SELECT * FROM patient WHERE ci=${id}`;
+    let query = `SELECT * FROM patient WHERE patient_id=${id}`;
 
     const patients = await neon_sql(query);
     return NextResponse.json(patients);

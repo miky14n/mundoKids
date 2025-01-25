@@ -6,5 +6,5 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: "Chivo";
+  font-family: "Chivo", sans-serif;
 }

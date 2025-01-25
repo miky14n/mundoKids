@@ -5,6 +5,7 @@ import PersonalButton from "@/components/Button";
 import Alert from "@/components/Alert";
 import SimpleDropdown from "@/components/SimpleDropdown";
 import ApiDropdown from "@/components/ApiDropdown";
+import Seeker from "@/components/Seeker";
 
 export default function MedicalAppointment() {
   const [patientName, setPatientName] = useState("");
@@ -157,6 +158,7 @@ export default function MedicalAppointment() {
           </div>
           {/* Fila para datos complementarios */}
           <div className="grid grid-cols-3 gap-6 mt-4">
+            <Seeker apiUrl="/api/patients?search"></Seeker>
             <div>
               <SimpleInput
                 type="text"

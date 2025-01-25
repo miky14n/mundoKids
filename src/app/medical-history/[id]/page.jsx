@@ -11,7 +11,7 @@ import {
 import BasicTable from "@/components/BasicTable";
 
 export default function OnePatient({ params }) {
-  let ci = params.id;
+  let patient_id = params.id;
   const [patient, setPatient] = useState(null);
   const [error, setError] = useState(null);
   const [servicesOnePatient, setServicesOnePatient] = useState([]);
@@ -19,17 +19,17 @@ export default function OnePatient({ params }) {
   const [lastServices, setLastServices] = useState([]);
   const [lastAppointments, setLastAppointments] = useState([]);
   useEffect(() => {
-    if (ci && ci.trim() !== "") {
+    if (patient_id && patient_id.trim() !== "") {
       const fetchPatient = async () => {
         try {
           //console.log("Buscando paciente con CI:", ci);
-          const response = await fetch(`/api/patients/${ci}`);
+          const response = await fetch(`/api/patients/${patient_id}`);
           if (!response.ok) {
             throw new Error(`Error al obtener los datos: ${response.status}`);
           }
 
           const data = await response.json();
-          const appoimentPatient = await fetchAppointments(ci);
+          const appoimentPatient = await fetchAppointments(patient_id);
           const servicesPatient = await fetchMedicalServices(
             data[0].patient_id
           );
@@ -62,7 +62,7 @@ export default function OnePatient({ params }) {
     } else {
       setError("CI del paciente no válido.");
     }
-  }, [ci]);
+  }, [patient_id]);
 
   if (error) {
     return (

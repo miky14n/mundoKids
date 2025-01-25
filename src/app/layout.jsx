@@ -13,9 +13,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body className="bg-slate-50 min-h-screen">
+      <body className="bg-slate-50 min-h-screen font-sans">
         <NextUIProvider>
-          <div className="font-sans ">
+          <div>
             <NavBarNxtUI />
             <AuthProvider>{children}</AuthProvider>
           </div>

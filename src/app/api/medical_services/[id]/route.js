@@ -68,7 +68,7 @@ export async function GET(request, { params }) {
     const medical_srv_id = params.id;
 
     console.log("ID de la cita médica recibido:", medical_srv_id);
-    console.log("CI recibido:", patient_id);
+    console.log("ID patient recibido:", patient_id);
 
     if (!medical_srv_id) {
       return NextResponse.json(
@@ -79,7 +79,7 @@ export async function GET(request, { params }) {
 
     let query = `SELECT * FROM medical_services`;
     if (patient_id) {
-      console.log("CI recibido:", patient_id);
+      console.log("ID patient recibido:", patient_id);
       query += ` WHERE patient_id = ${parseInt(patient_id, 10)}`;
     } else if (medical_srv_id) {
       console.log("UUID recibido:", medical_srv_id);

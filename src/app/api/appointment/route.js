@@ -4,7 +4,7 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const date = searchParams.get("date");
-    const ci = searchParams.get("id");
+    const patient_id = searchParams.get("id");
     const filter = searchParams.get("filter");
     let query = `SELECT * FROM medical_appointment`;
     const conditions = [];
@@ -12,8 +12,8 @@ export async function GET(request) {
     if (date) {
       conditions.push(`date = '${date}'`);
     }
-    if (ci) {
-      conditions.push(`ci = ${ci}`);
+    if (patient_id) {
+      conditions.push(`patient_id = ${patient_id}`);
     }
     console.log(filter, "el filtro");
     if (filter) {
@@ -108,7 +108,7 @@ export async function POST(request) {
         responsible
       ) VALUES (
         ${patient_id},
-        ${ci},
+        ${ci || 0},
         ${type_of_appointment},
         ${specialty_id},
         ${doctor_id},

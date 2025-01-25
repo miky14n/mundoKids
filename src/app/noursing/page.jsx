@@ -35,7 +35,7 @@ export default function Noursing() {
           ) {
             try {
               const patientResponse = await fetch(
-                `/api/patients/${appointment.ci}`
+                `/api/patients/${appointment.patient_id}`
               );
               if (!patientResponse.ok) {
                 throw new Error(
