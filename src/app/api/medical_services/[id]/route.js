@@ -1,17 +1,19 @@
 import { NextResponse } from "next/server";
 import { neon_sql } from "@/app/lib/neon";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function PATCH(request, { params }) {
+  const session = await getServerSession(authOptions);
   try {
+    const user_id = session?.user?.id;
     if (!params?.id) {
       return NextResponse.json(
         { error: `ID del servicio inválido.` },
         { status: 400 }
       );
     }
-
     const medical_srv_id = params.id;
-    console.log("ID de servicio recibido:", medical_srv_id);
 
     const body = await request.json();
     const {
@@ -24,7 +26,7 @@ export async function PATCH(request, { params }) {
       height,
       date,
     } = body;
-
+    console.log("Soy el body", body);
     // Actualizar los campos especificados
     const result = await neon_sql`
       UPDATE medical_services
@@ -36,7 +38,8 @@ export async function PATCH(request, { params }) {
         height = COALESCE(${height}, height),
         weight = COALESCE(${weight}, weight),
         temperature = COALESCE(${temperature}, temperature),
-        responsible = COALESCE(${responsible}, responsible)
+        responsible = COALESCE(${responsible}, responsible),
+        user_id = COALESCE(${user_id}, user_id)
       WHERE medical_srv_id = ${medical_srv_id}
       RETURNING *;
     `;

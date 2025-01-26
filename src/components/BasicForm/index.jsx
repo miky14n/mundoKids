@@ -4,6 +4,8 @@ import SimpleInput from "@/components/Input";
 import NextButton from "@/components/Button";
 import Alert from "@/components/Alert";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+
 export default function BasicForm({
   layout = "vertical",
   fields = [],
@@ -23,6 +25,7 @@ export default function BasicForm({
   colorButton = null,
   onSuccess = () => {},
 }) {
+  const { data: session } = useSession();
   const [formData, setFormData] = useState({});
   const [success, setSuccess] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
@@ -50,7 +53,7 @@ export default function BasicForm({
       return newFormData;
     });
   };
-
+  console.log(session);
   const handleSubmit = async () => {
     try {
       const response = await fetch(apiUrl, {

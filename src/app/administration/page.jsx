@@ -24,7 +24,7 @@ export default function MedicalHistory() {
   const [showAp, setshowAp] = useState(true);
 
   const items =
-    session?.user.role === "nurse" || session?.user.role === "rp"
+    session?.user.role === "nurse" || session?.user.role === "receptionist"
       ? [{ key: "today", label: "Dia" }]
       : [
           { key: "today", label: "Dia" },

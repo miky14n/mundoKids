@@ -7,10 +7,12 @@ import {
   Button,
 } from "@nextui-org/react";
 import { useState, useEffect } from "react";
+
 function getMenuItem(menuItems, buttonLabel, nameOfGet, id) {
   const foundItem = menuItems.find((item) => item[id] === buttonLabel);
   return foundItem ? foundItem[nameOfGet] : null;
 }
+
 export default function ApiDropdown({
   buttonLabel,
   urlApi,
@@ -23,11 +25,9 @@ export default function ApiDropdown({
   defaultText = "Choose any option",
 }) {
   const [menuItems, setMenuItems] = useState([]);
-  /*const [selectedItemName, setSelectedItemName] = useState(
-    buttonLabel || "Choose an option"
-  );*/
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchApi = async () => {
       setLoading(true);
@@ -39,8 +39,7 @@ export default function ApiDropdown({
           throw new Error("Error fetching data");
         }
         const data = await response.json();
-        const addData = [...data];
-        setMenuItems(addData);
+        setMenuItems(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -75,7 +74,7 @@ export default function ApiDropdown({
             (!filterLabel || item[filterLabel] === filterValue) && (
               <DropdownItem
                 key={`${item[idOfGet]}-${index}`}
-                onClick={() => handleSelect(item[idOfGet], item[nameOfGet])}
+                onPress={() => handleSelect(item[idOfGet], item[nameOfGet])} // Cambiado a `onPress`
               >
                 {String(item[nameOfGet])}
               </DropdownItem>

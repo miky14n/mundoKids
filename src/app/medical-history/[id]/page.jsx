@@ -9,8 +9,11 @@ import {
   combineDataMedicalSrv,
 } from "./functionsForOne";
 import BasicTable from "@/components/BasicTable";
+import { useSession } from "next-auth/react";
 
 export default function OnePatient({ params }) {
+  const { data: session } = useSession();
+  const limitAccesse = ["nurse", "doctor", "receptionist"];
   let patient_id = params.id;
   const [patient, setPatient] = useState(null);
   const [error, setError] = useState(null);
@@ -45,12 +48,12 @@ export default function OnePatient({ params }) {
           setAppoimentOnePatient(appoimentCombine);
           const servicesCombine = await combineDataMedicalSrv(servicesPatient);
           setServicesOnePatient(servicesCombine);
-          if (servicesPatient.length > 0) {
-            setLastServices(servicesPatient.at(-1));
+          if (servicesCombine.length > 0) {
+            setLastServices(servicesCombine.slice(-2));
           }
 
-          if (appoimentPatient.length > 0) {
-            setLastAppointments(appoimentPatient.at(-1));
+          if (appoimentCombine.length > 0) {
+            setLastAppointments(appoimentCombine.slice(-2));
           }
         } catch (err) {
           console.error("Error al buscar al paciente:", err);
@@ -105,19 +108,26 @@ export default function OnePatient({ params }) {
         <>
           {patient && (
             <>
-              {/*console.log("El paciente:", appoimentOnePatient)*/}
               <CardPatient data={patient} />
               <hr className=" my-6" />
               <div>
                 <BasicTable
-                  data={appoimentOnePatient}
+                  data={
+                    limitAccesse.includes(session?.user.role)
+                      ? lastAppointments
+                      : appoimentOnePatient
+                  }
                   title={"Ultima Cita medica"}
                   personalColums={columsAppoimentShow}
                 />
               </div>
               <div>
                 <BasicTable
-                  data={servicesOnePatient}
+                  data={
+                    limitAccesse.includes(session?.user.role)
+                      ? lastServices
+                      : servicesOnePatient
+                  }
                   title={"Ultima Servicios medicos Aplicados"}
                   personalColums={columsMedicalSrvShow}
                 />

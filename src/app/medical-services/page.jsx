@@ -4,8 +4,12 @@ import SimpleInput from "@/components/Input";
 import PersonalButton from "@/components/Button";
 import Alert from "@/components/Alert";
 import ApiDropdown from "@/components/ApiDropdown";
+import Seeker from "@/components/Seeker";
+import ToggleSwitch from "@/components/ToggleSwitch";
 
 export default function Services() {
+  const [showSeekerCi, setShowSeekerCi] = useState(false);
+  const [patient, setPatient] = useState([]);
   const [patientName, setPatientName] = useState("");
   const [ci, setCI] = useState("");
   const [services, setServices] = useState(null);
@@ -61,7 +65,7 @@ export default function Services() {
     .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
   const handleRegister = async () => {
     const data = {
-      patient_id: patient_id.current,
+      patient_id: patient_id.current || patient.patient_id,
       services_id: services,
       date: date,
       responsible,
@@ -133,35 +137,48 @@ export default function Services() {
                 onChange={(e) => setResponsible(e.target.value)}
               />
             </div>
-            <div>
-              <SimpleInput
-                type="text"
-                label="Ingrese el CI del paciente"
-                value={ci}
-                onChange={(e) => setCI(e.target.value)}
-              />
-            </div>
+            <Seeker
+              title="Buscar paciente"
+              description="Ingrese nombre del paciente"
+              resultSeek="Resultado de la busqueda"
+              voidMessage="No se encontro el paciente"
+              apiUrl="/api/patients?search"
+              getValue={setPatient}
+            ></Seeker>
           </div>
           {/* Fila para datos complementarios */}
-          <div className="grid grid-cols-3 gap-6 mt-4">
-            <div>
-              <SimpleInput
-                type="text"
-                label="Nombre"
-                value={patientName}
-                onChange={(e) => setPatientName(e.target.value)}
-                readOnly
-              />
-            </div>
-            <div>
-              <SimpleInput
-                type="text"
-                label="Apellido"
-                value={patientLastName}
-                onChange={(e) => setPatientLastName(e.target.value)}
-                readOnly
-              />
-            </div>
+          <div className="grid grid-cols-1 gap-6 mt-4">
+            <ToggleSwitch status={setShowSeekerCi} title="Buscar por CI" />
+            {showSeekerCi && (
+              <div className="grid grid-cols-3 gap-6 mt-4">
+                <div>
+                  <SimpleInput
+                    type="text"
+                    label="Ingrese el CI del paciente"
+                    value={ci}
+                    onChange={(e) => setCI(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <SimpleInput
+                    type="text"
+                    label="Nombre"
+                    value={patientName}
+                    onChange={(e) => setPatientName(e.target.value)}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <SimpleInput
+                    type="text"
+                    label="Apellido"
+                    value={patientLastName}
+                    onChange={(e) => setPatientLastName(e.target.value)}
+                    readOnly
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-3 gap-6 mt-4">

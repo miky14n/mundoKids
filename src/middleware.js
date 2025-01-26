@@ -34,7 +34,10 @@ export default async function middleware(req) {
         "/noursing/services",
         "/noursing",
       ];
-      if (authorizeDirectionsAdm.includes(url)) {
+      if (
+        authorizeDirectionsAdm.includes(url) ||
+        url.startsWith("/medical-history/")
+      ) {
         return NextResponse.next();
       } else {
         return NextResponse.redirect(new URL("/unauthorized", req.url));
@@ -49,22 +52,48 @@ export default async function middleware(req) {
         "/noursing",
         "/noursing/services",
         "/medical-appointment",
+        "/medical-history",
+        "/administration",
       ];
-      if (authorizeDirectionsN.includes(url)) {
+      if (
+        authorizeDirectionsN.includes(url) ||
+        url.startsWith("/medical-history/")
+      ) {
+        return NextResponse.next();
+      } else {
+        return NextResponse.redirect(new URL("/unauthorized", req.url));
+      }
+    case "receptionist":
+      const authorizeDirectionsRp = [
+        "/auth/changePassword",
+        "/medical-services",
+        "/medical-services/listOfServices",
+        "register",
+        "/",
+        "/medical-appointment",
+        "/medical-history",
+        "/administration",
+      ];
+      if (
+        authorizeDirectionsRp.includes(url) ||
+        url.startsWith("/medical-history/")
+      ) {
         return NextResponse.next();
       } else {
         return NextResponse.redirect(new URL("/unauthorized", req.url));
       }
     case "doctor":
       const authorizeDirectionsD = [
-        "/medical-services",
-        "register",
+        "/medical-services/listOfServices",
+        "/auth/changePassword",
         "/",
-        "/noursing",
-        "/medical-appointment",
         "/medical-history",
       ];
-      if (authorizeDirectionsD.includes(url)) {
+
+      if (
+        authorizeDirectionsD.includes(url) ||
+        url.startsWith("/medical-history/")
+      ) {
         return NextResponse.next();
       } else {
         return NextResponse.redirect(new URL("/unauthorized", req.url));

@@ -15,6 +15,7 @@ export default function Register() {
     { key: "nurse", label: "Efermeria" },
     { key: "doctor", label: "Doctor" },
     { key: "admin", label: "Administracion" },
+    { key: "receptionist", label: "Recepcionista" },
   ];
   return (
     <>

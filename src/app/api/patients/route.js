@@ -4,13 +4,12 @@ import { neon_sql } from "@/app/lib/neon";
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const search = searchParams.get("search"); // Obtén el parámetro de búsqueda
+    const search = searchParams.get("search");
 
     console.log("Parámetro de búsqueda recibido:", search);
-    let query = `SELECT * FROM patient`; // Solo devuelve los campos necesarios
+    let query = `SELECT * FROM patient`;
 
     if (search) {
-      // Filtrar por nombre o apellido (insensible a mayúsculas/minúsculas)
       query += ` WHERE name ILIKE '%${search}%' OR last_name ILIKE '%${search}%'`;
     }
 

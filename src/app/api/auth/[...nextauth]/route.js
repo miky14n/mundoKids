@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import { neon_sql } from "@/app/lib/neon";
 import bcrypt from "bcrypt";
+import { use } from "react";
 
 export const authOptions = {
   providers: [
@@ -34,7 +35,7 @@ export const authOptions = {
           }
 
           return {
-            id: user.id,
+            id: user.user_id,
             name: user.user_name,
             email: user.email,
             role: user.role,
@@ -53,12 +54,14 @@ export const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role;
+        token.id = user.id;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user.role = token.role;
+        session.user.id = token.id;
       }
       return session;
     },
