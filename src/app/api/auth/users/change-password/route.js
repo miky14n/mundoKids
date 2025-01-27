@@ -51,16 +51,22 @@ export async function PATCH(request, { params }) {
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    const change = await neon_sql(
-      `
+    let query = `
       UPDATE users
       SET password = $1
       WHERE email = $2
       RETURNING *;
-    `,
-      [hashedPassword, email]
-    );
+    `;
+    if (!userFound[0].verified_account) {
+      query = `
+      UPDATE users
+      SET password = $1
+      verified_account =${true}
+      WHERE email = $2
+      RETURNING *;
+    `;
+    }
+    const change = await neon_sql(query, [hashedPassword, email]);
 
     if (change.length === 0) {
       return NextResponse.json(

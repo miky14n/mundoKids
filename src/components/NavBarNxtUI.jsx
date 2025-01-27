@@ -30,11 +30,13 @@ export default async function NavBarNxtUI() {
                 Inicio
               </Link>
             </NavbarItem> */}
-            <NavbarItem>
-              <Link color="foreground" href="/noursing">
-                Enfermería
-              </Link>
-            </NavbarItem>
+            {!listRol.includes(session.user.role) && (
+              <NavbarItem>
+                <Link color="foreground" href="/noursing">
+                  Enfermería
+                </Link>
+              </NavbarItem>
+            )}
             <NavbarItem>
               <Link color="foreground" href="/medical-services/listOfServices">
                 Servicios Médicos

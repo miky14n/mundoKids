@@ -53,7 +53,6 @@ export default function BasicForm({
       return newFormData;
     });
   };
-  console.log(session);
   const handleSubmit = async () => {
     try {
       const response = await fetch(apiUrl, {

@@ -42,23 +42,10 @@ export default function Login() {
           return;
         }
         if (!data[0].verified_account) {
-          try {
-            const patchResponse = await fetch(`/api/auth/users/${email}`, {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json" },
-            });
-
-            if (!patchResponse.ok) {
-              throw new Error("Error al actualizar la cuenta.");
-            }
-          } catch (patchError) {
-            console.error("No se activó la cuenta correctamente:", patchError);
-          }
-
           alert("Cuenta recién creada. Se requiere cambio de contraseña.");
           setTimeout(() => {
             router.push("/auth/changePassword");
-          }, 1000);
+          }, 500);
         }
         router.push("/");
         router.refresh();

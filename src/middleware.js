@@ -24,6 +24,7 @@ export default async function middleware(req) {
       const authorizeDirectionsAdm = [
         "/administration",
         "/medical-services",
+        "/medical-appointment",
         "/auth",
         "/auth/changePassword",
         "/auth/register",
@@ -45,6 +46,7 @@ export default async function middleware(req) {
     case "nurse":
       const authorizeDirectionsN = [
         "/auth/changePassword",
+        "/register",
         "/medical-services",
         "/medical-services/listOfServices",
         "register",
@@ -66,6 +68,7 @@ export default async function middleware(req) {
     case "receptionist":
       const authorizeDirectionsRp = [
         "/auth/changePassword",
+        "/register",
         "/medical-services",
         "/medical-services/listOfServices",
         "register",
