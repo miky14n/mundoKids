@@ -87,6 +87,11 @@ export default function Settings() {
               type: "text",
               label: "Costo del Servicio",
             },
+            {
+              name: "home_price",
+              type: "text",
+              label: "Costo del Servicio a domicilio",
+            },
           ]}
           apiUrl="/api/services"
           formTitle="Añadir Servicio"

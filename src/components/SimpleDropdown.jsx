@@ -16,7 +16,8 @@ export default function SimpleDropdown({
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleSelect = (key) => {
-    const selected = menuItems.find((item) => item.key === key);
+    const selected = menuItems.find((item) => item.key === key) || menuItems[0];
+    console.log(menuItems[0]);
     setSelectedItem(selected.label); // Actualiza el estado interno del componente
     setItem(selected); // Llama a la función que actualiza el valor en el componente padre
   };

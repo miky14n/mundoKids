@@ -3,16 +3,30 @@ import { neon_sql } from "@/app/lib/neon";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export async function GET(req) {
+export async function GET(request) {
   const session = await getServerSession(authOptions);
   console.log("que tiene sesion para el usuario", session);
   if (!session) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
-
   try {
-    const patients = await neon_sql`SELECT * FROM doctor`;
-    return NextResponse.json(patients);
+    const { searchParams } = new URL(request.url);
+    const full_name = searchParams.get("full_name");
+    let query;
+    if (full_name) {
+      query = neon_sql`
+        SELECT 
+          doctor.*, 
+          CONCAT(doctor.name, ' ', doctor.last_name) AS full_name 
+        FROM doctor
+      `;
+    } else {
+      query = neon_sql`
+        SELECT * FROM doctor
+      `;
+    }
+    const doctors = await query;
+    return NextResponse.json(doctors);
   } catch (error) {
     console.error("Error al consultar la base de datos:", error);
     return NextResponse.json(
@@ -27,7 +41,8 @@ export async function POST(req) {
     const body = await req.json();
     const { name, last_name, ci, contact_number, email, hire_date } = body;
     const specialty_id = body.valueExtraComponent;
-    if (!name || !last_name || !ci) {
+    console.log(body, "El bd", specialty_id);
+    if (!name || !last_name) {
       return NextResponse.json(
         { error: "Los campos 'name', 'last_name' y 'ci' son obligatorios." },
         { status: 400 }

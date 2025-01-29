@@ -23,7 +23,6 @@ export default function BasicTable({
   if (!Array.isArray(data)) {
     validData = [data];
   }
-
   if (!personalColums) {
     columns = validData.length > 0 ? Object.keys(validData[0]) : [];
   }

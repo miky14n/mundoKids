@@ -83,11 +83,12 @@ const processDataServices = async (data, filterName) => {
   } else return data;
 };
 const processData = async (data, filterName) => {
+  console.log(data, "los datos  ");
   const statsMap = new Map();
   await Promise.all(
     data.map(async (item) => {
       const specialty = await fetchSpeciality(item.specialty_id);
-      const specialtyCost = parseFloat(specialty[0].price) || 0;
+      const specialtyCost = parseFloat(item.appointment_price) || 0;
       const doctor = await fetchDoctor(item.doctor_id);
       //console.log("Soy el dr:", doctor);
       if (!specialty || !specialtyCost) {

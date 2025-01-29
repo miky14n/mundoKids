@@ -68,7 +68,7 @@ export default function MedicalAppointment() {
     }
   }, [specialty]);
   const handleRegister = async () => {
-    const typeAppoiment = consultType ? consultType.label : null;
+    const typeAppoiment = consultType ? consultType.label : "Consulta";
     const today = new Date();
     const date = `${today.getFullYear()}-${(today.getMonth() + 1)
       .toString()
@@ -81,6 +81,7 @@ export default function MedicalAppointment() {
       doctor_id: doctor,
       date: date,
       responsible,
+      appointment_price: specialtyCost,
     };
     try {
       const response = await fetch("/api/appointment", {
@@ -139,7 +140,7 @@ export default function MedicalAppointment() {
             Agendar Consulta
           </h2>
 
-          {/* Fila para Encargada y CI del Paciente */}
+          {/* Fila para Encargada y nombre del Paciente */}
           <div className="grid grid-cols-2 gap-6">
             <div>
               <SimpleInput
@@ -212,10 +213,10 @@ export default function MedicalAppointment() {
               <ApiDropdown
                 buttonLabel={doctor}
                 defaultText="Seleccione un Doctor"
-                urlApi="/api/doctor"
+                urlApi="/api/doctor?full_name=true"
                 onActionId={(selectedDoctor) => setDoctor(selectedDoctor)}
                 idOfGet="doctor_id"
-                nameOfGet="name"
+                nameOfGet="full_name"
                 filterLabel={"specialty_id"}
                 filterValue={specialty}
               />

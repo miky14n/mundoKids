@@ -83,13 +83,13 @@ export default function ListOfServices(params) {
       {showSpecialty ? (
         <BasicTable
           data={specialty}
-          personalColumns={columsShow}
+          personalColums={columsShow}
           rowsPerPage={10}
         />
       ) : (
         <BasicTable
           data={services}
-          personalColumns={columsShow}
+          personalColums={columsShow}
           rowsPerPage={10}
         />
       )}

@@ -75,10 +75,10 @@ export async function POST(request) {
       weight,
       temperature,
       responsible,
+      appointment_price,
     } = body;
     if (
       !patient_id ||
-      !ci ||
       !type_of_appointment ||
       !specialty_id ||
       !doctor_id ||
@@ -97,7 +97,6 @@ export async function POST(request) {
     const result = await neon_sql`
       INSERT INTO medical_appointment (
         patient_id,
-        ci,
         type_of_appointment,
         specialty_id,
         doctor_id,
@@ -105,10 +104,10 @@ export async function POST(request) {
         height,
         weight,
         temperature,
-        responsible
+        responsible,
+        appointment_price
       ) VALUES (
         ${patient_id},
-        ${ci || 0},
         ${type_of_appointment},
         ${specialty_id},
         ${doctor_id},
@@ -116,7 +115,8 @@ export async function POST(request) {
         ${height || null},
         ${weight || null},
         ${temperature || null},
-        ${responsible || null}
+        ${responsible || null},
+        ${appointment_price || null}
       )
       RETURNING *;
     `;

@@ -17,7 +17,7 @@ export async function GET() {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, description, price } = body;
+    const { name, description, price, home_price } = body;
     if (!name || !price) {
       return NextResponse.json(
         { error: "Los campos 'name' y 'price' son obligatorios." },
@@ -25,8 +25,8 @@ export async function POST(request) {
       );
     }
     const result = await neon_sql`
-        INSERT INTO services (name, description, price)
-        VALUES (${name}, ${description || null}, ${price})
+        INSERT INTO services (name, description, price,home_price)
+        VALUES (${name}, ${description || null}, ${price},${home_price || null})
         RETURNING *;
       `;
     return NextResponse.json(result[0], { status: 201 });

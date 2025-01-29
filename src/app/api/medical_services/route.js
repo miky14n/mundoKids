@@ -75,7 +75,7 @@ export async function POST(request) {
       date,
     } = body;
     //corregir cuando se tenga a los usarios esto se debe enviar del body
-    const user_id = services_id;
+
     if (!services_id || !patient_id || !responsible || !user_id) {
       return NextResponse.json(
         {
@@ -106,7 +106,7 @@ export async function POST(request) {
         ${temperature || null}, 
         ${weight || null}, 
         ${height || null}, 
-        ${user_id},
+        ${user_id || null},
         ${date}
       )
       RETURNING *;
