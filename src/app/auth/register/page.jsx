@@ -1,11 +1,8 @@
 "use client";
 import { useState, useRef } from "react";
-import SimpleInput from "@/components/Input";
-import PersonalButton from "@/components/Button";
 import Alert from "@/components/Alert";
 import BasicForm from "@/components/BasicForm";
 import SimpleDropdown from "@/components/SimpleDropdown";
-import { Input } from "@nextui-org/react";
 
 export default function Register() {
   const [role, setRole] = useState(null); // Dropdown para rol

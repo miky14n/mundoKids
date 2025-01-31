@@ -8,6 +8,7 @@ export default function SimpleInput({
   value,
   typeInput = "onchnge",
   inputRef,
+  readonly = false,
 }) {
   return (
     <>
@@ -19,6 +20,7 @@ export default function SimpleInput({
           value={value}
           onChange={onChange}
           className="max-w-xs"
+          isReadOnly={readonly}
         />
       ) : (
         <Input

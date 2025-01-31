@@ -5,6 +5,7 @@ import NextButton from "@/components/Button";
 import Alert from "@/components/Alert";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import PersonalTextarea from "../Teaxtarea";
 
 export default function BasicForm({
   layout = "vertical",
@@ -140,6 +141,13 @@ export default function BasicForm({
                     )}
                     <p className="text-gray-700">{field.label}</p>
                   </div>
+                ) : field.type === "textarea" ? (
+                  <PersonalTextarea
+                    label={field.title}
+                    isReadOnly={true}
+                    description="Alergias que tiene el paciente"
+                    value={field.label}
+                  />
                 ) : (
                   <SimpleInput
                     type={field.type}

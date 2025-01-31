@@ -1,3 +1,5 @@
+import PersonalTextarea from "../Teaxtarea";
+
 export default function CardPatient(params) {
   const { data } = params;
   const patient = data[0];
@@ -56,6 +58,14 @@ export default function CardPatient(params) {
         <div>
           <p className="font-semibold text-gray-600">Número de Contacto</p>
           <p className="text-gray-800">{patient.contact_number}</p>
+        </div>
+        <div>
+          <PersonalTextarea
+            label={"Registro de alergias"}
+            isReadOnly={true}
+            description="Alergias que tiene el paciente"
+            value={patient.alergys}
+          />
         </div>
       </div>
     </div>

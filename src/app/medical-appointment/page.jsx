@@ -19,6 +19,9 @@ export default function MedicalAppointment() {
   const [success, setSuccess] = useState(null);
   const [patientLastName, setPatientLastName] = useState("");
   const [showSeekerCi, setShowSeekerCi] = useState(false);
+  const [isPartner, setIsPartner] = useState(false);
+  const [percentDiscount, setPercentDiscount] = useState(0);
+  const [percentDiscountL, setPercentDiscountL] = useState(null);
   const [responsible, setResponsible] = useState(
     localStorage.getItem("userName")
   );
@@ -26,6 +29,11 @@ export default function MedicalAppointment() {
   const consultTypeItems = [
     { key: "1", label: "Consulta" },
     { key: "2", label: "Re consulta" },
+  ];
+
+  const listDiscount = [
+    { key: "20", label: "Club Hipico" },
+    { key: "35", label: "Plantilla interna" },
   ];
   useEffect(() => {
     if (ci && ci !== "") {
@@ -113,9 +121,13 @@ export default function MedicalAppointment() {
     setConsultType(null);
     setSpecialtyCost("");
     setPatientLastName("");
-    setResponsible("");
     patient_id.current = "";
   };
+  useEffect(() => {
+    if (!isPartner) {
+      setPercentDiscount(0);
+    }
+  }, [isPartner]);
   return (
     <>
       {success === true && (
@@ -148,6 +160,7 @@ export default function MedicalAppointment() {
                 label="Encargado"
                 value={responsible}
                 onChange={(e) => setResponsible(e.target.value)}
+                readonly={true}
               />
             </div>
             <Seeker
@@ -232,15 +245,55 @@ export default function MedicalAppointment() {
           </div>
 
           {/* Fila para Costo de Especialidad y Resumen */}
-          <div className="grid grid-cols-2 gap-6 mt-4">
+          <div className="grid grid-cols-4 gap-6 mt-4">
             <div>
               <SimpleInput
                 type="text"
                 label="Costo de Especialidad"
-                value={specialtyCost}
+                value={
+                  percentDiscount === 0
+                    ? specialtyCost
+                    : specialtyCost * (1 - percentDiscount / 100)
+                }
                 onChange={(e) => setSpecialtyCost(e.target.value)}
               />
             </div>
+            {/*<div>
+              <SimpleInput
+                type="text"
+                label="Costo de Especialidad cb"
+                value={
+                  percentDiscountL === null
+                    ? specialtyCost
+                    : specialtyCost * (1 - parseInt(percentDiscountL.key) / 100)
+                }
+                onChange={(e) => setSpecialtyCost(e.target.value)}
+              />
+            </div>*/}
+            <ToggleSwitch
+              status={setIsPartner}
+              title="Pertenece a los socios?"
+            />
+            {isPartner && (
+              <>
+                <div>
+                  <SimpleInput
+                    type="text"
+                    label="Ingrese el % de descuento"
+                    value={percentDiscount}
+                    onChange={(e) => setPercentDiscount(e.target.value)}
+                  />
+                </div>
+                {/*<div>
+                  <SimpleDropdown
+                    buttonLabel="Que socio es?"
+                    menuItems={listDiscount}
+                    ariaLabel="percent Type"
+                    setItem={setPercentDiscountL}
+                  />
+                </div>*/}
+              </>
+            )}
           </div>
 
           {/* Botón de Guardar */}

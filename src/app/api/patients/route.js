@@ -38,14 +38,16 @@ export async function POST(request) {
       contact_number,
       guardian_ci,
       relationship_to_patient,
+      alergys,
     } = body;
+    console.log(alergys);
     const result = await neon_sql`
       INSERT INTO patient (
-        ci, name, last_name, gender, date_of_birth, age, guardian_name, contact_number, guardian_ci, relationship_to_patient
+        ci, name, last_name, gender, alergys, date_of_birth, age, guardian_name, contact_number, guardian_ci, relationship_to_patient
       ) VALUES (
-        ${
-          ci || 0
-        } , ${name}, ${last_name}, ${gender}, ${date_of_birth}, ${age}, ${guardian_name}, ${contact_number}, ${guardian_ci}, ${relationship_to_patient}
+        ${ci || 0} , ${name}, ${last_name}, ${gender}, ${
+      alergys || "N/A"
+    }, ${date_of_birth}, ${age}, ${guardian_name}, ${contact_number}, ${guardian_ci}, ${relationship_to_patient}
       )
       RETURNING *;
     `;
