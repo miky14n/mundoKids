@@ -19,8 +19,13 @@ export default async function NavBarNxtUI() {
         <Navbar className="bg-customPink text-customPurple" isBordered>
           <NavbarBrand justify="start" className="ml-[-20px]">
             <Link justify="start" className="pl-4" href="/">
-              <Image src="/Logo.png" alt="Logo" width="200" height="200" />
-              <p className="font-bold text-inherit"> </p>
+              <Image
+                src="/Logo.png"
+                alt="Logo"
+                className="w-auto h-auto max-w-full max-h-full"
+                width={100}
+                height={100}
+              />
             </Link>
           </NavbarBrand>
           {}

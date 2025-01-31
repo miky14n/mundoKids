@@ -15,7 +15,6 @@
 
 # production
 /build
-.env
 
 # misc
 .DS_Store
@@ -35,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Archivos de entorno
+.env
+.env.local
+.env.development
+.env.production
+.env.test

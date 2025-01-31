@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react"; // Importar useCallback
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import axios from "axios";
 
@@ -44,17 +44,23 @@ export default function Seeker({
   const [patients, setPatients] = useState([]); // Controla la lista de pacientes
   const [loading, setLoading] = useState(false); // Controla el estado de carga
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const searchPatients = async (term) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${apiUrl}=${term}`);
-      setPatients(response.data);
-    } catch (error) {
-      console.error("Error buscando pacientes:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+
+  // Memorizamos la función `searchPatients` con useCallback
+  const searchPatients = useCallback(
+    async (term) => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${apiUrl}=${term}`);
+        setPatients(response.data);
+      } catch (error) {
+        console.error("Error buscando pacientes:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [apiUrl]
+  ); // apiUrl es la única dependencia importante para esta función
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchTerm.trim() !== "") {
@@ -65,7 +71,7 @@ export default function Seeker({
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [searchTerm]);
+  }, [searchTerm, searchPatients]); // Ahora `searchPatients` está incluida en las dependencias
 
   const onSelectionChange = (id) => {
     const selected = patients.find((p) => {
