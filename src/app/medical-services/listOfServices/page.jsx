@@ -1,6 +1,6 @@
 "use client";
 import Alert from "@/components/Alert";
-import BasicTable from "@/components/BasicTable";
+import BasicTable from "@/components/Tables/BasicTable";
 import { useEffect, useState } from "react";
 export default function ListOfServices(params) {
   const [services, setServices] = useState([]);

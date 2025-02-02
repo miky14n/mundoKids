@@ -8,7 +8,7 @@ import {
   fetchMedicalServices,
   combineDataMedicalSrv,
 } from "./functionsForOne";
-import BasicTable from "@/components/BasicTable";
+import BasicTable from "@/components/Tables/BasicTable";
 import { useSession } from "next-auth/react";
 
 export default function OnePatient({ params }) {

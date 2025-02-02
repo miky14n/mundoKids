@@ -1,5 +1,5 @@
 "use client";
-import BasicTable from "@/components/BasicTable";
+import BasicTable from "@/components/Tables/BasicTable";
 import SimpleInput from "@/components/Input";
 import SimpleDropdown from "@/components/SimpleDropdown";
 import { useEffect, useState } from "react";

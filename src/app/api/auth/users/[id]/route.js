@@ -66,3 +66,21 @@ export async function PATCH(request, { params }) {
     );
   }
 }
+export async function DELETE(request, { params }) {
+  try {
+    const user_id = params.id;
+    console.log("el email", user_id);
+    const query = `
+      DELETE FROM users
+      WHERE user_id = $1;
+    `;
+    const response = await neon_sql(query, [user_id]);
+    return NextResponse.json(response);
+  } catch (error) {
+    console.error("Error al consultar la base de datos:", error);
+    return NextResponse.json(
+      { error: "Error al actualizar los datos" },
+      { status: 500 }
+    );
+  }
+}
