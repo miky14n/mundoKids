@@ -25,6 +25,7 @@ export default function TableActions({
   data,
   personal_id = "id",
   statusLable = "status",
+  setDeleteUs,
 }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -44,8 +45,7 @@ export default function TableActions({
         console.error("Error al eliminar usuario:", error);
       }
     }
-    router.refresh();
-
+    setDeleteUs(userToDelete);
     setIsOpen(false);
     setUserToDelete(null);
   };

@@ -2,11 +2,10 @@
 import TableActions from "@/components/Tables/TableActions";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { user } from "@nextui-org/react";
 export default function UsersList(params) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false); // Se define setLoading
-
+  const [deleteUs, setDeleteUs] = useState(null);
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
@@ -21,7 +20,7 @@ export default function UsersList(params) {
     };
 
     fetchUsers();
-  }, []);
+  }, [deleteUs]);
   const columns = [
     { name: "Nombre", uid: "user_name" },
     { name: "Rol", uid: "role" },
@@ -36,6 +35,7 @@ export default function UsersList(params) {
         data={users}
         personal_id="user_id"
         statusLable="active_account"
+        setDeleteUs={setDeleteUs}
       />
     </>
   );
