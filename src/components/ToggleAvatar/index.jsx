@@ -73,17 +73,30 @@ export default function ToggleAvatar({
               </Link>
             </li>
             {roleAdmition.includes(role) && (
-              <li>
-                <Link href={"/auth/register"}>
-                  <button
-                    className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600"
-                    onClick={() => console.log("Cambiar Contraseña")}
-                    role="menuitem"
-                  >
-                    Registrar usuarios
-                  </button>
-                </Link>
-              </li>
+              <>
+                <li>
+                  <Link href={"/auth/register"}>
+                    <button
+                      className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600"
+                      onClick={() => console.log("Cambiar Contraseña")}
+                      role="menuitem"
+                    >
+                      Registrar usuarios
+                    </button>
+                  </Link>
+                </li>
+                <li>
+                  <Link href={"/administration/manage/users-list"}>
+                    <button
+                      className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600"
+                      onClick={() => console.log("Lista de usuarios")}
+                      role="menuitem"
+                    >
+                      Lista de usuarios
+                    </button>
+                  </Link>
+                </li>
+              </>
             )}
             <li>
               <button
