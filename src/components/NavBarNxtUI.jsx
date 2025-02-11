@@ -47,13 +47,13 @@ export default async function NavBarNxtUI() {
                 Servicios Médicos
               </Link>
             </NavbarItem>
-            {session.user.role != "nurse" && (
-              <NavbarItem>
-                <Link color="foreground" href="/medical-history">
-                  Historial Clinico
-                </Link>
-              </NavbarItem>
-            )}
+            {/*session.user.role != "nurse" && ()*/}
+            <NavbarItem>
+              <Link color="foreground" href="/medical-history">
+                Historial Clinico
+              </Link>
+            </NavbarItem>
+
             <>
               {!listRol.includes(session.user.role) && (
                 <NavbarItem>

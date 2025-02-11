@@ -60,7 +60,7 @@ export async function PATCH(request, { params }) {
     if (!userFound[0].verified_account) {
       query = `
       UPDATE users
-      SET password = $1
+      SET password = $1,
       verified_account =${true}
       WHERE email = $2
       RETURNING *;
