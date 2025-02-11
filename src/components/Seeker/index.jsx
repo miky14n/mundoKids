@@ -40,9 +40,9 @@ export default function Seeker({
   voidMessage = "No item detected",
   getValue,
 }) {
-  const [searchTerm, setSearchTerm] = useState(""); // Controla el término de búsqueda
-  const [patients, setPatients] = useState([]); // Controla la lista de pacientes
-  const [loading, setLoading] = useState(false); // Controla el estado de carga
+  const [searchTerm, setSearchTerm] = useState("");
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
 
   // Memorizamos la función `searchPatients` con useCallback
@@ -71,7 +71,7 @@ export default function Seeker({
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [searchTerm, searchPatients]); // Ahora `searchPatients` está incluida en las dependencias
+  }, [searchTerm, searchPatients]);
 
   const onSelectionChange = (id) => {
     const selected = patients.find((p) => {

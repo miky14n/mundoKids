@@ -27,7 +27,6 @@ export default function TableActions({
   statusLable = "status",
   setDeleteUs,
 }) {
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
 
@@ -40,7 +39,6 @@ export default function TableActions({
       try {
         await axios.delete(`/api/auth/users/${userToDelete[personal_id]}`);
         console.log("Usuario eliminado:", userToDelete);
-        // Actualizar la lista de usuarios aquí si es necesario
       } catch (error) {
         console.error("Error al eliminar usuario:", error);
       }

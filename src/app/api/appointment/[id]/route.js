@@ -32,7 +32,6 @@ export async function PATCH(request, { params }) {
       UPDATE medical_appointment
       SET
         patient_id = COALESCE(${patient_id}, patient_id),
-        ci = COALESCE(${ci}, ci),
         type_of_appointment = COALESCE(${type_of_appointment}, type_of_appointment),
         specialty_id = COALESCE(${specialty_id}, specialty_id),
         doctor_id = COALESCE(${doctor_id}, doctor_id),

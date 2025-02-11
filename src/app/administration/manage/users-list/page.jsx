@@ -27,7 +27,7 @@ export default function UsersList(params) {
     { name: "Estado", uid: "active_account" },
     { name: "Acciones", uid: "actions" },
   ];
-  console.log("La rp de bd", users);
+
   return (
     <>
       <TableActions

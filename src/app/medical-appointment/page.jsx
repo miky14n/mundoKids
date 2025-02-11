@@ -122,12 +122,27 @@ export default function MedicalAppointment() {
     setSpecialtyCost("");
     setPatientLastName("");
     patient_id.current = "";
+    setPatient([]);
+    setIsPartner(false);
+    setPercentDiscount(0);
   };
   useEffect(() => {
     if (!isPartner) {
       setPercentDiscount(0);
     }
   }, [isPartner]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (percentDiscount !== 0) {
+        const newCost = specialtyCost * (1 - percentDiscount / 100);
+        setSpecialtyCost(newCost.toFixed(2));
+      }
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [percentDiscount]);
+
   return (
     <>
       {success === true && (
@@ -207,7 +222,7 @@ export default function MedicalAppointment() {
             )}
           </div>
 
-          {/* Fila para Especialidades, Tipo de Consulta y Doctor */}
+          {/* Fila para Especialidades */}
           <div className="grid grid-cols-3 gap-6 mt-4">
             <div>
               <ApiDropdown
@@ -221,7 +236,9 @@ export default function MedicalAppointment() {
                 nameOfGet="name"
               />
             </div>
-
+          </div>
+          {/* Fila para Tipo de Consulta y Doctor */}
+          <div className="grid grid-cols-3 gap-6 mt-4">
             <div>
               <ApiDropdown
                 buttonLabel={doctor}
@@ -250,12 +267,9 @@ export default function MedicalAppointment() {
               <SimpleInput
                 type="text"
                 label="Costo de Especialidad"
-                value={
-                  percentDiscount === 0
-                    ? specialtyCost
-                    : specialtyCost * (1 - percentDiscount / 100)
-                }
-                onChange={(e) => setSpecialtyCost(e.target.value)}
+                value={specialtyCost}
+                onChange={(e) => setSpecialtyCost(Number(e.target.value) || 0)}
+                typeInput="onchnge"
               />
             </div>
             {/*<div>
