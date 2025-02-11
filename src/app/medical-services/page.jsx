@@ -64,8 +64,9 @@ export default function Services() {
     .toString()
     .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
   const handleRegister = async () => {
+    console.log(patient);
     const data = {
-      patient_id: patient_id.current || patient.patient_id,
+      patient_id: patient.patient_id || patient_id.current,
       services_id: services,
       date: date,
       responsible,

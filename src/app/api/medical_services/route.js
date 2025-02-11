@@ -64,6 +64,7 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json();
+    console.log(body);
     const {
       services_id,
       patient_id,
@@ -73,10 +74,11 @@ export async function POST(request) {
       weight,
       height,
       date,
+      user_id,
     } = body;
     //corregir cuando se tenga a los usarios esto se debe enviar del body
 
-    if (!services_id || !patient_id || !responsible || !user_id) {
+    if (!services_id || !patient_id || !responsible) {
       return NextResponse.json(
         {
           error:
