@@ -15,13 +15,13 @@ export default function MedicalAppointment() {
   const [doctor, setDoctor] = useState(null);
   const [consultType, setConsultType] = useState(null);
   const [specialtyCost, setSpecialtyCost] = useState("");
+  const [appoimentCost, setAppoimentCost] = useState("");
   const [patient, setPatient] = useState([]);
   const [success, setSuccess] = useState(null);
   const [patientLastName, setPatientLastName] = useState("");
   const [showSeekerCi, setShowSeekerCi] = useState(false);
   const [isPartner, setIsPartner] = useState(false);
   const [percentDiscount, setPercentDiscount] = useState(0);
-  const [percentDiscountL, setPercentDiscountL] = useState(null);
   const [responsible, setResponsible] = useState(
     localStorage.getItem("userName")
   );
@@ -89,7 +89,7 @@ export default function MedicalAppointment() {
       doctor_id: doctor,
       date: date,
       responsible,
-      appointment_price: specialtyCost,
+      appointment_price: appoimentCost ? appoimentCost : specialtyCost,
     };
     try {
       const response = await fetch("/api/appointment", {
@@ -136,7 +136,9 @@ export default function MedicalAppointment() {
     const handler = setTimeout(() => {
       if (percentDiscount !== 0) {
         const newCost = specialtyCost * (1 - percentDiscount / 100);
-        setSpecialtyCost(newCost.toFixed(2));
+        setAppoimentCost(newCost.toFixed(2));
+      } else {
+        setAppoimentCost(null);
       }
     }, 500);
 
@@ -267,37 +269,22 @@ export default function MedicalAppointment() {
               <SimpleInput
                 type="text"
                 label="Costo de Especialidad"
-                value={specialtyCost}
+                value={appoimentCost ? appoimentCost : specialtyCost}
                 onChange={(e) => setSpecialtyCost(Number(e.target.value) || 0)}
                 typeInput="onchnge"
               />
             </div>
             {/**/}
-            <div>
-              <SimpleInput
-                type="text"
-                label="Costo de Especialidad cb"
-                value={
-                  percentDiscountL === null
-                    ? specialtyCost
-                    : specialtyCost * (1 - parseInt(percentDiscountL.key) / 100)
-                }
-                onChange={(e) => setSpecialtyCost(e.target.value)}
-              />
-            </div>
-            <ToggleSwitch
-              status={setIsPartner}
-              title="Pertenece a los socios?"
-            />
+
+            <ToggleSwitch status={setIsPartner} title="Convenios" />
             {isPartner && (
               <>
-                {/**/}
                 <div>
-                  <SimpleDropdown
-                    buttonLabel="Que socio es?"
-                    menuItems={listDiscount}
-                    ariaLabel="percent Type"
-                    setItem={setPercentDiscountL}
+                  <SimpleInput
+                    type="text"
+                    label="Ingrese el % de descuento"
+                    value={percentDiscount}
+                    onChange={(e) => setPercentDiscount(e.target.value)}
                   />
                 </div>
               </>
