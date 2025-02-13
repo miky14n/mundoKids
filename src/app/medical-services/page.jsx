@@ -136,6 +136,7 @@ export default function Services() {
                 label="Encargado"
                 value={responsible}
                 onChange={(e) => setResponsible(e.target.value)}
+                readonly={true}
               />
             </div>
             <Seeker

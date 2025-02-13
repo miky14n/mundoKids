@@ -30,8 +30,9 @@ export default function Noursing() {
         data.map(async (service) => {
           if (!service.weight && !service.height && !service.temperature) {
             try {
+              console.log(service);
               const patientResponse = await fetch(
-                `/api/patients?patient_id=${service.patient_id}`
+                `/api/patients/${service.patient_id}`
               );
 
               if (!patientResponse.ok) {
