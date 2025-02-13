@@ -95,7 +95,9 @@ export default function MedicalHistory() {
                       title: "Fecha de nacimiento",
                       label:
                         typeof patient.date_of_birth === "string"
-                          ? patient.date_of_birth.split("T")[0]
+                          ? new Date(patient.date_of_birth).toLocaleDateString(
+                              "es-ES"
+                            )
                           : "Fecha no disponible",
                     },
                   ]}

@@ -272,7 +272,8 @@ export default function MedicalAppointment() {
                 typeInput="onchnge"
               />
             </div>
-            {/*<div>
+            {/**/}
+            <div>
               <SimpleInput
                 type="text"
                 label="Costo de Especialidad cb"
@@ -283,29 +284,22 @@ export default function MedicalAppointment() {
                 }
                 onChange={(e) => setSpecialtyCost(e.target.value)}
               />
-            </div>*/}
+            </div>
             <ToggleSwitch
               status={setIsPartner}
               title="Pertenece a los socios?"
             />
             {isPartner && (
               <>
+                {/**/}
                 <div>
-                  <SimpleInput
-                    type="text"
-                    label="Ingrese el % de descuento"
-                    value={percentDiscount}
-                    onChange={(e) => setPercentDiscount(e.target.value)}
-                  />
-                </div>
-                {/*<div>
                   <SimpleDropdown
                     buttonLabel="Que socio es?"
                     menuItems={listDiscount}
                     ariaLabel="percent Type"
                     setItem={setPercentDiscountL}
                   />
-                </div>*/}
+                </div>
               </>
             )}
           </div>

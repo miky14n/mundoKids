@@ -111,11 +111,7 @@ export default function Seeker({
         <AutocompleteItem key={patient.patient_id}>
           {`${patient.name} ${patient.last_name} ${new Date(
             patient.date_of_birth
-          ).toLocaleDateString("es-ES", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          })}`}
+          ).toLocaleDateString("es-ES")}`}
         </AutocompleteItem>
       )}
     </Autocomplete>
