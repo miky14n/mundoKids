@@ -124,13 +124,15 @@ export default function MedicalHistory() {
             setItem={setSelectedItem}
           />
         </div>
-        <div className="flex-1">
-          <SimpleInput
-            label="Ingrese el nombre de doctor"
-            value={doctorName}
-            onChange={(e) => setDoctorName(e.target.value)}
-          />
-        </div>
+        {showAp && (
+          <div className="flex-1">
+            <SimpleInput
+              label="Ingrese el nombre de doctor"
+              value={doctorName}
+              onChange={(e) => setDoctorName(e.target.value)}
+            />
+          </div>
+        )}
         <div>
           <PersonalButton
             content="Exportar a Excel"

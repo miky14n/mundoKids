@@ -3,7 +3,8 @@ import { neon_sql } from "@/app/lib/neon";
 
 export async function GET() {
   try {
-    const specialtys = await neon_sql`SELECT * FROM specialty`;
+    const specialtys =
+      await neon_sql`SELECT * FROM specialty ORDER BY name ASC`;
     return NextResponse.json(specialtys);
   } catch (error) {
     console.error("Error al consultar la base de datos:", error);

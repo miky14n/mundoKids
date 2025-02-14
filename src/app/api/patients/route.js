@@ -7,7 +7,7 @@ export async function GET(request) {
     const search = searchParams.get("search");
 
     console.log("Parámetro de búsqueda recibido:", search);
-    let query = `SELECT * FROM patient`;
+    let query = `SELECT * FROM patient ORDER BY name ASC`;
 
     if (search) {
       query += ` WHERE name ILIKE '%${search}%' OR last_name ILIKE '%${search}%'`;
