@@ -22,6 +22,7 @@ export default function MedicalAppointment() {
   const [showSeekerCi, setShowSeekerCi] = useState(false);
   const [isPartner, setIsPartner] = useState(false);
   const [percentDiscount, setPercentDiscount] = useState(0);
+  const [discountDescribe, setDiscountDescribe] = useState("");
   const [responsible, setResponsible] = useState(
     localStorage.getItem("userName")
   );
@@ -31,10 +32,6 @@ export default function MedicalAppointment() {
     { key: "2", label: "Re consulta" },
   ];
 
-  const listDiscount = [
-    { key: "20", label: "Club Hipico" },
-    { key: "35", label: "Plantilla interna" },
-  ];
   useEffect(() => {
     if (ci && ci !== "") {
       const fetchDoctor = async () => {
@@ -90,6 +87,8 @@ export default function MedicalAppointment() {
       date: date,
       responsible,
       appointment_price: appoimentCost ? appoimentCost : specialtyCost,
+      discountDescribe,
+      percentDiscount,
     };
     try {
       const response = await fetch("/api/appointment", {
@@ -285,6 +284,14 @@ export default function MedicalAppointment() {
                     label="Ingrese el % de descuento"
                     value={percentDiscount}
                     onChange={(e) => setPercentDiscount(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <SimpleInput
+                    type="text"
+                    label="Descripcion del convenio"
+                    value={discountDescribe}
+                    onChange={(e) => setDiscountDescribe(e.target.value)}
                   />
                 </div>
               </>

@@ -76,6 +76,8 @@ export async function POST(request) {
       temperature,
       responsible,
       appointment_price,
+      discountDescribe,
+      percentDiscount,
     } = body;
     if (
       !patient_id ||
@@ -105,7 +107,9 @@ export async function POST(request) {
         weight,
         temperature,
         responsible,
-        appointment_price
+        appointment_price,
+        description_of_greement ,
+        agreement_percent 
       ) VALUES (
         ${patient_id},
         ${type_of_appointment},
@@ -116,7 +120,9 @@ export async function POST(request) {
         ${weight || null},
         ${temperature || null},
         ${responsible || null},
-        ${appointment_price || null}
+        ${appointment_price || null},
+        ${discountDescribe},
+        ${percentDiscount}
       )
       RETURNING *;
     `;
