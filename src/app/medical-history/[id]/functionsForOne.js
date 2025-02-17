@@ -107,6 +107,16 @@ function castColumns(columns, filterName) {
         return `Nombre del servicio medico`;
       case "total_earnings":
         return "Total de ingreso";
+      case "appointment_price":
+        return "Costo de la Consulta";
+      case "description_of_greement":
+        return "Descripcion del convenio";
+      case "agreement_percent":
+        return "Porcentaje de descuento aplicado";
+      case "specialty_price":
+        return "Costo de la especialidad";
+      case "doctor_full_name":
+        return "Nombre del doctor";
 
       default:
         return item; // Si no hay traducción, retorna el nombre original

@@ -36,7 +36,21 @@ const fetchMedicalServices = async (aditionalQuery) => {
     throw error;
   }
 };
-
+const fetchAppotimentReport = async (aditionalQuery) => {
+  try {
+    const response = await fetch(`/api/reports?${aditionalQuery}`, {
+      method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error(`Error al obtener los datos: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al buscar los servicios médicos:", error);
+    throw error;
+  }
+};
 const processDataServices = async (data, filterName) => {
   if (data.length > 0) {
     const statsMap = new Map();
@@ -82,7 +96,7 @@ const processDataServices = async (data, filterName) => {
     return renamedResults;
   } else return data;
 };
-const processData = async (data, filterName) => {
+const processDataForGlobalReport = async (data, filterName) => {
   console.log(data, "los datos  ");
   const statsMap = new Map();
   await Promise.all(
@@ -129,6 +143,22 @@ const processData = async (data, filterName) => {
 
   return renamedResults;
 };
+
+const procesDataForDetailRp = async (data, filterName) => {
+  console.log(data, "los datos  ");
+
+  const renamedResults = data.map((item) => {
+    const renamedItem = {};
+    Object.keys(item).forEach((key) => {
+      const translatedKey = castColumns([key], filterName)[0];
+      renamedItem[translatedKey] = item[key];
+    });
+    return renamedItem;
+  });
+
+  return renamedResults;
+};
+
 const exportToExcel = (
   data,
   filterName,
@@ -220,8 +250,10 @@ const exportToExcel = (
 
 export {
   fetchAppointments,
-  processData,
+  processDataForGlobalReport,
   exportToExcel,
   fetchMedicalServices,
   processDataServices,
+  fetchAppotimentReport,
+  procesDataForDetailRp,
 };
