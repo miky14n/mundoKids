@@ -7,13 +7,18 @@ export async function GET(request) {
     const search = searchParams.get("search");
 
     console.log("Parámetro de búsqueda recibido:", search);
-    let query = `SELECT * FROM patient ORDER BY name ASC`;
+
+    let query = `SELECT * FROM patient`;
+    let queryParams = [];
 
     if (search) {
-      query += ` WHERE name ILIKE '%${search}%' OR last_name ILIKE '%${search}%'`;
+      query += ` WHERE name ILIKE $1 OR last_name ILIKE $1`;
+      queryParams.push(`%${search}%`);
     }
 
-    const patients = await neon_sql(query);
+    query += ` ORDER BY name ASC`;
+
+    const patients = await neon_sql(query, queryParams);
     return NextResponse.json(patients);
   } catch (error) {
     console.error("Error al consultar la base de datos:", error);
