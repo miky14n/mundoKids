@@ -61,7 +61,9 @@ export async function GET(request) {
     }
 
     if (conditions.length > 0) {
-      query += ` WHERE ${conditions.join(" AND ")}`;
+      query += ` WHERE ${conditions.join(
+        " AND "
+      )} ORDER BY doctor_full_name ASC`;
     }
 
     const medical_appointment = await neon_sql(query);

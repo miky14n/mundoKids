@@ -15,7 +15,7 @@ export default function BasicTable({
   data,
   title = null,
   personalColums = null,
-  rowsPerPage = 4,
+  rowsPerPage = 30,
 }) {
   const [page, setPage] = useState(1);
   let columns;

@@ -136,13 +136,15 @@ export default function MedicalHistory() {
             color="success"
             action={() => {
               const dataToExport = showAp ? filteredData : dataReportServices;
-              const fileName = showAp ? "reporte_medicos" : "reporte_servicios";
+              const fileName = showAp
+                ? "reporte_medicos.xlsx"
+                : "reporte_servicios.xlsx";
               const checker = showAp ? true : false;
               exportToExcel(
                 dataToExport,
+                checker,
                 selectedItem ? selectedItem.label : "Dia",
-                `${fileName} ${selectedItem ? selectedItem.label : "Dia"}.xlsx`,
-                checker
+                fileName
               );
             }}
           />
