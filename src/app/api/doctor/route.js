@@ -12,6 +12,7 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const full_name = searchParams.get("full_name");
+    const email = searchParams.get("tofind");
     let query;
     if (full_name) {
       query = neon_sql`
@@ -25,6 +26,10 @@ export async function GET(request) {
         SELECT * FROM doctor
       `;
     }
+    if (email) {
+      query = neon_sql`SELECT doctor_id FROM doctor WHERE email = ${email}`;
+    }
+
     const doctors = await query;
     return NextResponse.json(doctors);
   } catch (error) {

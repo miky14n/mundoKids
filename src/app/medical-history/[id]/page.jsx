@@ -7,12 +7,14 @@ import {
   fetchAppointments,
   fetchMedicalServices,
   combineDataMedicalSrv,
+  findDoctor,
 } from "./functionsForOne";
 import BasicTable from "@/components/Tables/BasicTable";
 import { useSession } from "next-auth/react";
 
 export default function OnePatient({ params }) {
   const { data: session } = useSession();
+
   const limitAccesse = ["nurse", "doctor", "receptionist"];
   let patient_id = params.id;
   const [patient, setPatient] = useState(null);
@@ -48,12 +50,22 @@ export default function OnePatient({ params }) {
           setAppoimentOnePatient(appoimentCombine);
           const servicesCombine = await combineDataMedicalSrv(servicesPatient);
           setServicesOnePatient(servicesCombine);
-          if (servicesCombine.length > 0) {
-            setLastServices(servicesCombine.slice(-2));
-          }
+          if (limitAccesse.includes(session?.user.role)) {
+            if (servicesCombine.length > 0) {
+              setLastServices(servicesCombine.slice(-2));
+            }
 
-          if (appoimentCombine.length > 0) {
-            setLastAppointments(appoimentCombine.slice(-2));
+            if (appoimentCombine.length > 0) {
+              const doctor = await findDoctor(session?.user.email);
+              console.log("El doctore", appoimentCombine);
+              const appoimentFilter = appoimentCombine.filter(
+                (appointment) => appointment.doctor_id === doctor.doctor_id
+              );
+
+              setLastAppointments(appoimentFilter.slice(-2));
+            }
+          } else {
+            console.log("No se detecta el rol", session);
           }
         } catch (err) {
           console.error("Error al buscar al paciente:", err);
@@ -65,7 +77,8 @@ export default function OnePatient({ params }) {
     } else {
       setError("CI del paciente no válido.");
     }
-  }, [patient_id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [patient_id, session]);
 
   if (error) {
     return (
@@ -102,6 +115,7 @@ export default function OnePatient({ params }) {
     "Temperatura",
     "Responsable",
   ];
+
   return (
     <>
       {patient ? (
@@ -119,6 +133,7 @@ export default function OnePatient({ params }) {
                   }
                   title={"Ultima Cita medica"}
                   personalColums={columsAppoimentShow}
+                  rowsPerPage={10}
                 />
               </div>
               <div>
@@ -130,6 +145,7 @@ export default function OnePatient({ params }) {
                   }
                   title={"Ultima Servicios medicos Aplicados"}
                   personalColums={columsMedicalSrvShow}
+                  rowsPerPage={10}
                 />
               </div>
             </>

@@ -7,7 +7,7 @@ const fetchAppointments = async (ci) => {
       throw new Error(`Error al obtener los datos: ${response.status}`);
     }
     const data = await response.json();
-    console.log("Datos de la cita médica:", data);
+
     return data; // Retorna los datos de la API
   } catch (error) {
     console.error("Error al buscar la cita médica:", error);
@@ -24,7 +24,6 @@ const fetchMedicalServices = async (patient_id) => {
       throw new Error(`Error al obtener los datos: ${response.status}`);
     }
     const data = await response.json();
-    console.log("Datos de los servicios médicos:", data);
     return data;
   } catch (error) {
     console.error("Error al buscar los servicios médicos:", error);
@@ -163,7 +162,7 @@ const combineDataMedicalSrv = async (data) => {
         ...item,
         id: item.medical_srv_id,
         name_medical_srv: servicesName,
-        date_srv: new Date(item.data).toLocaleDateString(),
+        date_srv: new Date(item.date).toLocaleDateString(),
       };
     })
   );
@@ -178,8 +177,23 @@ const combineDataMedicalSrv = async (data) => {
   //console.log(renamedResults, "Los resultados con columnas traducidas");
   return renamedResults;
 };
-
+const findDoctor = async (doctor) => {
+  try {
+    const response = await fetch(`/api/doctor?tofind=${doctor}`, {
+      method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error(`Error al obtener los datos: ${response.status}`);
+    }
+    const data = await response.json();
+    return data[0];
+  } catch (error) {
+    console.error("Error al buscar los médicos:", error);
+    throw error;
+  }
+};
 export {
+  findDoctor,
   fetchAppointments,
   fetchOneServices,
   fetchMedicalServices,
