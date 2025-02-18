@@ -76,6 +76,8 @@ export default async function middleware(req) {
         "/medical-appointment",
         "/medical-history",
         "/administration",
+        "/noursing",
+        "/noursing/services",
       ];
       if (
         authorizeDirectionsRp.includes(url) ||
