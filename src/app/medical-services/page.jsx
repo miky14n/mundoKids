@@ -129,7 +129,7 @@ export default function Services() {
           </h2>
 
           {/* Fila para Encargada y CI del Paciente */}
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-2">
             <div>
               <SimpleInput
                 type="text"
@@ -140,6 +140,7 @@ export default function Services() {
               />
             </div>
             <Seeker
+              className="w-full"
               title="Buscar paciente"
               description="Ingrese nombre del paciente"
               resultSeek="Resultado de la busqueda"

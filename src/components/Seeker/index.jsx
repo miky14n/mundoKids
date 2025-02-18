@@ -1,36 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react"; // Importar useCallback
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import axios from "axios";
-
-const SearchIcon = ({ size = 24, strokeWidth = 1.5, ...props }) => {
-  return (
-    <svg
-      aria-hidden="true"
-      fill="none"
-      focusable="false"
-      height={size}
-      width={size}
-      role="presentation"
-      viewBox="0 0 24 24"
-      {...props}
-    >
-      <path
-        d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={strokeWidth}
-      />
-      <path
-        d="M22 22L20 20"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={strokeWidth}
-      />
-    </svg>
-  );
-};
+import { SearchIcon } from "../Icons";
 
 export default function Seeker({
   title = "Title Seeker",
@@ -84,12 +55,19 @@ export default function Seeker({
       getValue(selected);
     }
   };
+  const formatDate = (isoString) => {
+    if (!isoString) return ""; // Manejo de valores vacíos o undefined
 
+    const parts = isoString.split("T")[0].split("-"); // Separar la fecha
+    if (parts.length !== 3) return "Fecha inválida"; // Validar formato correcto
+
+    return `${parts[2]}/${parts[1]}/${parts[0]}`; // Formato DD/MM/YYYY
+  };
   return (
     <Autocomplete
       allowsCustomValue={true}
       isVirtualized
-      className="max-w-xs"
+      className="w-96 max-w-full" // Ampliar el ancho del input
       label={title}
       placeholder={description}
       description={resultSeek}
@@ -109,16 +87,13 @@ export default function Seeker({
       }
     >
       {(patient) => (
-        <AutocompleteItem key={patient.patient_id}>
-          {`${patient.name} ${patient.last_name} ${
+        <AutocompleteItem
+          key={patient.patient_id}
+          className="text-lg w-full whitespace-nowrap overflow-hidden"
+        >
+          {`${patient.name} ${patient.last_name} ${formatDate(
             patient.date_of_birth
-              ? new Date(patient.date_of_birth).toLocaleDateString("es-BO", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                })
-              : "Fecha no disponible"
-          }`}
+          )}`}
         </AutocompleteItem>
       )}
     </Autocomplete>
