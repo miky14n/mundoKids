@@ -52,6 +52,7 @@ export default function Seeker({
       try {
         const response = await axios.get(`${apiUrl}=${term}`);
         setPatients(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error buscando pacientes:", error);
       } finally {
@@ -109,9 +110,15 @@ export default function Seeker({
     >
       {(patient) => (
         <AutocompleteItem key={patient.patient_id}>
-          {`${patient.name} ${patient.last_name} ${new Date(
+          {`${patient.name} ${patient.last_name} ${
             patient.date_of_birth
-          ).toLocaleDateString("es-ES")}`}
+              ? new Date(patient.date_of_birth).toLocaleDateString("es-BO", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })
+              : "Fecha no disponible"
+          }`}
         </AutocompleteItem>
       )}
     </Autocomplete>
