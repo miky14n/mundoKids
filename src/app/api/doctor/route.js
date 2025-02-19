@@ -20,6 +20,7 @@ export async function GET(request) {
           doctor.*, 
           CONCAT(doctor.name, ' ', doctor.last_name) AS full_name 
         FROM doctor
+        ORDER BY full_name ASC
       `;
     } else {
       query = neon_sql`
