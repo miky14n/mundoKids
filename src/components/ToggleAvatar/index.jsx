@@ -96,6 +96,17 @@ export default function ToggleAvatar({
                     </button>
                   </Link>
                 </li>
+                <li>
+                  <Link href={"/administration/manage"}>
+                    <button
+                      className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600"
+                      onClick={() => console.log("Lista de usuarios")}
+                      role="menuitem"
+                    >
+                      Manejo administrativo
+                    </button>
+                  </Link>
+                </li>
               </>
             )}
             <li>

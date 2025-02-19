@@ -101,7 +101,6 @@ export default function Services() {
     setServices(null);
     setServicesCost("");
     setPatientLastName("");
-    setResponsible("");
     patient_id.current = "";
   };
   return (
@@ -195,6 +194,7 @@ export default function Services() {
                 }
                 idOfGet="services_id"
                 nameOfGet="name"
+                aditonalStyle="max-h-64 overflow-auto"
               />
             </div>
           </div>

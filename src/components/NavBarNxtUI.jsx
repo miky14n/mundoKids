@@ -44,7 +44,7 @@ export default async function NavBarNxtUI() {
             )}
             <NavbarItem>
               <Link color="foreground" href="/medical-services/listOfServices">
-                Servicios Médicos
+                Lista de Servicios
               </Link>
             </NavbarItem>
             {/*session.user.role != "nurse" && ()*/}

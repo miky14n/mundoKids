@@ -23,6 +23,7 @@ export default function ApiDropdown({
   filterLabel,
   filterValue,
   defaultText = "Choose any option",
+  aditonalStyle = "",
 }) {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +68,11 @@ export default function ApiDropdown({
             : defaultText}
         </Button>
       </DropdownTrigger>
-      <DropdownMenu variant="faded" aria-label="Dropdown Actions">
+      <DropdownMenu
+        variant="faded"
+        aria-label="Dropdown Actions"
+        className={`${aditonalStyle}`}
+      >
         {menuItems.map(
           (item, index) =>
             item[nameOfGet] &&
@@ -75,6 +80,7 @@ export default function ApiDropdown({
               <DropdownItem
                 key={`${item[idOfGet]}-${index}`}
                 onPress={() => handleSelect(item[idOfGet], item[nameOfGet])} // Cambiado a `onPress`
+                shouldBlockScroll={false}
               >
                 {String(item[nameOfGet])}
               </DropdownItem>

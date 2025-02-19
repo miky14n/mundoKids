@@ -13,6 +13,31 @@ export default function Settings() {
         <BasicForm
           layout="horizontal"
           fields={[
+            {
+              name: "name",
+              type: "text",
+              label: "Nombre de la especialidad",
+            },
+            { name: "description", type: "text", label: "Descripcion" },
+            {
+              name: "price",
+              type: "text",
+              label: "Costo de la especialidad",
+            },
+          ]}
+          apiUrl="/api/specialty"
+          formTitle="Añadir Especialidad"
+          onSuccessMessage="Especialidad creada exitosamente"
+          onErrorMessage="Error al registrar la especialidad"
+          buttonLabel="Registrar."
+          colorButton={"secondary"}
+        />
+      </div>
+      <hr className="border-t-2 border-gray-300 my-6" />
+      <div>
+        <BasicForm
+          layout="horizontal"
+          fields={[
             { name: "name", type: "text", label: "Nombre" },
             { name: "last_name", type: "text", label: "Apellido" },
             { name: "ci", type: "text", label: "Ci" },
@@ -43,31 +68,6 @@ export default function Settings() {
             </div>
           }
           valueExtraComponent={specialty}
-          colorButton={"secondary"}
-        />
-      </div>
-      <hr className="border-t-2 border-gray-300 my-6" />
-      <div>
-        <BasicForm
-          layout="horizontal"
-          fields={[
-            {
-              name: "name",
-              type: "text",
-              label: "Nombre de la especialidad",
-            },
-            { name: "description", type: "text", label: "Descripcion" },
-            {
-              name: "price",
-              type: "text",
-              label: "Costo de la especialidad",
-            },
-          ]}
-          apiUrl="/api/specialty"
-          formTitle="Añadir Especialidad"
-          onSuccessMessage="Especialidad creada exitosamente"
-          onErrorMessage="Error al registrar la especialidad"
-          buttonLabel="Registrar."
           colorButton={"secondary"}
         />
       </div>
