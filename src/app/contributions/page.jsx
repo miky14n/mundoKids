@@ -130,7 +130,7 @@ export default function Contributions() {
               action={resetForm}
             />
             <PersonalButton
-              content="Agendar"
+              content="Registrar"
               color="secondary"
               variant="ghost"
               action={handleRegister}

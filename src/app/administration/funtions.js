@@ -265,6 +265,14 @@ const exportToExcelGeneralReport = (
       console.error("Error al generar el archivo Excel:", error);
     });
 };
+const formatDate = (isoString) => {
+  if (!isoString) return ""; // Manejo de valores vacíos o undefined
+
+  const parts = isoString.split("T")[0].split("-"); // Separar la fecha
+  if (parts.length !== 3) return "Fecha inválida"; // Validar formato correcto
+
+  return `${parts[2]}/${parts[1]}/${parts[0]}`; // Formato DD/MM/YYYY
+};
 const exportToExcel = (
   data,
   showAp,
@@ -388,7 +396,7 @@ const exportToExcel = (
           doctor: item["Nombre del doctor"],
           responsable: item["Responsable"],
           contributionAmount: parseFloat(item["Cantidad de aporte"]) || 0,
-          fechaExtraccion: item["Fecha del aporte"],
+          fechaExtraccion: formatDate(item["Fecha del aporte"]),
           gloss: item["Glosa de aporte"],
         });
       });
