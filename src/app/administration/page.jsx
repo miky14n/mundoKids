@@ -50,6 +50,7 @@ export default function MedicalHistory() {
             medicalServices,
             filterName
           );
+          console.log(processedData);
           setDataServices(processedData);
         } else {
           const appoiments = await fetchAppotimentReport(`filter=${filter}`);
@@ -77,10 +78,11 @@ export default function MedicalHistory() {
   }, [selectedItem, showAp, showContributions]);
 
   useEffect(() => {
+    console.log("Cuando entro en el filtro", dataReport);
     const filtered = dataReport.filter((item) => {
       const matchesName =
         doctorName.trim() === "" ||
-        item["Nombre del Doctor"]
+        item["Nombre del doctor"]
           .toLowerCase()
           .includes(doctorName.toLowerCase());
       return matchesName;
