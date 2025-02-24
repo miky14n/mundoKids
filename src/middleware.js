@@ -34,6 +34,7 @@ export default async function middleware(req) {
         "/medical-services/listOfServices",
         "/noursing/services",
         "/noursing",
+        "/contributions",
       ];
       if (
         authorizeDirectionsAdm.includes(url) ||
@@ -78,6 +79,7 @@ export default async function middleware(req) {
         "/administration",
         "/noursing",
         "/noursing/services",
+        "/contributions",
       ];
       if (
         authorizeDirectionsRp.includes(url) ||

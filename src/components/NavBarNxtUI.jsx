@@ -58,7 +58,16 @@ export default async function NavBarNxtUI() {
               {!listRol.includes(session.user.role) && (
                 <NavbarItem>
                   <Link color="foreground" href="/administration">
-                    Administración
+                    Reportes
+                  </Link>
+                </NavbarItem>
+              )}
+            </>
+            <>
+              {!listRol.includes(session.user.role) && (
+                <NavbarItem>
+                  <Link color="foreground" href="/contributions">
+                    Aportes
                   </Link>
                 </NavbarItem>
               )}
