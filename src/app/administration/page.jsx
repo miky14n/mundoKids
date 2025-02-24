@@ -10,6 +10,7 @@ import {
   processDataServices,
   fetchAppotimentReport,
   procesDataForDetailRp,
+  fetchContributionsReport,
 } from "./funtions";
 import PersonalButton from "@/components/Button";
 import { useSession } from "next-auth/react";
@@ -18,12 +19,14 @@ import { iconExcel } from "@/components/Icons";
 export default function MedicalHistory() {
   const [dataReport, setData] = useState([]);
   const [dataReportServices, setDataServices] = useState([]);
+  const [dataReportContr, setDataContr] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [error, setError] = useState(null);
   const [doctorName, setDoctorName] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const { data: session } = useSession();
   const [showAp, setshowAp] = useState(true);
+  const [showContributions, setshowContributions] = useState(false);
 
   const items =
     session?.user.role === "nurse" || session?.user.role === "receptionist"
@@ -57,6 +60,13 @@ export default function MedicalHistory() {
           const dataProces = await procesDataForDetailRp(appoiments);
           setData(dataProces);
         }
+        if (showContributions) {
+          const contributions = await fetchContributionsReport(
+            `filter=${filter}`
+          );
+
+          setDataContr(await procesDataForDetailRp(contributions));
+        }
       } catch (error) {
         console.error("Error al cargar los datos:", error);
         setError("No se pudo cargar la lista de pacientes");
@@ -64,7 +74,7 @@ export default function MedicalHistory() {
     };
 
     loadData();
-  }, [selectedItem, showAp]);
+  }, [selectedItem, showAp, showContributions]);
 
   useEffect(() => {
     const filtered = dataReport.filter((item) => {
@@ -80,6 +90,12 @@ export default function MedicalHistory() {
 
   const handleNavigation = (isSpecialty) => {
     setshowAp(isSpecialty);
+    setshowContributions(false); // Asegurar que no se muestre la tabla de aportes médicos
+  };
+
+  const handleNavigationCtb = () => {
+    setshowAp(false); // Asegurar que se oculten las otras tablas
+    setshowContributions(true);
   };
 
   return (
@@ -91,22 +107,33 @@ export default function MedicalHistory() {
               type="radio"
               name="selection"
               value="specialty"
-              checked={showAp}
+              checked={showAp && !showContributions}
               onChange={() => handleNavigation(true)}
-              className="mr-2"
+              className="mr-3"
             />
             Reporte médicos
+          </label>
+          <label className="font-bold flex items-center mr-6">
+            <input
+              type="radio"
+              name="selection"
+              value="services"
+              checked={!showAp && !showContributions}
+              onChange={() => handleNavigation(false)}
+              className="mr-3"
+            />
+            Reporte servicios médicos
           </label>
           <label className="font-bold flex items-center">
             <input
               type="radio"
               name="selection"
-              value="services"
-              checked={!showAp}
-              onChange={() => handleNavigation(false)}
-              className="mr-2"
+              value="contributions"
+              checked={showContributions}
+              onChange={() => handleNavigationCtb()}
+              className="mr-3"
             />
-            Reporte servicios médicos
+            Reporte de aportes médicos
           </label>
         </div>
       </div>
@@ -120,7 +147,8 @@ export default function MedicalHistory() {
             setItem={setSelectedItem}
           />
         </div>
-        {showAp && (
+
+        {showAp && !showContributions && (
           <div className="flex-1">
             <SimpleInput
               label="Ingrese el nombre de doctor"
@@ -129,17 +157,28 @@ export default function MedicalHistory() {
             />
           </div>
         )}
+
         <div>
           <PersonalButton
             content="Exportar a Excel"
             startIcon={iconExcel}
             color="success"
             action={() => {
-              const dataToExport = showAp ? filteredData : dataReportServices;
-              const fileName = showAp
-                ? "reporte_medicos.xlsx"
-                : "reporte_servicios.xlsx";
-              const checker = showAp ? true : false;
+              let dataToExport, fileName, checker;
+              if (showAp) {
+                dataToExport = filteredData;
+                fileName = "reporte_medicos.xlsx";
+                checker = true;
+              } else if (showContributions) {
+                dataToExport = dataReportContr;
+                fileName = "reporte_aportes.xlsx";
+                checker = false;
+              } else {
+                dataToExport = dataReportServices;
+                fileName = "reporte_servicios.xlsx";
+                checker = false;
+              }
+
               exportToExcel(
                 dataToExport,
                 checker,
@@ -151,8 +190,22 @@ export default function MedicalHistory() {
         </div>
       </div>
 
-      <div>
-        {showAp ? (
+      {/* Renderizado de las tablas */}
+      <div className="mt-4">
+        {showContributions ? (
+          <BasicTable
+            data={dataReportContr}
+            title={"Reporte de aportes médicos"}
+            personalColums={[
+              "Nombre del doctor",
+              "Responsable",
+              "Cantidad de aporte",
+              "Fecha del aporte",
+              "Glosa de aporte",
+            ]}
+            nameColOfDate={"Fecha del aporte"}
+          />
+        ) : showAp ? (
           <BasicTable
             data={filteredData}
             title={"Reporte de médicos"}

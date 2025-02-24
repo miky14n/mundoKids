@@ -116,7 +116,12 @@ function castColumns(columns, filterName) {
         return "Costo de la especialidad";
       case "doctor_full_name":
         return "Nombre del doctor";
-
+      case "gloss":
+        return "Glosa de aporte";
+      case "date":
+        return "Fecha del aporte";
+      case "amount_contributed":
+        return "Cantidad de aporte";
       default:
         return item; // Si no hay traducción, retorna el nombre original
     }

@@ -16,6 +16,7 @@ export default function BasicTable({
   title = null,
   personalColums = null,
   rowsPerPage = 30,
+  nameColOfDate = null,
 }) {
   const [page, setPage] = useState(1);
   let columns;
@@ -34,7 +35,14 @@ export default function BasicTable({
     const end = start + rowsPerPage;
     return validData.slice(start, end);
   }, [page, rowsPerPage, validData]);
+  const formatDate = (isoString) => {
+    if (!isoString) return ""; // Manejo de valores vacíos o undefined
 
+    const parts = isoString.split("T")[0].split("-"); // Separar la fecha
+    if (parts.length !== 3) return "Fecha inválida"; // Validar formato correcto
+
+    return `${parts[2]}/${parts[1]}/${parts[0]}`; // Formato DD/MM/YYYY
+  };
   return (
     <div>
       {title && (
@@ -78,7 +86,9 @@ export default function BasicTable({
                 {(personalColums || columns).map((col) => (
                   <TableCell key={col}>
                     {item[col] !== null && item[col] !== undefined
-                      ? item[col].toString()
+                      ? col === nameColOfDate
+                        ? formatDate(item[col]) // Llama a formatDate si es "Fecha del aporte"
+                        : item[col].toString()
                       : "Dato no registrado"}
                   </TableCell>
                 ))}

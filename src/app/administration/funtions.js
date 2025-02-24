@@ -51,6 +51,24 @@ const fetchAppotimentReport = async (aditionalQuery) => {
     throw error;
   }
 };
+const fetchContributionsReport = async (aditionalQuery = "") => {
+  try {
+    const response = await fetch(
+      `/api/reports/doctor-contributions?${aditionalQuery}`,
+      {
+        method: "GET",
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Error al obtener los datos: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al buscar los servicios médicos:", error);
+    throw error;
+  }
+};
 const processDataServices = async (data, filterName) => {
   if (data.length > 0) {
     const statsMap = new Map();
@@ -379,4 +397,5 @@ export {
   processDataServices,
   fetchAppotimentReport,
   procesDataForDetailRp,
+  fetchContributionsReport,
 };

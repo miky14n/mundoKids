@@ -53,12 +53,11 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-
     const result = await neon_sql`
         INSERT INTO contributions (doctor_id, date,gloss ,amount_contributed, responsible)
         VALUES (
           ${doctor_id},
-          ${date ? new Date(date) : new Date()}, 
+          ${date}, 
           ${gloss || null},
           ${amount_contributed} ,
           ${responsible || null}
