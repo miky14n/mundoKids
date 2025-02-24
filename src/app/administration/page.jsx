@@ -168,15 +168,15 @@ export default function MedicalHistory() {
               if (showAp) {
                 dataToExport = filteredData;
                 fileName = "reporte_medicos.xlsx";
-                checker = true;
+                checker = "ap";
               } else if (showContributions) {
                 dataToExport = dataReportContr;
                 fileName = "reporte_aportes.xlsx";
-                checker = false;
+                checker = "ct";
               } else {
                 dataToExport = dataReportServices;
                 fileName = "reporte_servicios.xlsx";
-                checker = false;
+                checker = "sv";
               }
 
               exportToExcel(
