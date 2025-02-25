@@ -122,6 +122,10 @@ function castColumns(columns, filterName) {
         return "Fecha del aporte";
       case "amount_contributed":
         return "Cantidad de aporte";
+      case "payment_type":
+        return "Tipo de Pago";
+      case "service_cost":
+        return "Costo del servicio";
       default:
         return item; // Si no hay traducción, retorna el nombre original
     }

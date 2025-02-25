@@ -8,12 +8,14 @@ export async function GET(request) {
 
     let query = `
       SELECT 
+        ma.appoiment_id AS ID,
         ma.type_of_appointment,
         ma.date,
         ma.responsible,
         ma.appointment_price,
         ma.description_of_greement,
         ma.agreement_percent,
+        ma.payment_type,
         s.name AS specialty_name,
         s.price AS specialty_price,
         d.name || ' ' || d.last_name AS doctor_full_name,

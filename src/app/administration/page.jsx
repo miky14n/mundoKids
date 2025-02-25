@@ -4,13 +4,10 @@ import SimpleInput from "@/components/Input";
 import SimpleDropdown from "@/components/SimpleDropdown";
 import { useEffect, useState } from "react";
 import {
-  processDataForGlobalReport,
   exportToExcel,
-  fetchMedicalServices,
   processDataServices,
-  fetchAppotimentReport,
   procesDataForDetailRp,
-  fetchContributionsReport,
+  fetchReport,
 } from "./funtions";
 import PersonalButton from "@/components/Button";
 import { useSession } from "next-auth/react";
@@ -43,17 +40,17 @@ export default function MedicalHistory() {
         let filter = selectedItem ? selectedItem.key : "today";
         let filterName = selectedItem ? selectedItem.label : "Dia";
         if (!showAp) {
-          const medicalServices = await fetchMedicalServices(
-            `filter=${filter}`
+          const medicalServices = await fetchReport(
+            `/api/reports/medical-services?filter=${filter}`
           );
-          const processedData = await processDataServices(
+          /**const processedData = await processDataServices(
             medicalServices,
             filterName
-          );
-          console.log(processedData);
-          setDataServices(processedData);
+          ); console.log(processedData);*/
+          const dataProcesSv = await procesDataForDetailRp(medicalServices);
+          setDataServices(dataProcesSv);
         } else {
-          const appoiments = await fetchAppotimentReport(`filter=${filter}`);
+          const appoiments = await fetchReport(`/api/reports?filter=${filter}`);
           /*const processedData = await processDataForGlobalReport(
             appoiments,
             filterName
@@ -62,8 +59,8 @@ export default function MedicalHistory() {
           setData(dataProces);
         }
         if (showContributions) {
-          const contributions = await fetchContributionsReport(
-            `filter=${filter}`
+          const contributions = await fetchReport(
+            `/api/reports/doctor-contributions?filter=${filter}`
           );
 
           setDataContr(await procesDataForDetailRp(contributions));
@@ -204,6 +201,7 @@ export default function MedicalHistory() {
               "Cantidad de aporte",
               "Fecha del aporte",
               "Glosa de aporte",
+              "Tipo de Pago",
             ]}
             nameColOfDate={"Fecha del aporte"}
           />
@@ -219,6 +217,7 @@ export default function MedicalHistory() {
               "Porcentaje de descuento aplicado",
               "Costo de la Consulta",
               "Descripcion del convenio",
+              "Tipo de Pago",
             ]}
           />
         ) : (
@@ -227,10 +226,9 @@ export default function MedicalHistory() {
             title={"Reporte de servicios médicos"}
             personalColums={[
               "Nombre del servicio medico",
-              `Total de servicios atendidos ${
-                selectedItem ? selectedItem.label : "Dia"
-              }`,
-              "Total de ingreso",
+              "Responsable",
+              "Tipo de Pago",
+              "Costo del servicio",
             ]}
           />
         )}

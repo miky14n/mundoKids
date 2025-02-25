@@ -8,10 +8,12 @@ export async function GET(request) {
 
     let query = `
         SELECT 
+          co.contribution_id AS ID,
           co.date,
           co.responsible,
           co.amount_contributed,
           co.gloss,
+          co.payment_type,
           d.name || ' ' || d.last_name AS doctor_full_name,
           d.contact_number AS doctor_contact,
           d.email AS doctor_email
