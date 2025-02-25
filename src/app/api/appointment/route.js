@@ -78,6 +78,7 @@ export async function POST(request) {
       appointment_price,
       discountDescribe,
       percentDiscount,
+      payment_type,
     } = body;
     if (
       !patient_id ||
@@ -109,7 +110,8 @@ export async function POST(request) {
         responsible,
         appointment_price,
         description_of_greement ,
-        agreement_percent 
+        agreement_percent ,
+        payment_type
       ) VALUES (
         ${patient_id},
         ${type_of_appointment},
@@ -122,7 +124,8 @@ export async function POST(request) {
         ${responsible || null},
         ${appointment_price || null},
         ${discountDescribe},
-        ${percentDiscount}
+        ${percentDiscount},
+        ${payment_type || "Efectivo"}
       )
       RETURNING *;
     `;

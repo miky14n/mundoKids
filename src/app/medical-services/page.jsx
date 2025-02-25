@@ -16,6 +16,7 @@ export default function Services() {
   const [servicesCost, setServicesCost] = useState("");
   const [success, setSuccess] = useState(null);
   const [patientLastName, setPatientLastName] = useState("");
+  const [paymentType, setPaymentType] = useState("");
   const [responsible, setResponsible] = useState(
     localStorage.getItem("userName")
   );
@@ -64,12 +65,14 @@ export default function Services() {
     .toString()
     .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
   const handleRegister = async () => {
-    console.log(patient);
+    console.log(servicesCost, "soy el costo");
     const data = {
       patient_id: patient.patient_id || patient_id.current,
       services_id: services,
       date: date,
       responsible,
+      service_cost: servicesCost,
+      payment_type: paymentType,
     };
     console.log("Los datos a mandar:" + JSON.stringify(data));
     try {
@@ -102,6 +105,7 @@ export default function Services() {
     setServicesCost("");
     setPatientLastName("");
     patient_id.current = "";
+    setPaymentType("");
   };
   return (
     <>
@@ -204,7 +208,16 @@ export default function Services() {
                 type="text"
                 label="Costo del servicio medico"
                 value={servicesCost}
-                readOnly
+                onChange={(e) => setServicesCost(e.target.value || 0)}
+                typeInput="onchnge"
+              />
+            </div>
+            <div>
+              <SimpleInput
+                type="text"
+                label="Tipo de pago"
+                value={paymentType}
+                onChange={(e) => setPaymentType(e.target.value || 0)}
               />
             </div>
           </div>

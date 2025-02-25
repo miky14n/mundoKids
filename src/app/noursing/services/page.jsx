@@ -81,7 +81,10 @@ export default function Noursing() {
 
       {services.length > 0 ? (
         services
-          .filter((item) => !item.height && !item.weight && !item.temperature)
+          .filter(
+            (item) =>
+              !item.height && !item.weight && !item.temperature && !item.status
+          )
           .map((item, index) => (
             <div key={index} className="mt-16">
               <hr className="border-t-2 border-gray-300 my-6" />

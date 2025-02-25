@@ -9,10 +9,11 @@ export default function Register() {
   const [success, setSuccess] = useState(null);
 
   const items = [
-    { key: "nurse", label: "Efermeria" },
+    { key: "nurse", label: "Enfermeria" },
     { key: "doctor", label: "Doctor" },
     { key: "admin", label: "Administracion" },
     { key: "receptionist", label: "Recepcionista" },
+    { key: "partner", label: "Socio" },
   ];
   return (
     <>

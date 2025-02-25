@@ -10,6 +10,7 @@ export default function Contributions() {
   const [amountContributed, setAmountContributed] = useState("");
   const [gloss, setGloss] = useState("");
   const [success, setSuccess] = useState(null);
+  const [paymentType, setPaymentType] = useState("");
   const [responsible, setResponsible] = useState(
     localStorage.getItem("userName")
   );
@@ -26,6 +27,7 @@ export default function Contributions() {
       gloss,
       amount_contributed: amountContributed,
       responsible,
+      payment_type: paymentType,
     };
     console.log("Los datos a mandar:" + JSON.stringify(data));
     try {
@@ -55,6 +57,7 @@ export default function Contributions() {
     setGloss("");
     setDoctor("");
     setAmountContributed("");
+    setPaymentType("");
   };
   return (
     <>
@@ -118,6 +121,17 @@ export default function Contributions() {
                 label="Ingre el monto del aporte"
                 value={amountContributed}
                 onChange={(e) => setAmountContributed(e.target.value)}
+              />
+            </div>
+          </div>
+          {/*tipo de pago*/}
+          <div className="grid grid-cols-2 gap-6 mt-4">
+            <div>
+              <SimpleInput
+                type="text"
+                label="Ingre el tipo de pago"
+                value={paymentType}
+                onChange={(e) => setPaymentType(e.target.value)}
               />
             </div>
           </div>

@@ -75,6 +75,8 @@ export async function POST(request) {
       height,
       date,
       user_id,
+      service_cost,
+      payment_type,
     } = body;
     //corregir cuando se tenga a los usarios esto se debe enviar del body
 
@@ -98,7 +100,9 @@ export async function POST(request) {
         weight, 
         height, 
         user_id,
-        date
+        date,
+        service_cost,
+        payment_type
       )
       VALUES (
         ${services_id}, 
@@ -109,7 +113,10 @@ export async function POST(request) {
         ${weight || null}, 
         ${height || null}, 
         ${user_id || null},
-        ${date}
+        ${date},
+        ${service_cost || 0},
+        ${payment_type || "Efectivo"}
+        
       )
       RETURNING *;
     `;

@@ -45,7 +45,14 @@ export async function GET(request) {
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { doctor_id, gloss, date, amount_contributed, responsible } = body;
+    const {
+      doctor_id,
+      gloss,
+      date,
+      amount_contributed,
+      responsible,
+      payment_type,
+    } = body;
 
     if (!doctor_id) {
       return NextResponse.json(
@@ -54,13 +61,14 @@ export async function POST(req) {
       );
     }
     const result = await neon_sql`
-        INSERT INTO contributions (doctor_id, date,gloss ,amount_contributed, responsible)
+        INSERT INTO contributions (doctor_id, date,gloss ,amount_contributed, responsible, payment_type)
         VALUES (
           ${doctor_id},
           ${date}, 
           ${gloss || null},
           ${amount_contributed} ,
-          ${responsible || null}
+          ${responsible || null},
+          ${payment_type || "Efectivo"}
         )
         RETURNING *;
       `;

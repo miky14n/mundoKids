@@ -23,6 +23,7 @@ export default function MedicalAppointment() {
   const [isPartner, setIsPartner] = useState(false);
   const [percentDiscount, setPercentDiscount] = useState(0);
   const [discountDescribe, setDiscountDescribe] = useState("");
+  const [paymentType, setPaymentType] = useState("");
   const [responsible, setResponsible] = useState(
     localStorage.getItem("userName")
   );
@@ -89,6 +90,7 @@ export default function MedicalAppointment() {
       appointment_price: appoimentCost ? appoimentCost : specialtyCost,
       discountDescribe,
       percentDiscount,
+      payment_type: paymentType,
     };
     try {
       const response = await fetch("/api/appointment", {
@@ -124,6 +126,7 @@ export default function MedicalAppointment() {
     setPatient([]);
     setIsPartner(false);
     setPercentDiscount(0);
+    setPaymentType("");
   };
   useEffect(() => {
     if (!isPartner) {
@@ -263,7 +266,7 @@ export default function MedicalAppointment() {
             </div>
           </div>
 
-          {/* Fila para Costo de Especialidad y Resumen */}
+          {/* Fila para Costo de Especialidad y ver si hay convenio */}
           <div className="grid grid-cols-4 gap-6 mt-4">
             <div>
               <SimpleInput
@@ -297,6 +300,17 @@ export default function MedicalAppointment() {
                 </div>
               </>
             )}
+          </div>
+          {/*tipo de pago*/}
+          <div className="grid grid-cols-2 gap-6 mt-4">
+            <div>
+              <SimpleInput
+                type="text"
+                label="Ingre el tipo de pago"
+                value={paymentType}
+                onChange={(e) => setPaymentType(e.target.value)}
+              />
+            </div>
           </div>
 
           {/* Botón de Guardar */}

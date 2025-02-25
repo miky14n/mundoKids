@@ -16,7 +16,7 @@ export default async function middleware(req) {
   }
 
   const role = sesion.role;
-
+  //Socio tiene acceso a todo menos a vacunas.
   switch (role) {
     case "it":
       return NextResponse.next();
