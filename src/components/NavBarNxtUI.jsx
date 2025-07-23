@@ -4,7 +4,7 @@ import {
   NavbarContent,
   NavbarItem,
   Link,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import Image from "next/image";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";

@@ -24,7 +24,7 @@ export async function POST(request) {
       </html>
     `,
   };
-
+  console.log(mailOptions);
   try {
     const info = await transporter.sendMail(mailOptions);
     console.log("Correo enviado:", info.response);

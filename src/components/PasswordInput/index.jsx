@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Input } from "@nextui-org/react";
+import { Input } from "@heroui/react";
 
 export const EyeSlashFilledIcon = (props) => {
   return (

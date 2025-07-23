@@ -1,6 +1,6 @@
 import "./globals.css";
 import Navbar from "../components/NavBAr";
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 import NavBarNxtUI from "@/components/NavBarNxtUI";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
@@ -14,12 +14,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es">
       <body className="bg-slate-50 min-h-screen font-sans">
-        <NextUIProvider>
+        <HeroUIProvider>
           <div>
             <NavBarNxtUI />
             <AuthProvider>{children}</AuthProvider>
           </div>
-        </NextUIProvider>
+        </HeroUIProvider>
       </body>
     </html>
   );
