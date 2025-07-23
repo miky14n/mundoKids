@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Textarea } from "@nextui-org/react";
+import { Textarea } from "@heroui/react";
 
 export default function PersonalTextarea({
   description = "Enter a concise description of your project.",

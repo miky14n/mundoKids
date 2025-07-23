@@ -9,7 +9,7 @@ import {
   TableCell,
   Pagination,
   getKeyValue,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 export default function BasicTable({
   data,

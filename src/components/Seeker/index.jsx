@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react"; // Importar useCallback
-import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import axios from "axios";
 import { SearchIcon } from "../Icons";
 

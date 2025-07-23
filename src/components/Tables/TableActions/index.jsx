@@ -16,10 +16,9 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { EyeIcon, DeleteIcon, EditIcon } from "@/components/Icons";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 export default function TableActions({
   columns,
   data,
@@ -96,7 +95,7 @@ export default function TableActions({
                 <EditIcon />
               </span>
             </Tooltip>*/}
-              <Tooltip color="danger" content="Delete user">
+              <Tooltip color="danger" content="Eliminar usuario">
                 <span
                   className="text-lg text-danger cursor-pointer active:opacity-50"
                   onClick={() => handleDeleteClick(user)}

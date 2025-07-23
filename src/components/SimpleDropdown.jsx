@@ -5,7 +5,7 @@ import {
   DropdownTrigger,
   DropdownItem,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 export default function SimpleDropdown({
   buttonLabel,

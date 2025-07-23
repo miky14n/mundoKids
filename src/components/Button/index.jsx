@@ -1,6 +1,5 @@
 "use client";
-import { Button } from "@nextui-org/react";
-import react from "react";
+import { Button } from "@heroui/react";
 
 export default function PersonalButton({
   content = "Button",

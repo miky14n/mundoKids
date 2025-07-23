@@ -5,7 +5,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useState, useEffect } from "react";
 
 function getMenuItem(menuItems, buttonLabel, nameOfGet, id) {
