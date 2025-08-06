@@ -12,7 +12,7 @@ export async function PATCH(request, { params }) {
     const queryCheck = `SELECT * FROM users WHERE email = $1`;
     const userFound = await neon_sql(queryCheck, [email]);
     const { password, newPassword } = await request.json();
-    console.log("los datos de la consulta", password, newPassword, email);
+
     if (userFound.length === 0) {
       return NextResponse.json(
         {
@@ -23,20 +23,17 @@ export async function PATCH(request, { params }) {
         }
       );
     }
-
     const matchPassword = await bcrypt.compare(password, userFound[0].password);
     if (!matchPassword) {
       return NextResponse.json(
         {
-          error:
-            "La contraseña actual ingresada no coincide con la contraseña registrada en el sistema.",
+          error:"La contraseña actual ingresada no coincide con la contraseña registrada en el sistema.",
         },
         {
           status: 400,
         }
       );
     }
-
     if (password === newPassword) {
       return NextResponse.json(
         { error: "Las contraseñas son iguales." },
@@ -49,7 +46,6 @@ export async function PATCH(request, { params }) {
         { status: 400 }
       );
     }
-
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     let query = `
       UPDATE users
@@ -67,14 +63,12 @@ export async function PATCH(request, { params }) {
     `;
     }
     const change = await neon_sql(query, [hashedPassword, email]);
-
     if (change.length === 0) {
       return NextResponse.json(
         { error: `No se encontró al usuario: ${email}` },
         { status: 404 }
       );
     }
-
     return NextResponse.json(
       { message: "Contraseña actualizada exitosamente." },
       { status: 200 }
