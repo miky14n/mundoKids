@@ -45,10 +45,10 @@ export default function TableActions({
         console.log("Usuario eliminado:", selectedUser);
         setDeleteUs(selectedUser);
       } else if (modalAction === "reset") {
-        await axios.put(
-          `/api/auth/users/${selectedUser[personal_id]}?email=${selectedUser.email}`
-        );
-        console.log("Contraseña reiniciada para:", selectedUser);
+        const response=  await axios.put(
+            `/api/auth/users/${selectedUser[personal_id]}?email=${selectedUser.email}`
+          );
+        console.log("Contraseña reiniciada para:", selectedUser, response.data);
       }
     } catch (error) {
       console.error("Error en la acción:", error);
