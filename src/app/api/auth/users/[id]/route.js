@@ -91,6 +91,16 @@ export async function PUT(request, { params }) {
     const user_id = params.id;
     const { searchParams } = new URL(request.url);
     const email = searchParams.get("email");
+
+    // Validación básica
+    if (!user_id || !email) {
+      return NextResponse.json(
+        { success: false, message: "Faltan datos requeridos" },
+        { status: 400 }
+      );
+    }
+
+    // Generar y hashear nueva contraseña
     const generateRandomPassword = () => {
       return crypto
         .randomBytes(3)
@@ -98,9 +108,11 @@ export async function PUT(request, { params }) {
         .replace(/[^a-zA-Z0-9]/g, "")
         .slice(0, 5);
     };
+
     const generatedPassword = generateRandomPassword();
-    const hashedPassword = await bcrypt.hash( generatedPassword, 10);
-    console.log("El pass hash", hashedPassword, "user id",);
+    const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+
+    // Actualizar en base de datos
     const query = `
       UPDATE users
       SET password = $1
@@ -108,41 +120,31 @@ export async function PUT(request, { params }) {
     `;
     const response = await neon_sql(query, [hashedPassword, user_id]);
     const personalSubject = "Restauración de contraseña";
-    const personalMessage = "Clinica Mundo Kids restauracion de contraseña";
-    if (response && email) {
-      console.log("Entre if", response);
+    const personalMessage = "Clínica Mundo Kids - Restauración de contraseña";
       try {
-       const baseUrl = request.nextUrl.origin; 
-      await fetch(`${baseUrl}/api/send`, {
+        const baseUrl = request.nextUrl.origin;
+        await fetch(`${baseUrl}/api/send`, {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             password: generatedPassword,
             email,
             personalSubject,
             personalMessage,
           }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (emailError) {
-      console.error("Error al enviar correo:", emailError.message);
-    }
+        });
+      } catch (emailError) {
+        console.error("❌ Error al enviar correo:", emailError);
+      }
+
       return NextResponse.json({
         success: true,
         message: "Contraseña restablecida",
         data: response,
       });
-    }
-    else{
-      console.log("no Entre if", response);
-      return NextResponse.json({success: false,
-        message: "Contraseña No restablecida",
-        data: response,})
-    }
 
   } catch (error) {
-    console.error("Error al restablecer la contraseña:", error);
+    console.error("❌ Error al restablecer la contraseña:", error);
     return NextResponse.json(
       { error: "Error al restablecer la contraseña" },
       { status: 500 }
