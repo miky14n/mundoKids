@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Table,
   TableHeader,
@@ -17,8 +17,14 @@ import {
   ModalFooter,
   Button,
 } from "@heroui/react";
-import { EyeIcon, DeleteIcon, EditIcon } from "@/components/Icons";
+import {
+  EyeIcon,
+  DeleteIcon,
+  EditIcon,
+  PasswordResetIcon,
+} from "@/components/Icons";
 import axios from "axios";
+
 export default function TableActions({
   columns,
   data,
@@ -27,27 +33,33 @@ export default function TableActions({
   setDeleteUs,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [modalAction, setModalAction] = useState(null); // 'delete' o 'reset'
 
-  const handleDeleteClick = (user) => {
-    setUserToDelete(user);
-    setIsOpen(true);
-  };
-  const confirmDelete = async () => {
-    if (userToDelete) {
-      try {
-        await axios.delete(`/api/auth/users/${userToDelete[personal_id]}`);
-        console.log("Usuario eliminado:", userToDelete);
-      } catch (error) {
-        console.error("Error al eliminar usuario:", error);
+  const confirmAction = async () => {
+    if (!selectedUser) return;
+
+    try {
+      if (modalAction === "delete") {
+        await axios.delete(`/api/auth/users/${selectedUser[personal_id]}`);
+        console.log("Usuario eliminado:", selectedUser);
+        setDeleteUs(selectedUser);
+      } else if (modalAction === "reset") {
+        const response=  await axios.put(
+            `/api/auth/users/${selectedUser[personal_id]}?email=${selectedUser.email}`
+          );
+        console.log("Contraseña reiniciada para:", selectedUser, response.data);
       }
+    } catch (error) {
+      console.error("Error en la acción:", error);
     }
-    setDeleteUs(userToDelete);
+
     setIsOpen(false);
-    setUserToDelete(null);
+    setSelectedUser(null);
+    setModalAction(null);
   };
 
-  const renderCell = React.useCallback(
+  const renderCell = useCallback(
     (user, columnKey) => {
       const cellValue = user[columnKey];
 
@@ -85,20 +97,27 @@ export default function TableActions({
         case "actions":
           return (
             <div className="flex justify-center items-center gap-2 w-full h-full">
-              {/*<Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Edit user">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
-              </span>
-            </Tooltip>*/}
+              <Tooltip content="Restaurar Contraseña">
+                <span
+                  className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                  onClick={() => {
+                    setSelectedUser(user);
+                    setModalAction("reset");
+                    setIsOpen(true);
+                  }}
+                >
+                  <PasswordResetIcon />
+                </span>
+              </Tooltip>
+
               <Tooltip color="danger" content="Eliminar usuario">
                 <span
                   className="text-lg text-danger cursor-pointer active:opacity-50"
-                  onClick={() => handleDeleteClick(user)}
+                  onClick={() => {
+                    setSelectedUser(user);
+                    setModalAction("delete");
+                    setIsOpen(true);
+                  }}
                 >
                   <DeleteIcon />
                 </span>
@@ -114,7 +133,7 @@ export default function TableActions({
 
   return (
     <>
-      <Table aria-label="Example table with custom cells">
+      <Table aria-label="Tabla de usuarios con acciones personalizadas">
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn
@@ -136,21 +155,30 @@ export default function TableActions({
         </TableBody>
       </Table>
 
-      {/* Modal de Confirmación */}
+      {/* Modal reutilizable */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalContent>
-          <ModalHeader>Eliminar Usuario</ModalHeader>
+          <ModalHeader>
+            {modalAction === "delete"
+              ? "Eliminar Usuario"
+              : "Restaurar Contraseña"}
+          </ModalHeader>
           <ModalBody>
             <p>
-              ¿Estás seguro de que deseas eliminar a {userToDelete?.user_name}?
+              {modalAction === "delete"
+                ? `¿Estás seguro de que deseas eliminar a ${selectedUser?.user_name}?`
+                : `¿Estás seguro de que deseas restaurar la contraseña de ${selectedUser?.user_name}?`}
             </p>
           </ModalBody>
           <ModalFooter>
             <Button variant="light" onPress={() => setIsOpen(false)}>
               Cancelar
             </Button>
-            <Button color="danger" onPress={confirmDelete}>
-              Eliminar
+            <Button
+              color={modalAction === "delete" ? "danger" : "primary"}
+              onPress={confirmAction}
+            >
+              {modalAction === "delete" ? "Eliminar" : "Restaurar"}
             </Button>
           </ModalFooter>
         </ModalContent>

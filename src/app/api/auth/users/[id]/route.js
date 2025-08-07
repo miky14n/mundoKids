@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { neon_sql } from "@/app/lib/neon";
-
+import bcrypt from "bcrypt";
+import crypto from "crypto";
+import { ok } from "assert";
 export async function GET(request, { params }) {
   try {
     // Validar params.id
@@ -80,6 +82,71 @@ export async function DELETE(request, { params }) {
     console.error("Error al consultar la base de datos:", error);
     return NextResponse.json(
       { error: "Error al actualizar los datos" },
+      { status: 500 }
+    );
+  }
+}
+export async function PUT(request, { params }) {
+  try {
+    const user_id = params.id;
+    const { searchParams } = new URL(request.url);
+    const email = searchParams.get("email");
+
+    // Validación básica
+    if (!user_id || !email) {
+      return NextResponse.json(
+        { success: false, message: "Faltan datos requeridos" },
+        { status: 400 }
+      );
+    }
+
+    // Generar y hashear nueva contraseña
+    const generateRandomPassword = () => {
+      return crypto
+        .randomBytes(3)
+        .toString("base64")
+        .replace(/[^a-zA-Z0-9]/g, "")
+        .slice(0, 5);
+    };
+
+    const generatedPassword = generateRandomPassword();
+    const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+
+    // Actualizar en base de datos
+    const query = `
+      UPDATE users
+      SET password = $1
+      WHERE user_id = $2;
+    `;
+    const response = await neon_sql(query, [hashedPassword, user_id]);
+    const personalSubject = "Restauración de contraseña";
+    const personalMessage = "Clínica Mundo Kids - Restauración de contraseña";
+      try {
+        const baseUrl = request.nextUrl.origin;
+        await fetch(`${baseUrl}/api/send`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            password: generatedPassword,
+            email,
+            personalSubject,
+            personalMessage,
+          }),
+        });
+      } catch (emailError) {
+        console.error("❌ Error al enviar correo:", emailError);
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: "Contraseña restablecida",
+        data: response,
+      });
+
+  } catch (error) {
+    console.error("❌ Error al restablecer la contraseña:", error);
+    return NextResponse.json(
+      { error: "Error al restablecer la contraseña" },
       { status: 500 }
     );
   }

@@ -14,7 +14,7 @@ export async function POST(request) {
       verified_account,
       valueExtraComponent,
     } = data;
-    const role = valueExtraComponent?.key; // Verifica si `valueExtraComponent` existe
+    const role = valueExtraComponent?.key; 
     if (!role) {
       return NextResponse.json(
         {
@@ -52,7 +52,6 @@ export async function POST(request) {
     const generatedPassword = generateRandomPassword();
     const hashedPassword = await bcrypt.hash(password || generatedPassword, 10);
 
-    console.log("Generated password:", generatedPassword);
 
     // Insertar el nuevo usuario
     const queryInsert = `

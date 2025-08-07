@@ -1,8 +1,11 @@
 import nodemailer from "nodemailer";
 
-export async function POST(request) {
-  const { email, password } = await request.json();
-
+export async function POST(request,) {
+  const data = await request.json();
+const { email, password } = data;
+const personalSubject=data.personalSubject||"Creación de cuenta";
+const personalMessage=data.personalMessage||"Bienvenido a Mundokids";
+console.log("Llegada al envio de correo", personalSubject);
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -14,11 +17,11 @@ export async function POST(request) {
   const mailOptions = {
     from: "mundokidsit@gmail.com",
     to: email,
-    subject: "Creación de cuenta",
+    subject: personalSubject,
     html: `
       <html>
         <body>
-          <h1>Bienvenido a Mundokids</h1>
+          <h1>${personalMessage}</h1>
           <p>Tu contraseña generada es: <strong>${password}</strong></p>
         </body>
       </html>
