@@ -4,7 +4,7 @@ import SimpleInput from "@/components/Input";
 import SimpleDropdown from "@/components/SimpleDropdown";
 import { useEffect, useState } from "react";
 import {
-  exportToExcel,
+  exportToExcel,exportToPDF,
   processDataServices,
   procesDataForDetailRp,
   fetchReport,

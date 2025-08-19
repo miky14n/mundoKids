@@ -9,11 +9,13 @@
       "lint": "next lint"
    },
    "dependencies": {
-      "@neondatabase/serverless": "^0.10.3",
       "@heroui/react": "2.7.11",
+      "@neondatabase/serverless": "^0.10.3",
       "axios": "^1.7.9",
       "bcrypt": "^5.1.1",
       "exceljs": "^4.4.0",
+      "jspdf": "^3.0.1",
+      "jspdf-autotable": "^5.0.2",
       "next": "^14.2.23",
       "next-auth": "^4.24.11",
       "nodemailer": "^6.9.16",

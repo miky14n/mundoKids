@@ -1,3 +1,4 @@
+import { calculateAge } from "@/app/register/functions";
 import PersonalTextarea from "../Teaxtarea";
 
 export default function CardPatient(params) {
@@ -39,7 +40,7 @@ export default function CardPatient(params) {
         </div>
         <div>
           <p className="font-semibold text-gray-600">Edad</p>
-          <p className="text-gray-800">{patient.age} años</p>
+          <p className="text-gray-800">{calculateAge(patient.date_of_birth)} años</p>
         </div>
         <div>
           <p className="font-semibold text-gray-600">Nombre del Tutor</p>

@@ -1,6 +1,7 @@
 import { castColumns } from "../medical-history/[id]/functionsForOne";
 import ExcelJS from "exceljs";
-
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 const fetchAppointments = async (aditionalQuery) => {
   try {
     const response = await fetch(`/api/appointment?${aditionalQuery}`, {
@@ -227,4 +228,125 @@ const exportToExcel = (
     });
 };
 
-export { fetchAppointments, exportToExcel, procesDataForDetailRp, fetchReport };
+
+
+
+const exportToPDF = (data, showAp, fileName = "reporte_medico.pdf") => {
+  const doc = new jsPDF("p", "pt", "letter"); // p=portrait, letter = hoja carta
+  const currentDate = new Date().toLocaleDateString("es-ES");
+
+  let columns = [];
+  let rows = [];
+  let totalIngreso = 0;
+
+  switch (showAp) {
+    case "ap":
+      columns = [
+        "Especialidad",
+        "Nombre del Doctor",
+        "Tipo de Consulta",
+        "Responsable",
+        "Porcentaje de Descuento Aplicado",
+        "Costo de la Consulta",
+        "Descripción del Convenio",
+        "Fecha de Extracción",
+        "Tipo de Pago",
+      ];
+
+      rows = data.map((item) => {
+        const costo = parseFloat(item["Costo de la Consulta"]) || 0;
+        totalIngreso += costo;
+        return [
+          item["Especialidad"],
+          item["Nombre del doctor"],
+          item["Tipo de consulta"],
+          item["Responsable"],
+          item["Porcentaje de descuento aplicado"],
+          costo.toFixed(2),
+          item["Descripcion del convenio"],
+          currentDate,
+          item["Tipo de Pago"],
+        ];
+      });
+
+      // Fila total
+      rows.push([
+        "Total Ingreso", "", "", "", "", totalIngreso.toFixed(2), "", "", "",
+      ]);
+      break;
+
+    case "sv":
+      columns = [
+        "Nombre del servicio medico",
+        "Responsable",
+        "Tipo de Pago",
+        "Costo del servicio",
+        "Fecha de extracción de reporte",
+      ];
+
+      rows = data.map((item) => {
+        const costo = parseFloat(item["Costo del servicio"]) || 0;
+        totalIngreso += costo;
+        return [
+          item["Nombre del servicio medico"],
+          item["Responsable"],
+          item["Tipo de Pago"],
+          costo.toFixed(2),
+          currentDate,
+        ];
+      });
+
+      rows.push(["Total Ingreso", "", "", totalIngreso.toFixed(2), ""]);
+      break;
+
+    case "ct":
+      columns = [
+        "Nombre del Doctor",
+        "Responsable",
+        "Cantidad de aporte",
+        "Fecha del aporte",
+        "Glosa del aporte",
+        "Tipo de Pago",
+      ];
+
+      rows = data.map((item) => {
+        const aporte = parseFloat(item["Cantidad de aporte"]) || 0;
+        totalIngreso += aporte;
+        return [
+          item["Nombre del doctor"],
+          item["Responsable"],
+          aporte.toFixed(2),
+          item["Fecha del aporte"],
+          item["Glosa de aporte"],
+          item["Tipo de Pago"],
+        ];
+      });
+
+      rows.push(["Total Ingreso", "", totalIngreso.toFixed(2), "", "", ""]);
+      break;
+
+    default:
+      console.error("Valor no válido para showAp");
+      return;
+  }
+
+  // Título y fecha
+  doc.setFontSize(16);
+  doc.text("Reporte Médico", 40, 40);
+  doc.setFontSize(10);
+  doc.text(`Fecha de extracción: ${currentDate}`, 40, 60);
+
+  // Generar tabla
+  autoTable(doc, {
+    head: [columns],
+    body: rows,
+    startY: 80,
+    styles: { fontSize: 8, cellPadding: 4 },
+    headStyles: { fillColor: [41, 128, 185] }, // azul para cabecera
+  });
+
+  // Descargar PDF
+  doc.save(fileName.replace(".pdf", `_${currentDate}.pdf`));
+};
+
+export { fetchAppointments, exportToExcel, procesDataForDetailRp, fetchReport ,exportToPDF};
