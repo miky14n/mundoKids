@@ -27,7 +27,6 @@ console.log("Llegada al envio de correo", personalSubject);
       </html>
     `,
   };
-  console.log(mailOptions);
   try {
     const info = await transporter.sendMail(mailOptions);
     console.log("Correo enviado:", info.response);

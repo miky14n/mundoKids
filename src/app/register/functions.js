@@ -9,6 +9,5 @@ export const calculateAge = (dateBorn) => {
   if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
     age--;
   }
-  console.log("la edad calculada " + age);
   return age;
 };
