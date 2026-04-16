@@ -77,9 +77,8 @@ export default function BasicForm({
   };
 
   const handleDateChange = (date) => {
-    const dateObj = formatDateForSQL(new Date(date));
+    const dateObj = new Date(date);
     setSelectedDate(date);
-    console.log("Fecha seleccionada:", date);
     setFormData((prev) => ({
       ...prev,
       datelimitloan: dateObj,
@@ -87,111 +86,118 @@ export default function BasicForm({
   };
 
   return (
-    <>
+    <div className="w-full space-y-4">
       {success === true && (
-        <div>
+        <>
           <Alert
             message={onSuccessMessage}
             color="success"
             link=""
             setStatus={setSuccess}
           />
-          <div>{actionOnSuccess || <></>}</div>
-        </div>
+          {actionOnSuccess && <div>{actionOnSuccess}</div>}
+        </>
       )}
       {success === false && (
         <Alert
           message={onErrorMessage}
-          color="error"
+          color="danger"
           link=""
           setStatus={setSuccess}
         />
       )}
 
-      <div className="flex items-center justify-center ">
-        <div className="bg-white shadow-md rounded-lg px-10 py-8 w-full max-w-7xl">
-          <h2 className="text-3xl font-bold mb-8 text-center">{formTitle}</h2>
-          <div
-            className={`flex ${
-              layout === "horizontal"
-                ? "flex-row space-x-2"
-                : "flex-col space-y-4 items-center justify-center"
-            }`}
-          >
-            {extraComponent && (
-              <div className="w-full">
-                <div className="mb-4">{extraComponent}</div>
-              </div>
-            )}
-            {fields.map((field, index) => (
-              <div key={index} className="w-full">
-                {field.type === "checkbox" ? (
-                  <label className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
-                      checked={formData[field.name] || false}
-                      onChange={(e) => handleChange(field, e.target.checked)}
-                    />
-                    <span className="text-gray-700">{field.label}</span>
-                  </label>
-                ) : field.type === "text-only" ? (
-                  <div className="text-center">
-                    {field.title && (
-                      <p className="font-bold text-gray-800">{field.title}</p>
-                    )}
-                    <p className="text-gray-700">{field.label}</p>
-                  </div>
-                ) : field.type === "textarea" ? (
-                  <PersonalTextarea
-                    label={field.title}
-                    isReadOnly={true}
-                    description="Alergias que tiene el paciente"
-                    value={field.label}
-                  />
-                ) : (
-                  <SimpleInput
-                    type={field.type}
-                    label={field.label}
-                    variant="bordered"
-                    value={formData[field.name] || ""}
-                    onChange={(e) => handleChange(field, e.target.value)}
-                    className="mb-4"
-                  />
-                )}
-              </div>
-            ))}
-            {dateOption ||
-              (formData.support && (
-                <div className="w-full">
+      <div className="surface-card p-6 sm:p-8">
+        {formTitle && (
+          <div className="mb-6">
+            <h2 className="section-title">{formTitle}</h2>
+            <div className="mt-3 h-px w-full bg-gradient-to-r from-brand-100 via-slate-100 to-transparent" />
+          </div>
+        )}
+        <div
+          className={`${
+            layout === "horizontal"
+              ? "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end"
+              : "flex flex-col gap-4"
+          }`}
+        >
+          {extraComponent && (
+            <div className="w-full">{extraComponent}</div>
+          )}
+          {fields.map((field, index) => (
+            <div key={index} className="w-full">
+              {field.type === "checkbox" ? (
+                <label className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
                   <input
-                    type="text"
-                    value={selectedDate}
-                    onFocus={(e) => (e.target.type = "date")}
-                    onBlur={(e) =>
-                      (e.target.type = selectedDate ? "date" : "text")
-                    }
-                    onChange={(e) => handleDateChange(e.target.value)}
-                    placeholder={titleDate}
-                    className="mt-1 border rounded px-4 py-2 w-full"
+                    type="checkbox"
+                    checked={formData[field.name] || false}
+                    onChange={(e) => handleChange(field, e.target.checked)}
+                    className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
                   />
+                  <span className="text-sm font-medium text-ink">
+                    {field.label}
+                  </span>
+                </label>
+              ) : field.type === "text-only" ? (
+                <div>
+                  {field.title && (
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-faint">
+                      {field.title}
+                    </p>
+                  )}
+                  <p className="mt-1 text-sm font-medium text-ink">
+                    {field.label || "—"}
+                  </p>
                 </div>
-              ))}
-            <div className="w-full flex justify-center">
-              {navigationTo ? (
-                <Link href={navigationTo}>
-                  <NextButton content={buttonLabel} />
-                </Link>
+              ) : field.type === "textarea" ? (
+                <PersonalTextarea
+                  label={field.title}
+                  isReadOnly={true}
+                  description="Alergias registradas del paciente"
+                  value={field.label}
+                />
               ) : (
-                <NextButton
-                  content={buttonLabel}
-                  action={personalSubmint || handleSubmit}
-                  color={colorButton}
+                <SimpleInput
+                  type={field.type}
+                  label={field.label}
+                  variant="bordered"
+                  value={formData[field.name] || ""}
+                  onChange={(e) => handleChange(field, e.target.value)}
                 />
               )}
             </div>
-          </div>
+          ))}
+          {dateOption ||
+            (formData.support && (
+              <div className="w-full">
+                <input
+                  type="text"
+                  value={selectedDate}
+                  onFocus={(e) => (e.target.type = "date")}
+                  onBlur={(e) =>
+                    (e.target.type = selectedDate ? "date" : "text")
+                  }
+                  onChange={(e) => handleDateChange(e.target.value)}
+                  placeholder={titleDate}
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-100"
+                />
+              </div>
+            ))}
+        </div>
+        <div className="mt-6 flex justify-end">
+          {navigationTo ? (
+            <Link href={navigationTo}>
+              <NextButton content={buttonLabel} color={colorButton || "primary"} />
+            </Link>
+          ) : (
+            <NextButton
+              content={buttonLabel}
+              action={personalSubmint || handleSubmit}
+              color={colorButton || "primary"}
+            />
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }

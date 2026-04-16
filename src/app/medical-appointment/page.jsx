@@ -8,6 +8,25 @@ import ApiDropdown from "@/components/ApiDropdown";
 import Seeker from "@/components/Seeker";
 import ToggleSwitch from "@/components/ToggleSwitch";
 
+function Section({ title, description, children }) {
+  return (
+    <section className="surface-card p-6 sm:p-8">
+      <header className="mb-5">
+        <h3 className="section-title">{title}</h3>
+        {description && <p className="mt-0.5 text-xs text-ink-soft">{description}</p>}
+        <div className="mt-3 h-px w-full bg-gradient-to-r from-brand-100 via-slate-100 to-transparent" />
+      </header>
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function FieldLabel({ children }) {
+  return <p className="mb-1.5 text-xs font-medium text-ink-muted">{children}</p>;
+}
+
 export default function MedicalAppointment() {
   const [patientName, setPatientName] = useState("");
   const [ci, setCI] = useState("");
@@ -25,9 +44,10 @@ export default function MedicalAppointment() {
   const [discountDescribe, setDiscountDescribe] = useState("");
   const [paymentType, setPaymentType] = useState("");
   const [responsible, setResponsible] = useState(
-    localStorage.getItem("userName")
+    typeof window !== "undefined" ? localStorage.getItem("userName") : ""
   );
   const patient_id = useRef(null);
+
   const consultTypeItems = [
     { key: "1", label: "Consulta" },
     { key: "2", label: "Re consulta" },
@@ -35,44 +55,39 @@ export default function MedicalAppointment() {
 
   useEffect(() => {
     if (ci && ci !== "") {
-      const fetchDoctor = async () => {
+      const fetchOne = async () => {
         try {
           const response = await fetch(`/api/patients/${ci}`);
-          if (!response.ok) {
-            throw new Error(`Error al obtener los datos: ${response.status}`);
-          }
+          if (!response.ok) throw new Error(`Error ${response.status}`);
           const data = await response.json();
           setPatientName(data[0].name);
           setPatientLastName(data[0].last_name);
           patient_id.current = data[0].patient_id;
-        } catch (error) {
-          console.error("Error al buscar al paciente:", error);
+        } catch (err) {
           setPatientName("No existe el paciente");
           setPatientLastName("");
         }
       };
-      fetchDoctor();
+      fetchOne();
     }
   }, [ci]);
+
   useEffect(() => {
     if (specialty && specialty !== "") {
-      const fetchDoctor = async () => {
+      const fetchSpec = async () => {
         try {
           const response = await fetch(`/api/specialty/${specialty}`);
-          if (!response.ok) {
-            throw new Error(`Error al obtener los datos: ${response.status}`);
-          }
+          if (!response.ok) throw new Error();
           const data = await response.json();
           setSpecialtyCost(data[0].price);
-        } catch (error) {
-          console.error("Error al buscar al paciente:", error);
-          setPatientName("No existe el paciente");
-          setPatientLastName("");
+        } catch (err) {
+          /* no-op */
         }
       };
-      fetchDoctor();
+      fetchSpec();
     }
   }, [specialty]);
+
   const handleRegister = async () => {
     const typeAppoiment = consultType ? consultType.label : "Consulta";
     const today = new Date();
@@ -85,7 +100,7 @@ export default function MedicalAppointment() {
       type_of_appointment: typeAppoiment,
       specialty_id: specialty,
       doctor_id: doctor,
-      date: date,
+      date,
       responsible,
       appointment_price: appoimentCost ? appoimentCost : specialtyCost,
       discountDescribe,
@@ -96,20 +111,15 @@ export default function MedicalAppointment() {
       const response = await fetch("/api/appointment", {
         method: "POST",
         body: JSON.stringify(data),
-
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
-
       if (response.ok) {
         setSuccess(true);
         resetForm();
       } else {
         setSuccess(false);
       }
-    } catch (error) {
-      console.error("Error al registrar el paciente:", error);
+    } catch (err) {
       setSuccess(false);
     }
   };
@@ -128,10 +138,9 @@ export default function MedicalAppointment() {
     setPercentDiscount(0);
     setPaymentType("");
   };
+
   useEffect(() => {
-    if (!isPartner) {
-      setPercentDiscount(0);
-    }
+    if (!isPartner) setPercentDiscount(0);
   }, [isPartner]);
 
   useEffect(() => {
@@ -143,192 +152,156 @@ export default function MedicalAppointment() {
         setAppoimentCost(null);
       }
     }, 500);
-
     return () => clearTimeout(handler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [percentDiscount]);
 
   return (
-    <>
-      {success === true && (
-        <Alert
-          message="Registro exitoso!"
-          color="success"
-          link=""
-          setStatus={setSuccess}
-        />
-      )}
-      {success === false && (
-        <Alert
-          message="Error al registrar"
-          color="danger"
-          link=""
-          setStatus={setSuccess}
-        />
-      )}
-      <div className="flex flex-col items-center justify-center mt-16 bg-gray-100">
-        <div className="bg-white shadow-md rounded-lg p-8 max-w-5xl w-full mt-40 mb-10">
-          <h2 className="text-2xl font-bold mb-6 text-center">
-            Agendar Consulta
-          </h2>
+    <div className="page-container">
+      <div className="mx-auto max-w-6xl space-y-4">
+        {success === true && (
+          <Alert message="Consulta agendada correctamente." color="success" setStatus={setSuccess} />
+        )}
+        {success === false && (
+          <Alert message="Ocurrió un error al agendar la consulta." color="danger" setStatus={setSuccess} />
+        )}
 
-          {/* Fila para Encargada y nombre del Paciente */}
-          <div className="grid grid-cols-2 gap-6">
+        <div className="page-header">
+          <div>
+            <h2 className="page-title">Agendar consulta</h2>
+            <p className="page-subtitle">Busca al paciente y define la especialidad.</p>
+          </div>
+        </div>
+
+        <div className="space-y-5">
+          <Section title="Paciente y responsable" description="Identifica al paciente y a quien recibe la consulta.">
             <div>
               <SimpleInput
                 type="text"
                 label="Encargado"
-                value={responsible}
+                value={responsible || ""}
                 onChange={(e) => setResponsible(e.target.value)}
-                readonly={true}
+                readonly
               />
             </div>
-            <Seeker
-              title="Buscar paciente"
-              description="Ingrese nombre del paciente"
-              resultSeek="Resultado de la busqueda"
-              voidMessage="No se encontro el paciente"
-              apiUrl="/api/patients?search"
-              getValue={setPatient}
-            ></Seeker>
-          </div>
-          {/* Fila para datos complementarios */}
-          <div className="grid grid-cols-1 gap-6 mt-4">
-            <ToggleSwitch status={setShowSeekerCi} title="Buscar por CI" />
+            <div className="sm:col-span-2">
+              <Seeker
+                title="Buscar paciente"
+                description="Escribe el nombre del paciente"
+                resultSeek="Resultados"
+                voidMessage="No se encontró el paciente"
+                apiUrl="/api/patients?search"
+                getValue={setPatient}
+              />
+            </div>
+            <div className="sm:col-span-2 lg:col-span-3">
+              <ToggleSwitch status={setShowSeekerCi} title="Buscar por CI en su lugar" />
+            </div>
             {showSeekerCi && (
-              <div className="grid grid-cols-3 gap-6 mt-4">
+              <>
                 <div>
                   <SimpleInput
                     type="text"
-                    label="Ingrese el CI del paciente"
+                    label="CI del paciente"
                     value={ci}
                     onChange={(e) => setCI(e.target.value)}
                   />
                 </div>
                 <div>
-                  <SimpleInput
-                    type="text"
-                    label="Nombre"
-                    value={patientName}
-                    onChange={(e) => setPatientName(e.target.value)}
-                    readOnly
-                  />
+                  <SimpleInput type="text" label="Nombre" value={patientName} onChange={() => {}} readOnly />
                 </div>
                 <div>
-                  <SimpleInput
-                    type="text"
-                    label="Apellido"
-                    value={patientLastName}
-                    onChange={(e) => setPatientLastName(e.target.value)}
-                    readOnly
-                  />
+                  <SimpleInput type="text" label="Apellido" value={patientLastName} onChange={() => {}} readOnly />
                 </div>
-              </div>
+              </>
             )}
-          </div>
+          </Section>
 
-          {/* Fila para Especialidades */}
-          <div className="grid grid-cols-3 gap-6 mt-4">
+          <Section title="Especialidad y doctor" description="Selecciona la especialidad y el profesional a cargo.">
             <div>
+              <FieldLabel>Especialidad</FieldLabel>
               <ApiDropdown
                 buttonLabel={specialty}
-                defaultText="Seleccione una Especialidad"
+                defaultText="Selecciona una especialidad"
                 urlApi="/api/specialty"
-                onActionId={(selectedSpecialty) =>
-                  setSpecialty(selectedSpecialty)
-                }
+                onActionId={(v) => setSpecialty(v)}
                 idOfGet="specialty_id"
                 nameOfGet="name"
               />
             </div>
-          </div>
-          {/* Fila para Tipo de Consulta y Doctor */}
-          <div className="grid grid-cols-3 gap-6 mt-4">
             <div>
+              <FieldLabel>Doctor</FieldLabel>
               <ApiDropdown
                 buttonLabel={doctor}
-                defaultText="Seleccione un Doctor"
+                defaultText="Selecciona un doctor"
                 urlApi="/api/doctor?full_name=true"
-                onActionId={(selectedDoctor) => setDoctor(selectedDoctor)}
+                onActionId={(v) => setDoctor(v)}
                 idOfGet="doctor_id"
                 nameOfGet="full_name"
-                filterLabel={"specialty_id"}
+                filterLabel="specialty_id"
                 filterValue={specialty}
               />
             </div>
             <div>
+              <FieldLabel>Tipo de consulta</FieldLabel>
               <SimpleDropdown
                 buttonLabel="Consulta"
                 menuItems={consultTypeItems}
-                ariaLabel="Consult Type"
+                ariaLabel="Tipo de consulta"
                 setItem={setConsultType}
               />
             </div>
-          </div>
+          </Section>
 
-          {/* Fila para Costo de Especialidad y ver si hay convenio */}
-          <div className="grid grid-cols-4 gap-6 mt-4">
+          <Section title="Costos y convenios" description="Aplica descuentos y define el tipo de pago.">
             <div>
               <SimpleInput
                 type="text"
-                label="Costo de Especialidad"
+                label="Costo de la especialidad"
                 value={appoimentCost ? appoimentCost : specialtyCost}
                 onChange={(e) => setSpecialtyCost(Number(e.target.value) || 0)}
-                typeInput="onchnge"
               />
             </div>
-            {/**/}
-
-            <ToggleSwitch status={setIsPartner} title="Convenios" />
+            <div className="flex items-end pb-1">
+              <ToggleSwitch status={setIsPartner} title="Convenio / descuento" />
+            </div>
+            <div />
             {isPartner && (
               <>
                 <div>
                   <SimpleInput
                     type="text"
-                    label="Ingrese el % de descuento"
+                    label="% de descuento"
                     value={percentDiscount}
                     onChange={(e) => setPercentDiscount(e.target.value)}
                   />
                 </div>
-                <div>
+                <div className="sm:col-span-2">
                   <SimpleInput
                     type="text"
-                    label="Descripcion del convenio"
+                    label="Descripción del convenio"
                     value={discountDescribe}
                     onChange={(e) => setDiscountDescribe(e.target.value)}
                   />
                 </div>
               </>
             )}
-          </div>
-          {/*tipo de pago*/}
-          <div className="grid grid-cols-2 gap-6 mt-4">
             <div>
               <SimpleInput
                 type="text"
-                label="Ingre el tipo de pago"
+                label="Tipo de pago"
                 value={paymentType}
                 onChange={(e) => setPaymentType(e.target.value)}
               />
             </div>
-          </div>
+          </Section>
 
-          {/* Botón de Guardar */}
-          <div className="flex justify-around mt-6">
-            <PersonalButton
-              content="Borrar"
-              color="danger"
-              action={resetForm}
-            />
-            <PersonalButton
-              content="Agendar"
-              color="secondary"
-              variant="ghost"
-              action={handleRegister}
-            />
+          <div className="flex flex-col-reverse justify-end gap-3 sm:flex-row">
+            <PersonalButton content="Borrar" color="danger" variant="flat" action={resetForm} />
+            <PersonalButton content="Agendar consulta" color="primary" action={handleRegister} />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

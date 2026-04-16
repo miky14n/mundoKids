@@ -1,51 +1,69 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Card(params) {
+function IconArrow(props) {
   return (
-    <Link href={params.path} className="block">
-      <div className="max-w-sm h-full bg-white border-4 border-customPurple rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 dark:bg-gray-800 dark:border-gray-700 p-5 cursor-pointer flex flex-col justify-between">
-        {/* Imagen centrada */}
-        <div className="flex justify-center">
-          <Image
-            className="rounded-t-lg"
-            src={params.img}
-            alt="img-card"
-            width="200"
-            height="200"
-          />
-        </div>
-        <div className="p-5 flex flex-col flex-grow">
-          {/* Título */}
-          <h5 className="mb-4 text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-white">
-            {params.title}
-          </h5>
-          {/* Descripción */}
-          <p className="mb-6 font-normal text-center text-gray-700 dark:text-gray-400 flex-grow">
-            {params.description}
-          </p>
-          {/* Botón centrado */}
-          <div className="flex justify-center mt-auto">
-            <div className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-colors">
-              {params.titleButton}
-              <svg
-                className="w-3.5 h-3.5 ml-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                />
-              </svg>
-            </div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  );
+}
+
+export default function Card(params) {
+  const tone = params.tone || "brand";
+  const tones = {
+    brand: {
+      iconWrap: "bg-brand-50 ring-brand-100",
+      accent: "from-brand-50 to-white",
+      chip: "bg-brand-100 text-brand-700",
+      btn: "bg-brand-700 hover:bg-brand-800 text-white",
+    },
+    accent: {
+      iconWrap: "bg-accent-50 ring-accent-100",
+      accent: "from-accent-50 to-white",
+      chip: "bg-accent-100 text-accent-600",
+      btn: "bg-accent-500 hover:bg-accent-600 text-white",
+    },
+    neutral: {
+      iconWrap: "bg-slate-50 ring-slate-100",
+      accent: "from-slate-50 to-white",
+      chip: "bg-slate-100 text-ink-muted",
+      btn: "bg-ink text-white hover:bg-slate-800",
+    },
+  };
+  const t = tones[tone] || tones.brand;
+
+  return (
+    <Link href={params.path} className="group block">
+      <div
+        className={`relative flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-b ${t.accent} p-6 shadow-soft transition hover:-translate-y-0.5 hover:shadow-card`}
+      >
+        <div className="mb-4 flex items-start justify-between">
+          <div
+            className={`flex h-14 w-14 items-center justify-center rounded-2xl ring-1 ${t.iconWrap}`}
+          >
+            <Image
+              src={params.img}
+              alt={params.title}
+              width={40}
+              height={40}
+              className="h-9 w-9 object-contain"
+            />
           </div>
+          {params.badge && (
+            <span className={`pill ${t.chip}`}>{params.badge}</span>
+          )}
         </div>
+        <h3 className="mb-2 text-lg font-semibold text-ink">{params.title}</h3>
+        <p className="mb-6 flex-grow text-sm leading-relaxed text-ink-soft">
+          {params.description}
+        </p>
+        <span
+          className={`inline-flex w-fit items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition ${t.btn}`}
+        >
+          {params.titleButton}
+          <IconArrow className="h-4 w-4 transition group-hover:translate-x-0.5" />
+        </span>
       </div>
     </Link>
   );

@@ -1,47 +1,78 @@
 "use client";
 import { useState } from "react";
 
-export default function Alert({ message, color, link, setStatus = () => {} }) {
-  const [isVisible, setIsVisible] = useState(true);
+const palettes = {
+  success: {
+    wrap: "bg-emerald-50 border-emerald-200 text-emerald-900",
+    icon: "bg-emerald-100 text-emerald-700",
+    close: "text-emerald-700 hover:bg-emerald-100",
+  },
+  danger: {
+    wrap: "bg-red-50 border-red-200 text-red-900",
+    icon: "bg-red-100 text-red-700",
+    close: "text-red-700 hover:bg-red-100",
+  },
+  error: {
+    wrap: "bg-red-50 border-red-200 text-red-900",
+    icon: "bg-red-100 text-red-700",
+    close: "text-red-700 hover:bg-red-100",
+  },
+  warning: {
+    wrap: "bg-amber-50 border-amber-200 text-amber-900",
+    icon: "bg-amber-100 text-amber-700",
+    close: "text-amber-700 hover:bg-amber-100",
+  },
+  info: {
+    wrap: "bg-brand-50 border-brand-200 text-brand-900",
+    icon: "bg-brand-100 text-brand-700",
+    close: "text-brand-700 hover:bg-brand-100",
+  },
+};
 
-  const colorClasses = {
-    success: {
-      text: "text-green-600",
-      border: "border-green-300",
-      background: "bg-green-50",
-      darkText: "dark:text-green-400",
-      darkBorder: "dark:border-green-800",
-    },
-    danger: {
-      text: "text-red-800",
-      border: "border-red-300",
-      background: "bg-red-50",
-      darkText: "dark:text-red-400",
-      darkBorder: "dark:border-red-800",
-    },
-  };
+function IconSuccess(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+function IconInfo(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4M12 8h.01" />
+    </svg>
+  );
+}
+function IconX(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M18 6 6 18M6 6l12 12" />
+    </svg>
+  );
+}
+
+export default function Alert({ message, color = "info", link, setStatus = () => {} }) {
+  const [isVisible, setIsVisible] = useState(true);
+  const palette = palettes[color] || palettes.info;
 
   if (!isVisible) return null;
 
+  const Icon = color === "success" ? IconSuccess : IconInfo;
+
   return (
     <div
-      className={`flex items-center p-4 mb-4 ${colorClasses[color]?.text} border-t-4 ${colorClasses[color]?.border} ${colorClasses[color]?.background} dark:bg-gray-800 ${colorClasses[color]?.darkText} dark:${colorClasses[color]?.darkBorder}`}
+      className={`mx-auto flex w-full max-w-5xl items-start gap-3 rounded-2xl border p-4 shadow-soft ${palette.wrap}`}
       role="alert"
     >
-      <svg
-        className="flex-shrink-0 w-4 h-4"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-      >
-        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-      </svg>
-      <div className="ml-3 text-sm font-medium">
-        {message}{" "}
+      <span className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl ${palette.icon}`}>
+        <Icon className="h-4 w-4" />
+      </span>
+      <div className="flex-1 text-sm font-medium leading-relaxed">
+        {message}
         {link && (
-          <a href={link} className="font-semibold underline hover:no-underline">
-            example link
+          <a href={link} className="ml-2 font-semibold underline hover:no-underline">
+            ver más
           </a>
         )}
       </div>
@@ -51,25 +82,10 @@ export default function Alert({ message, color, link, setStatus = () => {} }) {
           setIsVisible(false);
           setStatus(null);
         }}
-        className={`ml-auto -mx-1.5 -my-1.5 ${colorClasses[color]?.background} text-${color}-500 rounded-lg focus:ring-2 focus:ring-${color}-400 p-1.5 hover:bg-${color}-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-${color}-400 dark:hover:bg-gray-700`}
-        aria-label="Close"
+        className={`-m-1 flex h-8 w-8 items-center justify-center rounded-lg transition ${palette.close}`}
+        aria-label="Cerrar"
       >
-        <span className="sr-only">Dismiss</span>
-        <svg
-          className="w-3 h-3"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 14 14"
-        >
-          <path
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-          />
-        </svg>
+        <IconX className="h-3.5 w-3.5" />
       </button>
     </div>
   );

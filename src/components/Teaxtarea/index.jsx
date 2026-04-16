@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import { Textarea } from "@heroui/react";
 
 export default function PersonalTextarea({
-  description = "Enter a concise description of your project.",
-  placeholder = "Fill blank...",
-  label = "Title",
+  description = "",
+  placeholder = "Escribe aquí...",
+  label = "",
   value,
   onChange,
   debounceTime = 1000,
@@ -13,18 +13,18 @@ export default function PersonalTextarea({
 }) {
   const [inputValue, setInputValue] = useState(value || "");
   const [timeoutId, setTimeoutId] = useState(null);
+
   const handleChange = (e) => {
     setInputValue(e.target.value);
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
     const newTimeoutId = setTimeout(() => {
-      onChange(e);
-      console.log("Input Value:", e.target.value);
+      onChange && onChange(e);
     }, debounceTime);
-
     setTimeoutId(newTimeoutId);
   };
+
   useEffect(() => {
     setInputValue(value || "");
   }, [value]);
@@ -32,13 +32,15 @@ export default function PersonalTextarea({
   return (
     <Textarea
       isReadOnly={isReadOnly}
-      className="max-w-xs"
+      className="w-full"
       description={description}
       label={label}
+      labelPlacement="outside"
       placeholder={placeholder}
       variant="bordered"
       value={inputValue}
       onChange={handleChange}
+      minRows={3}
     />
   );
 }

@@ -1,60 +1,24 @@
-import React, { useState } from "react";
+"use client";
+import { useState } from "react";
 
-export default function InputDate({ setDateBorn }) {
+export default function InputDate({ setDateBorn, label = "Fecha de nacimiento" }) {
   const [value, setValue] = useState("");
 
   const handleChange = (event) => {
-    const newValue = event.target.value; // Obtiene el valor seleccionado
-    setValue(newValue); // Actualiza el estado local
-    setDateBorn(newValue); // Pasa el valor al componente padre
+    const newValue = event.target.value;
+    setValue(newValue);
+    setDateBorn(newValue);
   };
 
   return (
-    <div className="relative max-w-sm">
-      {/* Input de fecha */}
+    <label className="flex flex-col gap-1.5 text-sm">
+      <span className="font-medium text-ink-muted">{label}</span>
       <input
-        id="default-datepicker"
-        type="date" // Tipo de input de fecha nativo
+        type="date"
         value={value}
         onChange={handleChange}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder="Seleccione una fecha"
+        className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-ink focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-100"
       />
-    </div>
+    </label>
   );
 }
-/**import React from "react";
-import { DatePicker } from "@heroui/react";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { useDateFormatter } from "@react-aria/i18n";
-
-export default function InputDate({ setDateBorn }) {
-  const [value, setValue] = React.useState(parseDate("2010-04-04"));
-
-  let formatter = useDateFormatter({ dateStyle: "full" });
-
-  return (
-    <div className="flex flex-row gap-2">
-      <div className="w-full flex flex-col gap-y-2">
-        <DatePicker
-          showMonthAndYearPickers
-          variant="bordered"
-          className="max-w-[284px]"
-          label="Ingrese la Fecha de Nacimiento"
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue); // Mantiene el formato original en el estado local
-            const isoDate = newValue.toString(); // Convierte a formato ISO (ej. "2014-04-04")
-            setDateBorn(isoDate); // Pasa la fecha en formato ISO
-          }}
-        />
-        {/*
-          <p className="text-default-500 text-sm">
-            Selected date:{" "}
-            {value ? formatter.format(value.toDate(getLocalTimeZone())) : "--"}
-          </p>
-        }
-        </div>
-        </div>
-      );
-    } */

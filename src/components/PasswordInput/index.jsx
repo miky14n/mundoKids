@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { Input } from "@heroui/react";
 
@@ -64,7 +65,7 @@ export const EyeFilledIcon = (props) => {
 
 export default function PasswordInput({
   personalPlaceHolder = "",
-  personaLabel = " ",
+  personaLabel = "Contraseña",
   onChange,
 }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -73,18 +74,18 @@ export default function PasswordInput({
 
   return (
     <Input
-      className="max-w-xs"
+      className="w-full"
       endContent={
         <button
-          aria-label="toggle password visibility"
+          aria-label="Mostrar u ocultar contraseña"
           className="focus:outline-none"
           type="button"
           onClick={toggleVisibility}
         >
           {isVisible ? (
-            <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+            <EyeSlashFilledIcon className="text-xl text-default-400 pointer-events-none" />
           ) : (
-            <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+            <EyeFilledIcon className="text-xl text-default-400 pointer-events-none" />
           )}
         </button>
       }
@@ -92,6 +93,7 @@ export default function PasswordInput({
       placeholder={personalPlaceHolder}
       type={isVisible ? "text" : "password"}
       variant="bordered"
+      labelPlacement="outside"
       onChange={onChange}
     />
   );

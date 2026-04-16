@@ -1,10 +1,77 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://fonts.googleapis.com/css2?family=Chivo:wght@400;700&display=swap");
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: "Chivo", sans-serif;
+@layer base {
+  :root {
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --surface: #ffffff;
+    --surface-muted: #f8fafc;
+    --surface-subtle: #f1f5f9;
+    --border: #e2e8f0;
+    --ring: #0e7490;
+    --brand: #0e7490;
+    --brand-soft: #cffafe;
+    --accent: #f97316;
+    --accent-soft: #ffedd5;
+  }
+
+  html {
+    background-color: #f8fafc;
+  }
+
+  body {
+    color: var(--foreground);
+    background: var(--background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  /* Subtle scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  .surface-card {
+    @apply bg-white border border-slate-200 rounded-2xl shadow-soft;
+  }
+
+  .page-container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8;
+  }
+
+  .page-header {
+    @apply flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between mb-6;
+  }
+
+  .page-title {
+    @apply text-2xl sm:text-3xl font-bold tracking-tight text-ink;
+  }
+
+  .page-subtitle {
+    @apply text-sm text-ink-soft;
+  }
+
+  .section-title {
+    @apply text-lg font-semibold text-ink;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
 }
