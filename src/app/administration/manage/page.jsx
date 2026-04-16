@@ -2,106 +2,85 @@
 import ApiDropdown from "@/components/ApiDropdown";
 import BasicForm from "@/components/BasicForm";
 import { useState } from "react";
-export default function Settings() {
-  /***/
+
+export default function ManageClinic() {
   const [specialty, setSpecialty] = useState("");
-  const [ciDoctor, setciDoctor] = useState("");
+
   return (
-    <div className="mt-16">
-      <hr className="border-t-2 border-gray-300 my-6" />
-      <div>
+    <div className="page-container">
+      <div className="page-header">
+        <div>
+          <h2 className="page-title">Gestión clínica</h2>
+          <p className="page-subtitle">
+            Administra las especialidades, doctores y servicios de la clínica.
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-6">
         <BasicForm
           layout="horizontal"
           fields={[
-            {
-              name: "name",
-              type: "text",
-              label: "Nombre de la especialidad",
-            },
-            { name: "description", type: "text", label: "Descripcion" },
-            {
-              name: "price",
-              type: "text",
-              label: "Costo de la especialidad",
-            },
+            { name: "name", type: "text", label: "Nombre de la especialidad" },
+            { name: "description", type: "text", label: "Descripción" },
+            { name: "price", type: "text", label: "Costo de la especialidad" },
           ]}
           apiUrl="/api/specialty"
-          formTitle="Añadir Especialidad"
+          formTitle="Añadir especialidad"
           onSuccessMessage="Especialidad creada exitosamente"
           onErrorMessage="Error al registrar la especialidad"
-          buttonLabel="Registrar."
-          colorButton={"secondary"}
+          buttonLabel="Registrar especialidad"
+          colorButton="primary"
         />
-      </div>
-      <hr className="border-t-2 border-gray-300 my-6" />
-      <div>
+
         <BasicForm
           layout="horizontal"
           fields={[
             { name: "name", type: "text", label: "Nombre" },
             { name: "last_name", type: "text", label: "Apellido" },
-            { name: "ci", type: "text", label: "Ci" },
-            {
-              name: "contact_number",
-              type: "text",
-              label: "Numero de contacto",
-            },
+            { name: "ci", type: "text", label: "CI" },
+            { name: "contact_number", type: "text", label: "Número de contacto" },
             { name: "email", type: "text", label: "Correo" },
           ]}
           apiUrl="/api/doctor"
-          formTitle="Registra Nuevo Doctor"
+          formTitle="Registrar nuevo doctor"
           onSuccessMessage="Doctor creado exitosamente"
           onErrorMessage="Error al registrar doctor"
-          buttonLabel="Registrar Dr."
+          buttonLabel="Registrar doctor"
           extraComponent={
-            <div>
-              <ApiDropdown
-                buttonLabel={specialty}
-                defaultText="Elija una Especialidad"
-                urlApi="/api/specialty"
-                onActionId={(selectedSpecialty) =>
-                  setSpecialty(selectedSpecialty)
-                }
-                idOfGet="specialty_id"
-                nameOfGet="name"
-              />
-            </div>
+            <ApiDropdown
+              buttonLabel={specialty}
+              defaultText="Elija una especialidad"
+              urlApi="/api/specialty"
+              onActionId={(selected) => setSpecialty(selected)}
+              idOfGet="specialty_id"
+              nameOfGet="name"
+            />
           }
           valueExtraComponent={specialty}
-          colorButton={"secondary"}
+          colorButton="primary"
         />
-      </div>
-      <hr className="border-t-2 border-gray-300 my-6" />
-      <div>
+
         <BasicForm
           layout="horizontal"
           fields={[
-            {
-              name: "name",
-              type: "text",
-              label: "Nombre del Servicio",
-            },
-            { name: "description", type: "text", label: "Descripcion" },
-            {
-              name: "price",
-              type: "text",
-              label: "Costo del Servicio",
-            },
+            { name: "name", type: "text", label: "Nombre del servicio" },
+            { name: "description", type: "text", label: "Descripción" },
+            { name: "price", type: "text", label: "Costo del servicio" },
             {
               name: "home_price",
               type: "text",
-              label: "Costo del Servicio a domicilio",
+              label: "Costo del servicio a domicilio",
             },
           ]}
           apiUrl="/api/services"
-          formTitle="Añadir Servicio"
-          onSuccessMessage="Servicio registrado"
-          onErrorMessage="Error al registrar la Servicio"
-          buttonLabel="Registrar."
-          colorButton={"secondary"}
+          formTitle="Añadir servicio médico"
+          onSuccessMessage="Servicio registrado exitosamente"
+          onErrorMessage="Error al registrar el servicio"
+          buttonLabel="Registrar servicio"
+          colorButton="primary"
         />
       </div>
-      <hr className="border-t-2 border-gray-300 my-6" />
     </div>
   );
 }

@@ -2,55 +2,66 @@
 
 import Alert from "@/components/Alert";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function Layout({ children }) {
   const [error, setError] = useState(null);
-  const [showAppointments, setShowAppointments] = useState(true);
+  const pathname = usePathname();
   const router = useRouter();
 
-  const handleNavigation = (isAppointments) => {
-    setShowAppointments(isAppointments);
-    router.push(isAppointments ? "/noursing" : "/noursing/services");
+  const isAppointments = pathname === "/noursing";
+
+  const handleNavigation = (target) => {
+    router.push(target);
   };
 
   return (
-    <>
+    <div className="page-container">
+      <div className="page-header">
+        <div>
+          <h2 className="page-title">Enfermería</h2>
+          <p className="page-subtitle">
+            Registra signos vitales para consultas y servicios médicos.
+          </p>
+        </div>
+      </div>
+
       {error && (
         <Alert
           message={`Error: ${error}`}
-          type="error"
+          color="danger"
           setStatus={() => setError(null)}
         />
       )}
-      <div className="mt-8 p-4 rounded-md">
-        <div className="flex items-center mb-4">
-          <label className="mr-4 font-bold">Por atender:</label>
-          <label className="flex items-center mr-6">
-            <input
-              type="radio"
-              name="selection"
-              value="appointments"
-              checked={showAppointments}
-              onChange={() => handleNavigation(true)}
-              className="mr-2"
-            />
-            Consultas
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="selection"
-              value="services"
-              checked={!showAppointments}
-              onChange={() => handleNavigation(false)}
-              className="mr-2"
-            />
-            Servicios
-          </label>
+
+      <div className="surface-card mb-6 p-2">
+        <div className="flex gap-1">
+          <button
+            type="button"
+            onClick={() => handleNavigation("/noursing")}
+            className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-medium transition ${
+              isAppointments
+                ? "bg-brand-600 text-white shadow-soft"
+                : "text-ink-muted hover:bg-slate-50"
+            }`}
+          >
+            Consultas por atender
+          </button>
+          <button
+            type="button"
+            onClick={() => handleNavigation("/noursing/services")}
+            className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-medium transition ${
+              !isAppointments
+                ? "bg-brand-600 text-white shadow-soft"
+                : "text-ink-muted hover:bg-slate-50"
+            }`}
+          >
+            Servicios por atender
+          </button>
         </div>
       </div>
+
       {children}
-    </>
+    </div>
   );
 }

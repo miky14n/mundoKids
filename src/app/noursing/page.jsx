@@ -7,6 +7,7 @@ import BasicForm from "@/components/BasicForm";
 export default function Noursing() {
   const [appoiments, setAppoiments] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchApiAppoiment();
@@ -14,11 +15,11 @@ export default function Noursing() {
 
   const fetchApiAppoiment = async () => {
     try {
+      setLoading(true);
       const today = new Date();
       const date = `${today.getFullYear()}-${(today.getMonth() + 1)
         .toString()
         .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
-      let checker = false;
       const response = await fetch(`/api/appointment?date=${date}`, {
         method: "GET",
       });
@@ -55,63 +56,71 @@ export default function Noursing() {
                 patientLastName: "",
               };
             }
-          } else {
-            console.log("No hay datos por completar");
-            checker = true;
           }
+          return null;
         })
       );
-
-      const filteredAppointments = updatedAppointments.filter(Boolean);
-      setAppoiments(filteredAppointments);
+      setAppoiments(updatedAppointments.filter(Boolean));
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  const pendingAppointments = appoiments.filter(
+    (item) => !item.height && !item.weight && !item.temperature
+  );
+
   return (
     <>
-      {error && <Alert message={`Error: ${error}`} type="error" />}
-      <div className="mt-8 ">
-        {appoiments.length > 0 ? (
-          appoiments
-            .filter((item) => !item.height && !item.weight && !item.temperature)
-            .map((item, index) => (
-              <div key={index} className="mt-16">
-                <hr className="border-t-2 border-gray-300 my-6" />
-                <BasicForm
-                  layout="horizontal"
-                  fields={[
-                    {
-                      name: "temperature",
-                      type: "text",
-                      label: "Ingrese la temperatura",
-                    },
-                    { name: "weight", type: "text", label: "Ingrese el peso" },
-                    {
-                      name: "height",
-                      type: "text",
-                      label: "Ingrese la altura",
-                    },
-                  ]}
-                  apiUrl={`/api/appointment/${item.appoiment_id}`}
-                  typeRequestApi="PATCH"
-                  formTitle={`Paciente: ${item.patientName} ${item.patientLastName}`}
-                  onSuccessMessage="Registro completado"
-                  onErrorMessage="Error al registrar el peso, talla y temperatura"
-                  buttonLabel="Registrar."
-                  colorButton="secondary"
-                  onSuccess={fetchApiAppoiment}
-                />
-              </div>
-            ))
-        ) : (
-          <Alert
-            message={"No hay pacientes agendados para consulta medica"}
-            color="error"
-          />
-        )}
-      </div>
+      {error && (
+        <Alert
+          message={`Error: ${error}`}
+          color="danger"
+          setStatus={() => setError(null)}
+        />
+      )}
+      {loading ? (
+        <div className="surface-card flex items-center justify-center p-10 text-sm text-ink-soft">
+          Cargando consultas...
+        </div>
+      ) : pendingAppointments.length === 0 ? (
+        <div className="surface-card p-10 text-center">
+          <p className="text-sm font-medium text-ink">
+            No hay pacientes agendados para consulta médica
+          </p>
+          <p className="mt-1 text-xs text-ink-soft">
+            Cuando lleguen nuevas consultas, aparecerán aquí.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-5">
+          {pendingAppointments.map((item, index) => (
+            <BasicForm
+              key={index}
+              layout="horizontal"
+              fields={[
+                {
+                  name: "temperature",
+                  type: "text",
+                  label: "Ingrese la temperatura",
+                },
+                { name: "weight", type: "text", label: "Ingrese el peso" },
+                { name: "height", type: "text", label: "Ingrese la altura" },
+              ]}
+              apiUrl={`/api/appointment/${item.appoiment_id}`}
+              typeRequestApi="PATCH"
+              formTitle={`Paciente: ${item.patientName} ${item.patientLastName}`}
+              onSuccessMessage="Registro completado"
+              onErrorMessage="Error al registrar el peso, talla y temperatura"
+              buttonLabel="Registrar"
+              colorButton="primary"
+              onSuccess={fetchApiAppoiment}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
 }

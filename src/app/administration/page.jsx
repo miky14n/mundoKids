@@ -5,15 +5,21 @@ import SimpleDropdown from "@/components/SimpleDropdown";
 import { useEffect, useState } from "react";
 import {
   exportToExcel,
-  processDataServices,
   procesDataForDetailRp,
   fetchReport,
 } from "./funtions";
 import PersonalButton from "@/components/Button";
 import { useSession } from "next-auth/react";
 import { iconExcel } from "@/components/Icons";
+import Alert from "@/components/Alert";
 
-export default function MedicalHistory() {
+const VIEWS = [
+  { key: "appointments", label: "Reporte médicos" },
+  { key: "services", label: "Reporte de servicios" },
+  { key: "contributions", label: "Reporte de aportes" },
+];
+
+export default function Reports() {
   const [dataReport, setData] = useState([]);
   const [dataReportServices, setDataServices] = useState([]);
   const [dataReportContr, setDataContr] = useState([]);
@@ -22,8 +28,7 @@ export default function MedicalHistory() {
   const [doctorName, setDoctorName] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const { data: session } = useSession();
-  const [showAp, setshowAp] = useState(true);
-  const [showContributions, setshowContributions] = useState(false);
+  const [view, setView] = useState("appointments");
 
   const items =
     session?.user.role === "nurse" || session?.user.role === "receptionist"
@@ -37,49 +42,34 @@ export default function MedicalHistory() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        let filter = selectedItem ? selectedItem.key : "today";
-        let filterName = selectedItem ? selectedItem.label : "Dia";
-        if (!showAp) {
+        const filter = selectedItem ? selectedItem.key : "today";
+        if (view === "services") {
           const medicalServices = await fetchReport(
             `/api/reports/medical-services?filter=${filter}`
           );
-          /**const processedData = await processDataServices(
-            medicalServices,
-            filterName
-          ); console.log(processedData);*/
-          const dataProcesSv = await procesDataForDetailRp(medicalServices);
-          setDataServices(dataProcesSv);
-        } else {
-          const appoiments = await fetchReport(`/api/reports?filter=${filter}`);
-          /*const processedData = await processDataForGlobalReport(
-            appoiments,
-            filterName
-          );*/
-          const dataProces = await procesDataForDetailRp(appoiments);
-          setData(dataProces);
-        }
-        if (showContributions) {
+          setDataServices(await procesDataForDetailRp(medicalServices));
+        } else if (view === "contributions") {
           const contributions = await fetchReport(
             `/api/reports/doctor-contributions?filter=${filter}`
           );
-
           setDataContr(await procesDataForDetailRp(contributions));
+        } else {
+          const appoiments = await fetchReport(`/api/reports?filter=${filter}`);
+          setData(await procesDataForDetailRp(appoiments));
         }
-      } catch (error) {
-        console.error("Error al cargar los datos:", error);
-        setError("No se pudo cargar la lista de pacientes");
+      } catch (err) {
+        console.error("Error al cargar los datos:", err);
+        setError("No se pudo cargar la información de reportes");
       }
     };
-
     loadData();
-  }, [selectedItem, showAp, showContributions]);
+  }, [selectedItem, view]);
 
   useEffect(() => {
-    console.log("Cuando entro en el filtro", dataReport);
     const filtered = dataReport.filter((item) => {
       const matchesName =
         doctorName.trim() === "" ||
-        item["Nombre del doctor"]
+        (item["Nombre del doctor"] || "")
           .toLowerCase()
           .includes(doctorName.toLowerCase());
       return matchesName;
@@ -87,114 +77,105 @@ export default function MedicalHistory() {
     setFilteredData(filtered);
   }, [doctorName, dataReport]);
 
-  const handleNavigation = (isSpecialty) => {
-    setshowAp(isSpecialty);
-    setshowContributions(false); // Asegurar que no se muestre la tabla de aportes médicos
-  };
+  const isAppointments = view === "appointments";
+  const isServices = view === "services";
+  const isContributions = view === "contributions";
 
-  const handleNavigationCtb = () => {
-    setshowAp(false); // Asegurar que se oculten las otras tablas
-    setshowContributions(true);
+  const handleExport = () => {
+    let dataToExport, fileName, checker;
+    if (isAppointments) {
+      dataToExport = filteredData;
+      fileName = "reporte_medicos.xlsx";
+      checker = "ap";
+    } else if (isContributions) {
+      dataToExport = dataReportContr;
+      fileName = "reporte_aportes.xlsx";
+      checker = "ct";
+    } else {
+      dataToExport = dataReportServices;
+      fileName = "reporte_servicios.xlsx";
+      checker = "sv";
+    }
+    exportToExcel(
+      dataToExport,
+      checker,
+      selectedItem ? selectedItem.label : "Dia",
+      fileName
+    );
   };
 
   return (
-    <div>
-      <div className="mt-8 p-4 rounded-md">
-        <div className="flex items-center mb-4">
-          <label className="font-bold flex items-center mr-6">
-            <input
-              type="radio"
-              name="selection"
-              value="specialty"
-              checked={showAp && !showContributions}
-              onChange={() => handleNavigation(true)}
-              className="mr-3"
-            />
-            Reporte médicos
-          </label>
-          <label className="font-bold flex items-center mr-6">
-            <input
-              type="radio"
-              name="selection"
-              value="services"
-              checked={!showAp && !showContributions}
-              onChange={() => handleNavigation(false)}
-              className="mr-3"
-            />
-            Reporte servicios médicos
-          </label>
-          <label className="font-bold flex items-center">
-            <input
-              type="radio"
-              name="selection"
-              value="contributions"
-              checked={showContributions}
-              onChange={() => handleNavigationCtb()}
-              className="mr-3"
-            />
-            Reporte de aportes médicos
-          </label>
+    <div className="page-container">
+      <div className="page-header">
+        <div>
+          <h2 className="page-title">Reportes</h2>
+          <p className="page-subtitle">
+            Revisa los indicadores de la clínica y exporta los datos cuando lo
+            necesites.
+          </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-4 mt-4">
-        <div className="flex-1">
-          <SimpleDropdown
-            buttonLabel="Seleccione el periodo"
-            menuItems={items}
-            ariaLabel="Actions"
-            setItem={setSelectedItem}
-          />
-        </div>
+      {error && (
+        <Alert message={error} color="danger" setStatus={() => setError(null)} />
+      )}
 
-        {showAp && !showContributions && (
-          <div className="flex-1">
+      {/* Tabs */}
+      <div className="surface-card mb-5 p-2">
+        <div className="flex flex-wrap gap-1">
+          {VIEWS.map((v) => (
+            <button
+              key={v.key}
+              type="button"
+              onClick={() => setView(v.key)}
+              className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-medium transition ${
+                view === v.key
+                  ? "bg-brand-600 text-white shadow-soft"
+                  : "text-ink-muted hover:bg-slate-50"
+              }`}
+            >
+              {v.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="surface-card mb-6 p-5 sm:p-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:items-end">
+          <div>
+            <p className="mb-1.5 text-xs font-medium text-ink-muted">Periodo</p>
+            <SimpleDropdown
+              buttonLabel="Seleccione el periodo"
+              menuItems={items}
+              ariaLabel="Periodo del reporte"
+              setItem={setSelectedItem}
+            />
+          </div>
+          {isAppointments && (
             <SimpleInput
-              label="Ingrese el nombre de doctor"
+              label="Nombre de doctor"
               value={doctorName}
               onChange={(e) => setDoctorName(e.target.value)}
             />
+          )}
+          <div className={isAppointments ? "" : "md:col-span-2 md:justify-self-end"}>
+            <PersonalButton
+              content="Exportar a Excel"
+              startIcon={iconExcel}
+              color="success"
+              action={handleExport}
+            />
           </div>
-        )}
-
-        <div>
-          <PersonalButton
-            content="Exportar a Excel"
-            startIcon={iconExcel}
-            color="success"
-            action={() => {
-              let dataToExport, fileName, checker;
-              if (showAp) {
-                dataToExport = filteredData;
-                fileName = "reporte_medicos.xlsx";
-                checker = "ap";
-              } else if (showContributions) {
-                dataToExport = dataReportContr;
-                fileName = "reporte_aportes.xlsx";
-                checker = "ct";
-              } else {
-                dataToExport = dataReportServices;
-                fileName = "reporte_servicios.xlsx";
-                checker = "sv";
-              }
-
-              exportToExcel(
-                dataToExport,
-                checker,
-                selectedItem ? selectedItem.label : "Dia",
-                fileName
-              );
-            }}
-          />
         </div>
       </div>
 
-      {/* Renderizado de las tablas */}
-      <div className="mt-4">
-        {showContributions ? (
+      {/* Tables */}
+      <div>
+        {isContributions ? (
           <BasicTable
             data={dataReportContr}
-            title={"Reporte de aportes médicos"}
+            title="Reporte de aportes médicos"
             personalColums={[
               "Nombre del doctor",
               "Responsable",
@@ -203,12 +184,12 @@ export default function MedicalHistory() {
               "Glosa de aporte",
               "Tipo de Pago",
             ]}
-            nameColOfDate={"Fecha del aporte"}
+            nameColOfDate="Fecha del aporte"
           />
-        ) : showAp ? (
+        ) : isAppointments ? (
           <BasicTable
             data={filteredData}
-            title={"Reporte de médicos"}
+            title="Reporte de consultas médicas"
             personalColums={[
               "Especialidad",
               "Nombre del doctor",
@@ -223,7 +204,7 @@ export default function MedicalHistory() {
         ) : (
           <BasicTable
             data={dataReportServices}
-            title={"Reporte de servicios médicos"}
+            title="Reporte de servicios médicos"
             personalColums={[
               "Nombre del servicio medico",
               "Responsable",
